@@ -1,0 +1,134 @@
+[
+  {
+    "title": "conjunto buzo con capucha",
+    "description": "conjunto para niños",
+    "code": "7890",
+    "price": 24000,
+    "status": true,
+    "stock": 5,
+    "category": "conjunto para niños ",
+    "thumbnail": "sin datos",
+    "id": 1
+  },
+  {
+    "title": "zapatillas adidas grand court",
+    "description": "zapatillas para niñas",
+    "code": "1435",
+    "price": 23000,
+    "status": true,
+    "stock": 8,
+    "category": "zapatillas para niñas ",
+    "thumbnail": "sin datos",
+    "id": 2
+  },
+  {
+    "title": "chomba de entremamiento Boca",
+    "description": "chomba para hombres",
+    "code": "1974",
+    "price": 22000,
+    "status": true,
+    "stock": 10,
+    "category": "Remera de hombre ",
+    "thumbnail": "sin datos",
+    "id": 3
+  },
+  {
+    "title": "camiseta alternativa selección",
+    "description": "camiseta para mujer",
+    "code": "2223",
+    "price": 21000,
+    "status": true,
+    "stock": 9,
+    "category": "Remera para hombre ",
+    "thumbnail": "sin datos",
+    "id": 4
+  },
+  {
+    "title": "campera térmica",
+    "description": "campera para hombre",
+    "code": "9920",
+    "price": 69000,
+    "status": true,
+    "stock": 4,
+    "category": "campera para hombre ",
+    "thumbnail": "sin datos",
+    "id": 5
+  },
+  {
+    "title": "campera premium slim ",
+    "description": "Campera para mujer",
+    "code": "3456",
+    "price": 58000,
+    "status": true,
+    "stock": 3,
+    "category": "Campera de mujer",
+    "thumbnail": "sin datos",
+    "id": 6
+  },
+  {
+    "title": "remera aeroready",
+    "description": "remera de hombre",
+    "code": "4648",
+    "price": 12000,
+    "status": true,
+    "stock": 11,
+    "category": "Remera de hombre",
+    "thumbnail": "sin datos",
+    "id": 7
+  },
+  {
+    "title": "remera fram print ",
+    "description": "remera de mujer",
+    "code": "3840",
+    "price": 13000,
+    "status": true,
+    "stock": 25,
+    "category": "Remera de mujer",
+    "thumbnail": "sin datos",
+    "id": 8
+  },
+  {
+    "title": " zapatillas trail running terrex",
+    "description": "zapatillas outdoor de hombre",
+    "code": "1123",
+    "price": 45000,
+    "status": true,
+    "stock": 7,
+    "category": "Zapatillas de hombre",
+    "thumbnail": "sin datos",
+    "id": 9
+  },
+  {
+    "title": "zapatillas terrex Ax4",
+    "description": "zapatillas de mujer",
+    "code": "3435",
+    "price": 47000,
+    "status": true,
+    "stock": 5,
+    "category": "Zapatillas de mujer",
+    "thumbnail": "sin datos",
+    "id": 10
+  },
+  {
+    "title": "zapatillas ultraboost 1.0",
+    "description": "zapatillas hombre",
+    "code": "9542",
+    "price": 60000,
+    "status": true,
+    "stock": 9,
+    "category": "Zapatillas de hombre",
+    "thumbnail": "sin datos",
+    "id": 11
+  },
+  {
+    "title": "Ultraboost 5.0 Dna W",
+    "description": "zapatillas de mujer",
+    "code": "3557",
+    "price": 57000,
+    "status": true,
+    "stock": 15,
+    "category": "Zapatillas de mujer",
+    "thumbnail": "sin datos",
+    "id": 12
+  }
+]
