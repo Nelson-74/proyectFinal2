@@ -100,7 +100,7 @@ async deleteCart(id) {
 }
 
 async deleteAll() {
-  return fs.promises.writeFile("../carts.json", "[]", "utf-8").then(() => {
+  return fs.promises.writeFile("./carts.json", "[]", "utf-8").then(() => {
       return "deleted carts";
   }).catch((err) => {
       console.log(err);
