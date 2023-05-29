@@ -1,0 +1,30 @@
+<div>
+<div class="card text-center" id="product-list" >
+  <h2>List of Products</h2>
+  <div class="container" >
+    <div class="card-group" >
+        {{#each products}}
+        <div class="row">
+          <main class="col-sm-auto row "></main>
+            <aside class="col-sm-10 row-4">
+              <div class="product">
+            <h2>{{this.title}}</h2>
+            <ul class="list-group">
+            <hr>
+            <img src="{{this.thumbnail}}" alt="">
+            <p><strong>{{this.description}}</strong></p>
+            <h3>Price: ${{this.price}}</h3>
+            <h3>Stock: {{this.stock}}</h3>
+            <p>Category: {{this.category}}</p>
+            <p>Code: {{this.code}}</p>
+            <p>Id: {{this.id}}</p>
+            </ul>
+            <button class="delete-btn" onclick="deleteProductSocket('${product.id}')">Delete</button>
+            </aside>
+    </div>
+    {{/each}}
+  </div>
+  </div>
+  </div>
+</div>
+

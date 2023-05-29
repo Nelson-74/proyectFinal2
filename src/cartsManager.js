@@ -2,7 +2,7 @@ import fs from "fs";
 
 export class CartManager {
     constructor(path) {
-        this.path = "./carts.json";
+        this.path = "src/carts.json";
         let productsFile = [];
         if (fs.existsSync(this.path) && fs.readFileSync(this.path, "utf-8").length > 0) {
         const productsString = fs.readFileSync(this.path, "utf-8")
@@ -100,7 +100,7 @@ async deleteCart(id) {
 }
 
 async deleteAll() {
-  return fs.promises.writeFile("./carts.json", "[]", "utf-8").then(() => {
+  return fs.promises.writeFile("src/carts.json", "[]", "utf-8").then(() => {
       return "deleted carts";
   }).catch((err) => {
       console.log(err);

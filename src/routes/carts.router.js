@@ -4,8 +4,8 @@ import {CartManager} from "../cartsManager.js";
 
 export const cartsRouter = Router();
 
-const products = new ProductManager("../../products.json")
-const carts = new CartManager("../../carts.json")
+const products = new ProductManager("../products.json")
+const carts = new CartManager("../carts.json")
 
 cartsRouter.get("/", async (req, res, next) => {
   try {

@@ -2,7 +2,7 @@ import fs from "fs";
 
 export class ProductManager {
   constructor() {
-    this.path = "./products.json";
+    this.path = "src/products.json";
   }
 
   async getProducts() {
@@ -99,130 +99,130 @@ const productManager = new ProductManager();
 
 const product1 ={
   title: "Ultraboost 5.0 Dna W",
-  description : "zapatillas de mujer",
+  description : "Zapatillas de mujer",
   code : "3557",
   price : 57000,
   status:true,
   stock: 15,
   category: "Zapatillas de mujer",
-  thumbnail : "sin datos"
+  thumbnail : "https://i.ibb.co/31pj7gg/zapatilla-Mujer1.jpg"
 }
 
 const product2 ={
-  title: "zapatillas ultraboost 1.0",
+  title: "Zapatillas ultraboost 1.0",
   description : "zapatillas hombre",
   code : "9542",
   price : 60000,
   status:true,
   stock: 9,
   category: "Zapatillas de hombre",
-  thumbnail : "sin datos"
+  thumbnail : "https://i.ibb.co/3mgRdZK/zapatillas-Hombre.jpg"
 }
 
 const product3 ={
-  title: "zapatillas terrex Ax4",
+  title: "Zapatillas terrex Ax4",
   description : "zapatillas de mujer",
   code : "3435",
   price : 47000,
   status:true,
   stock: 5,
   category: "Zapatillas de mujer",
-  thumbnail : "sin datos"
+  thumbnail : "https://i.ibb.co/VjmKmy5/zapatilla-Mujer2.jpg"
 }
 const product4 ={
-  title: " zapatillas trail running terrex",
+  title: " Zapatillas trail running terrex",
   description : "zapatillas outdoor de hombre",
   code : "1123",
   price : 45000,
   status:true,
   stock: 7,
   category: "Zapatillas de hombre",
-  thumbnail : "sin datos"
+  thumbnail : "https://i.ibb.co/NZZHv3y/zapatillas-Hombre2.jpg"
 }
 
 const product5 ={
-  title: "remera fram print ",
+  title: "Remera fram print ",
   description : "remera de mujer",
   code : "3840",
   price : 13000,
   status:true,
   stock: 25,
   category: "Remera de mujer",
-  thumbnail : "sin datos"
+  thumbnail : "https://i.ibb.co/6RFw2sr/remera-Mujer.jpg"
 }
 
 const product6 ={
-  title: "remera aeroready",
+  title: "Remera aeroready",
   description : "remera de hombre",
   code : "4648",
   price : 12000,
   status:true,
   stock: 11,
   category: "Remera de hombre",
-  thumbnail : "sin datos"
+  thumbnail : "https://i.ibb.co/Cnn52BL/remera-Hombre.jpg"
 }
 const product7 ={
-  title: "campera premium slim ",
+  title: "Campera premium slim ",
   description : "Campera para mujer",
   code : "3456",
   price : 58000,
   status:true,
   stock: 3,
   category: "Campera de mujer",
-  thumbnail : "sin datos"
+  thumbnail : "https://i.ibb.co/7nSW35F/campera-Mujer.jpg"
 }
 const product8 ={
-  title: "campera térmica",
+  title: "Campera térmica",
   description : "campera para hombre",
   code : "9920",
   price : 69000,
   status:true,
   stock: 4,
-  category: "campera para hombre ",
-  thumbnail : "sin datos"
+  category: "Campera para hombre ",
+  thumbnail : "https://i.ibb.co/g7wQ8mq/campera-Hombre.jpg"
 }
 
 const product9 ={
-  title: "camiseta alternativa selección",
+  title: "Camiseta alternativa selección",
   description : "camiseta para mujer",
   code : "2223",
   price : 21000,
   status:true,
   stock: 9,
-  category: "Remera para hombre ",
-  thumbnail : "sin datos"
+  category: "Remera para mujer ",
+  thumbnail : "https://i.ibb.co/Ld92BG4/camiseta-Seleccion-Mujer.jpg"
 }
 const product10 ={
-  title: "chomba de entremamiento Boca",
+  title: "Chomba de entremamiento Boca",
   description : "chomba para hombres",
   code : "1974",
   price : 22000,
   status:true,
   stock: 10,
   category: "Remera de hombre ",
-  thumbnail : "sin datos"
+  thumbnail : "https://i.ibb.co/LzTSr0G/chomba-Boca.jpg"
 }
 
 const product11 ={
-  title: "zapatillas adidas grand court",
+  title: "Zapatillas adidas grand court",
   description : "zapatillas para niñas",
   code : "1435",
   price : 23000,
   status:true,
   stock: 8,
-  category: "zapatillas para niñas ",
-  thumbnail : "sin datos"
+  category: "Zapatillas para niñas ",
+  thumbnail : "https://i.ibb.co/hV7DbSL/zapatillas-Ni-a.jpg"
 }
 
 const product12 ={
-  title: "conjunto buzo con capucha",
+  title: "Conjunto buzo con capucha",
   description : "conjunto para niños",
   code : "7890",
   price : 24000,
   status:true,
   stock:5, 
-  category: "conjunto para niños ",
-  thumbnail : "sin datos"
+  category: "Conjunto para niños ",
+  thumbnail : "https://i.ibb.co/By6vj72/conjunto-Ni-os.jpg"
 } 
 
 productManager.addProduct(product1);
