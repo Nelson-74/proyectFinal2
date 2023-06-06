@@ -13,9 +13,22 @@ const storage = multer.diskStorage({
 });
 
 export const uploader = multer({ storage });
-
+// __dirname
 // https://flaviocopes.com/fix-dirname-not-defined-es-module-scope/
 
-export const __filename = fileURLToPath(import.meta.url);
+/* export const __filename = fileURLToPath(import.meta.url);
 export const __dirname = path.dirname(__filename);
 export default __dirname;
+
+import { connect } from "mongoose";
+export async function connectMongo() {
+  try {
+    await connect(
+      "mongodb+srv://backendCoderNelson:CedW4PNucNIwKThz@backendcodernelson.a5badyt.mongodb.net/";
+    );
+    console.log("plug to mongo!");
+  } catch (e) {
+    console.log(e);
+    throw "can not connect to the db";
+  }
+} */

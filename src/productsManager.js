@@ -24,8 +24,9 @@ export class ProductManager {
       const data = await this.getProducts();      
       const toLookForCode = data.find((p) => p.code === product.code);
       if(toLookForCode){
-        return "existing code"
-      }if (
+        return "existing code";
+      }
+      if (
         !product.title||
         !product.description||
         !product.code||
@@ -34,7 +35,7 @@ export class ProductManager {
         !product.stock||
         !product.category||
         !product.thumbnail
-    ){
+      ){
         return "missing fields to load";
       }
       const lastDataId = data.length > 0 ? data[data.length - 1].id + 1 : 1;

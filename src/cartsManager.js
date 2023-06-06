@@ -106,5 +106,4 @@ async deleteAll() {
       console.log(err);
   })
 }
-
 }
