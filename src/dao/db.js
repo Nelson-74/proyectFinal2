@@ -1,7 +1,8 @@
-import mongoose from 'mongoose';
+/* import mongoose from 'mongoose';
 
 // URL de conexión a la base de datos de MongoDB en Atlas
-const dbURI = "mongodb+srv://backendCoderNelson:CedW4PNucNIwKThz@backendcodernelson.a5badyt.mongodb.net/";
+const dbURI = "mongodb+srv://nelsonandrada:CedW4PNucNIwKThz@backendcodernelson.a5badyt.mongodb.net/?retryWrites=true&w=majority";
+
 
 // Opciones de configuración de la conexión
 const options = {
@@ -24,4 +25,4 @@ import Cart from "./models/cartModel.js";
 import Message from "./models/messageModel.js";
 
 // Exportar los modelos
-export { Product, Cart, Message };
+export { Product, Cart, Message }; */

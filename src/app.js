@@ -1,13 +1,13 @@
 import express from "express";
 import{productsRouter} from "./routes/products.router.js";
 import { cartsRouter } from "./routes/carts.router.js";
-import { __dirname } from "./utils.js";
+import { __dirname, connectMongo } from "./utils.js";
 import path from "path";
 import {Server as SocketServer} from "socket.io";
 import handlebars from "express-handlebars";
 import homeRouter from "./routes/home.router.js";
 import websocket from "./websockets/websocket.js";
-import { connectMongo } from "utils.js";
+
 
 const app = express();
 const port = 8080;
@@ -18,6 +18,7 @@ const httpServer = app.listen(port, () => {
 });
 const io = new SocketServer(httpServer);
 
+connectMongo();
 websocket(io);
 
 app.use(express.json());

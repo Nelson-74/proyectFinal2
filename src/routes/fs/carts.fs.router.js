@@ -1,11 +1,12 @@
 import {Router} from "express";
-import { ProductManager } from "../productsManager.js";
-import {CartManager} from "../cartsManager.js";
+import { ProductManager } from "../../DAO/fyleSystem/productsManager.js";
+import {CartManager} from "../../DAO/fyleSystem/cartsManager.js";
+
 
 export const cartsRouter = Router();
 
-const products = new ProductManager("../products.json")
-const carts = new CartManager("../carts.json")
+const products = new ProductManager("../DAO/fyleSystem/products.json")
+const carts = new CartManager("../DAO/fyleSystem/carts.json")
 
 cartsRouter.get("/", async (req, res, next) => {
   try {
@@ -21,31 +22,10 @@ cartsRouter.get("/", async (req, res, next) => {
       status: "error",
       msg: "Internal Server Error",
       data: {},
-   });
+  });
   }
 });
 
-cartsRouter.post("/", async (req, res, next) => {
-  try {
-    const newCart = await carts.addCart({ products: [] });
-    res.status(200).json(newCart);
-  } catch (err) {
-    if (err instanceof Error) {
-      res.status(500).json({ 
-        status: "error",
-        msg: "Invalid input",
-        data: {},
-      });
-    } else {
-      res.status(500).json({ 
-        status: "error",
-        msg: "Error in server",
-        data: {},
-      });
-    }
-  }
-});
-  
 cartsRouter.get("/:cid", async (req, res, next) => {
   try {
     const id = parseInt(req.params.cid);
@@ -68,6 +48,27 @@ cartsRouter.get("/:cid", async (req, res, next) => {
   });
   }
 });
+cartsRouter.post("/", async (req, res, next) => {
+  try {
+    const newCart = await carts.addCart({ products: [] });
+    res.status(200).json(newCart);
+  } catch (err) {
+    if (err instanceof Error) {
+      res.status(500).json({ 
+        status: "error",
+        msg: "Invalid input",
+        data: {},
+      });
+    } else {
+      res.status(500).json({ 
+        status: "error",
+        msg: "Error in server",
+        data: {},
+      });
+    }
+  }
+});
+  
 
 cartsRouter.post("/:cid/products/:pid", async (req, res, next) => {
   try {
@@ -99,3 +100,4 @@ cartsRouter.post("/:cid/products/:pid", async (req, res, next) => {
       data: {} });
   }
 });
+

@@ -1,9 +1,10 @@
-import {Router} from "express";
-import {ProductManager} from "../productsManager.js";
 
+import {Router} from "express";
+import {ProductManager} from "../../DAO/fsManagers/productsManager.js";
+import { Query } from "mongoose";
 
 export const productsRouter = Router();
-const productsManager = new ProductManager ("../productsManager.js");
+const productsManager = new ProductManager ();
 
 productsRouter.get("/",async (req,res) => {
   try {
@@ -22,12 +23,13 @@ productsRouter.get("/",async (req,res) => {
 
 productsRouter.get("/:pid",async (req,res) => {
   try {
-    const product = await productsManager.getProduct(req.params.pid);
+    const product = await productsManager.getProducts(req.params.pid);
     res.status(200).json(product);
   } catch (error) {
     res.status(500).json({message: "there was a mistake"});
   }
 });
+
 productsRouter.post("/",async(req,res) => {
   const newProduct = req.body;
   newProduct.id = (Math.random()*100000000).toFixed(0).toString();
@@ -42,7 +44,7 @@ productsRouter.post("/",async(req,res) => {
 productsRouter.put("/:pid",async(req,res) => {
     try {
       const updatedProduct = req.body;
-      const product = await productsManager.updatedProduct(req.params.id, updatedProduct);
+      const product = await productsManager.updateProduct(req.params.pid, updatedProduct);
       return res.status(200).json({
       status: "ok",
       message:"update product",
