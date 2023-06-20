@@ -5,4 +5,4 @@ const Schema = new Schema ({
     message: { type: String, required: true },
 });
 
-export const messagesModel = model("Message", Schema);
+export const messagesModel = model("messages", Schema);

@@ -20,7 +20,7 @@ export const uploader = multer({ storage });
 export const __dirname = path.dirname(__filename);
 export default __dirname; 
 
-import { connect } from "mongoose";
+import { connect,Schema,model } from "mongoose";
 export async function connectMongo() {
   try {
     await connect(

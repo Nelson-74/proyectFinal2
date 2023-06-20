@@ -1,12 +1,12 @@
 import {Router} from "express";
-import { ProductManager } from "../../DAO/fyleSystem/productsManager.js";
-import {CartManager} from "../../DAO/fyleSystem/cartsManager.js";
+import { ProductManager } from "../../DAO/fsManagers/productsManager.js";
+import {CartManager} from "../../DAO/fsManagers/cartsManager.js";
 
 
 export const cartsRouter = Router();
 
-const products = new ProductManager("../DAO/fyleSystem/products.json")
-const carts = new CartManager("../DAO/fyleSystem/carts.json")
+const products = new ProductManager("../../DAO/fsManagers/products.json")
+const carts = new CartManager("../../DAO/fsManagers/carts.json")
 
 cartsRouter.get("/", async (req, res, next) => {
   try {

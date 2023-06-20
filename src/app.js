@@ -1,12 +1,14 @@
+
 import express from "express";
-import{productsRouter} from "./routes/products.router.js";
-import { cartsRouter } from "./routes/carts.router.js";
+import handlebars from "express-handlebars";
 import { __dirname, connectMongo } from "./utils.js";
 import path from "path";
 import {Server as SocketServer} from "socket.io";
-import handlebars from "express-handlebars";
-import homeRouter from "./routes/home.router.js";
+import messagesRouter from "./routes/mongo/messages.router.js";
+import homeRouter from "./routes/fs/home.fs.router.js";
 import websocket from "./websockets/websocket.js";
+import productRouter from "./routes/mongo/product.mongo.router.js";
+import cartRouter from "./routes/mongo/cart.mongo.router.js";
 
 
 const app = express();
@@ -23,21 +25,20 @@ websocket(io);
 
 app.use(express.json());
 app.use(express.urlencoded({extended: true})); 
+app.use(express.static(path.join(__dirname, "public")));
 
 app.engine("handlebars", handlebars.engine());
 app.set("views",path.join (__dirname, "views"));
 app.set("view engine", "handlebars");
 
-app.use(express.static(path.join(__dirname, "public")));
-
-// Ruta:  API rest con JSON
-app.use("/api/products", productsRouter);
-app.use("/api/carts", cartsRouter);
-
+/* app.use("/api/products", productsRouter);
+app.use("/api/carts", cartsRouter); */
+app.use("/", productRouter)
+app.use("/cart", cartRouter)
 app.use("/",homeRouter);
 app.use("/realtimeproducts", homeRouter);
+app.use("/chat", messagesRouter);
 
-connectMongo();
 app.get("*",(req,res) => {
   return res.status(404).json({
     status:"error",

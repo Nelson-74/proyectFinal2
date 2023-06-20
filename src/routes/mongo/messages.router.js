@@ -1,11 +1,10 @@
-import { Router } from "express";
-import { get } from "mongoose";
+import express from "express";
 
-const router = Router ();
+const messagesRouter = express.Router ();
 
-router.get ("/" , async(req, res) => {
+messagesRouter.get ("/" , async(req, res) => {
   try {
-        res.render ("chat");
+        res.status(200).render ("chat");
   } catch (error) {
         res.status(500).json({
           status : "error",
@@ -13,4 +12,5 @@ router.get ("/" , async(req, res) => {
   })
   }
 });
+export default messagesRouter;
 

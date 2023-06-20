@@ -1,7 +1,7 @@
 
 import {Router} from "express";
 import {ProductManager} from "../../DAO/fsManagers/productsManager.js";
-import { Query } from "mongoose";
+
 
 export const productsRouter = Router();
 const productsManager = new ProductManager ();

@@ -1,17 +1,23 @@
 import { Schema,model } from "mongoose";
 
-const productSchema = new Schema({
-  productId: {type : Schema.Types.ObjectId, ref: "products"},
-  qty: {type: Number},
-}, 
-{_id: false}
-);
-
-cartSchema = new Schema({
-  products : [productSchema]
-}, {
-  versionKey : false,
+const cartSchema = new Schema({
+  products: {
+    type : [{
+      product: {
+        type: Schema.Types.ObjectId, 
+      ref: "products",
+    required: true},
+  qty: {
+    type: Number,
+    required: true,
+    min: 1,
+  default: 1 
+},
+_id: false
+}], 
+default: [],
+},
 });
 
 
-export const cartModel = model("carts", Schema);
+export const cartModel = model("carts", cartSchema );
