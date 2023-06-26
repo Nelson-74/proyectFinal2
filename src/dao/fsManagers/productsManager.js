@@ -2,7 +2,7 @@ import fs from "fs";
 
 export class ProductManager {
   constructor() {
-    this.path = "../fsManagers/products.json";
+    this.path = "./src/DAO/fsManagers/products.json";
   }
 
   async getProducts() {
@@ -87,6 +87,7 @@ export class ProductManager {
         return true;
       } else {
         return false;
+
       }
     } catch (error) {
       throw new Error("Error deleting the product");
@@ -238,4 +239,4 @@ productManager.addProduct(product10);
 productManager.addProduct(product11);
 productManager.addProduct(product12); 
 
-console.log(productManager.getProducts());
+console.log(productManager.getProducts()); 

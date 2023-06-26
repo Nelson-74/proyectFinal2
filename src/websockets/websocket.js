@@ -1,4 +1,4 @@
-import { ProductManager } from "../DAO/fsManagers/productsManager.js";
+/* import { ProductManager } from "../DAO/fsManagers/productsManager.js";
 import { __dirname } from "../utils.js";
 import path from "path";
 
@@ -36,7 +36,7 @@ export default (io) => {
       console.log("Cliente desconectado");
     });
   });
-};
+}; */
 
 /* const socketServer = new Server(httpServer);
 let msgs = [];

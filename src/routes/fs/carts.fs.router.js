@@ -1,4 +1,4 @@
-import {Router} from "express";
+/* import {Router} from "express";
 import { ProductManager } from "../../DAO/fsManagers/productsManager.js";
 import {CartManager} from "../../DAO/fsManagers/cartsManager.js";
 
@@ -100,4 +100,4 @@ cartsRouter.post("/:cid/products/:pid", async (req, res, next) => {
       data: {} });
   }
 });
-
+ */

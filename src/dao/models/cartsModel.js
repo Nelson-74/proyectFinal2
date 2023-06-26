@@ -16,6 +16,7 @@ const cartSchema = new Schema({
 _id: false
 }], 
 default: [],
+required:true
 },
 });
 

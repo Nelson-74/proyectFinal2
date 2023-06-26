@@ -1,8 +1,8 @@
 import { Schema, model } from "mongoose";
 
-const Schema = new Schema ({
-    user: { type: String, required: true },
-    message: { type: String, required: true },
+const messageSchema = new Schema({
+  user: { type: String, required: true },
+  message: { type: String, required: true },
 });
 
-export const messagesModel = model("messages", Schema);
+export const MessageModel = model("messages", messageSchema);

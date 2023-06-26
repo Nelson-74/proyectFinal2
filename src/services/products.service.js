@@ -1,38 +1,71 @@
-
 import { productModel } from "../DAO/models/productsModel.js";
 
 class ProductService {
-
-  async getAllProducts() {
-    try {
-      const products = await productModel.find();
-      return products;
-    } catch (error) {
-      console.error("Error al obtener los productos:", error);
-      throw new Error("Error al obtener los productos");
+  validate(title, description, price, thumbnail, code, stock, category) {
+    if (!title || !description || !price || !thumbnail || !code || !stock || !category) {
+      console.log("Validation error: please complete all fields.");
+      throw new Error("Validation error: please complete all fields.");
     }
-  };
+  }
 
-  async getProductById(productId) {
-    try {
-      const product = await productModel.findById(productId);
-      return product;
-    } catch (error) {
-      console.error("Error al obtener el producto:", error);
-      throw new Error("Error al obtener el producto");
+  async get(queryParams) {
+    const { limit = 10, page = 1, sort, query } = queryParams;
+    const filter = {};
+
+    if (query) {
+      filter.$or = [{ category: query }, { availability: query }];
     }
-  };
 
-  async addProduct(product) {
-    try {
-      const newProduct = new productModel(product);
-      return newProduct.save();
-    } catch (error) {
-      console.error("Error al agregar el producto:", error);
-      throw new Error("Error al agregar el producto");
+    const options = {
+      page: parseInt(page),
+      limit: parseInt(limit),
+      sort: sort === "desc" ? "-price" : "price",
+    };
+
+    const result = await productModel.paginate(filter, options);
+
+    const response = {
+      status: "ok",
+      payload: result.docs,
+      totalPages: result.totalPages,
+      prevPage: result.hasPrevPage ? result.prevPage : null,
+      nextPage: result.hasNextPage ? result.nextPage : null,
+      page: result.page,
+      hasPrevPage: result.hasPrevPage,
+      hasNextPage: result.hasNextPage,
+      prevLink: result.hasPrevPage ? `/api/products?limit=${limit}&page=${result.prevPage}` : null,
+      nextLink: result.hasNextPage ? `/api/products?limit=${limit}&page=${result.nextPage}` : null,
+    };
+
+    return response;
+  }
+
+  async createOne(title, description, price, thumbnail, code, stock, category) {
+    this.validate(title, description, price, thumbnail, code, stock, category);
+    const productCreated = await productModel.create({ title, description, price, thumbnail, code, stock, category });
+    return productCreated;
+  }
+
+  async deleteOne(_id) {
+    const deleted = await productModel.deleteOne({ _id });
+
+    if (deleted.deletedCount === 1) {
+      return true;
+    } else {
+      throw new Error("Product not found");
     }
-  };
-};
+  }
 
-export default new ProductService();
+  async updateOne(id, title, description, price, thumbnail, code, stock, category) {
+    this.validate(title, description, price, thumbnail, code, stock, category);
+    const productUpdated = await productModel.updateOne({ _id: id }, { title, description, price, thumbnail, code, stock, category });
+    return productUpdated;
+  }
+}
+
+export default ProductService;
+
+
+
+
 

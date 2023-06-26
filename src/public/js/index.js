@@ -1,3 +1,61 @@
+
+const API_URL = "http://localhost:8080/api";
+
+// Función para agregar un producto al carrito
+async function putIntoCart(_id) {
+  let carritoId = localStorage.getItem("carrito-id");
+  const url = `${API_URL}/carts/${carritoId}/product/${_id}`;
+  const data = {};
+  const options = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  };
+
+  try {
+    const response = await fetch(url, options);
+    const result = await response.json();
+    console.log(result);
+    alert("¡Agregado!");
+  } catch (error) {
+    console.error("Error:", error);
+    alert(JSON.stringify(error));
+  }
+}
+
+// Verificar si hay un ID de carrito almacenado
+let carritoId = localStorage.getItem("carrito-id");
+if (!carritoId) {
+  alert("No se encontró ID de carrito");
+  const url = `${API_URL}/carts`;
+  const data = {};
+  const options = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  };
+
+  fetch(url, options)
+    .then((response) => response.json())
+    .then((data) => {
+      console.log("Response:", data);
+      localStorage.setItem("carrito-id", data._id);
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+      alert(JSON.stringify(error));
+    });
+}
+
+
+
+
+
+
 document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("addProductForm");
 
