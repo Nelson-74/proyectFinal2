@@ -1,4 +1,7 @@
-<h2><strong>All Products</strong></h2>
+<div>
+  <h2>Bienvenido, {{user.email}} !!!</h2>
+  <p>User: {{user.firstName}}</p>
+  <h2><strong>All Products</strong></h2>
 
 {{#each products}}
   <div class="card">
@@ -47,4 +50,6 @@ nextLink:
   {{#if nextLink}}
     <a href="{{nextLink}}" class="btn btn-primary">Next</a>
   {{/if}}
+</div>
+<p><a href="/logout"> Logout </a></p>
 </div>

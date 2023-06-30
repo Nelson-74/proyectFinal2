@@ -1,9 +1,9 @@
 <h2>Register</h2>
-<form action="/auth/register" method="Post">
+<form action="/auth/register" method="POST">
 <input type="text" name="first_name" placeholder="first_name"/>
 <input type="text" name="last_name" placeholder="last_name"/>
-<input type="text" name="email" placeholder="email"/>
-<input type="text" name="password" placeholder="password"/>
-<button type=" submit btn btn-primary" value="Registrar" >Registrar!</button>
+<input type="text" name="email" placeholder="email" required/>
+<input type="text" name="password" placeholder="password" required/>
+<button type=" submit btn btn-primary" value="Registrar" >Registrarse</button>
 </form>
 <a href="/auth/login"> Ya estoy registrado!</a>
