@@ -2,12 +2,12 @@ import { Schema, model } from "mongoose";
 import mongoosePaginate from "mongoose-paginate-v2"
 
 const schema = new Schema({
-  first_name: {
+  firstName: {
     type: String,
     required: true,
     max: 100,
     },
-    last_name: {
+    lastName: {
       type: String,
       required: true,
       max: 100,         

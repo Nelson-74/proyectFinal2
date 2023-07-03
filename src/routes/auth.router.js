@@ -16,7 +16,7 @@ authRouter.get("/profile", isUser,(req, res) => {
 });
 
 authRouter.get("/administration" , isUser, isAdmin, (req, res) => {
-  return res.send("secret")
+  return res.send("Date top secret!!")
 });
 
 authRouter.get("/logout", (req, res) => {
@@ -76,7 +76,7 @@ authRouter.post("/login", (req, res) => {
   } else if (username === "nelson@gmail.com" && password === "n3ls0npa5s") {
     req.session.email = username;
     req.session.role = "admin";
-    res.redirect("/productos");
+    res.redirect("/products");
   } else {
     res.redirect("/");
   }

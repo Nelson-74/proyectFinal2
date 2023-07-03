@@ -1,25 +1,19 @@
 import express from 'express';
-import { UserModel } from '../DAO/models/users.model.js';
-import { UserService } from '../services/users.service.js';
+import { userService } from "../services/users.service.js";
 
 export const usersRouter = express.Router();
 
-const Service = new UserService();
+const Service = new userService();
 
 usersRouter.get('/', async (req, res) => {
   try {
     const users = await Service.getAll();
-    console.log(users);
-    return res.status(200).json({
-      status: "ok",
-      msg: "users List",
-      data: users,
-    });
-  } catch (e) {
-    console.log(e);
+    res.render("users", { users });
+  } catch (error) {
+    console.log("Failed to fetch users", error);
     return res.status(500).json({
       status: "error",
-      msg: "something went wrong ",
+      msg: "Failed to fetch users",
       data: {},
     });
   }
@@ -47,7 +41,8 @@ usersRouter.post("/", async (req, res) => {
 usersRouter.delete("/:id", async (req, res) => {
   try {
     const { id } = req.params;
-
+    if (!ObjectId.isValid(id)) throw new Error("Invalid ObjectId");
+    // delete the user with this ID from DB and send response back to client
     return res.status(200).json({
       status: "ok",
       msg: "user deleted",

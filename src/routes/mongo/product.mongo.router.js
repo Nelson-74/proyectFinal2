@@ -53,7 +53,7 @@ productRouter.get("/:pid", async (req, res) => {
     const product = await productModel.findById(productId).lean();
     const { title, description, price, thumbnail, code, stock, category, _id } = product;
 
-    res.status(200).render("viewProduct", { title, price, description, stock, category, id: _id });
+    res.status(200).render("viewProduct", { title, price, description, stock,thumbnail, code, category, id: _id });
   } catch (error) {
     console.error(error);
     res.status(500).json({
@@ -123,7 +123,7 @@ productRouter.delete("/:id", async (req, res) => {
     res.status(200).json({
       status: "ok",
       msg: "Product deleted",
-      data: {},
+      data: {productDeleted},
     });
   } catch (error) {
     console.error(error);

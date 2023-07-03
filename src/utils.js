@@ -1,7 +1,5 @@
 
 import multer from "multer";
-import { fileURLToPath } from "url";
-import path from "path";
 
 
 const storage = multer.diskStorage({
@@ -17,19 +15,22 @@ export const uploader = multer({ storage });
 // __dirname
 // https://flaviocopes.com/fix-dirname-not-defined-es-module-scope/
 
+import path from "path";
+import { fileURLToPath } from "url";
 export const __filename = fileURLToPath(import.meta.url);
 export const __dirname = path.dirname(__filename);
-export default __dirname; 
+
 
 import { connect,Schema,model } from "mongoose";
 import { Server } from "socket.io";
+//import { userModel } from "./DAO/models/usersModel.js";
 
 export async function connectMongo() {
   try {
     await connect(
       "mongodb+srv://nelsonandrada:CedW4PNucNIwKThz@backendcodernelson.a5badyt.mongodb.net/ecommerce?retryWrites=true&w=majority"
     );
-    console.log("plug to mongo!");
+    console.log("Connect to MongoDB!");
   } catch (e) {
     console.log(e);
     throw "can not connect to the db";
@@ -82,5 +83,10 @@ export function isLogedIn(req, res, next) {
   return res.status(401).render(error,{error:"Error de autorización"})
 }
 
-
+/* export function isAdmin(req, res, next){
+  if(req.session?.admin){
+    return next();
+  }
+  return res.status(401).send("error de autorización");
+} */
   
