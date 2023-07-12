@@ -23,9 +23,19 @@ const schema = new Schema({
         required: true,
         max: 100,
       },
-      isAdmin: {
-        type: Boolean,
+      rol: {
+        type: String,
+        default: "user",
         required: true,
+        max: 100,
+      },
+      age: {
+        type: Number,
+        required: false,
+      },
+      cart: {
+        type: String,
+        required: false,
       }
     });
     schema.plugin(mongoosePaginate);

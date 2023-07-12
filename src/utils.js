@@ -89,4 +89,6 @@ export function isLogedIn(req, res, next) {
   }
   return res.status(401).send("error de autorización");
 } */
-  
+
+
+

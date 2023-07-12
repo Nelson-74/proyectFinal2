@@ -1,19 +1,19 @@
-import { io } from 'socket.io-client';
+import { io } from "socket.io-client";
 
 const socket = io();
 
 const input = document.getElementById("text");
 const log = document.getElementById("mensajes");
 
-input.addEventListener('keyup', event => {
-    if (event.key === 'Enter') {
+input.addEventListener("keyup", event => {
+    if (event.key === "Enter") {
         socket.emit('message2', input.value);
         input.value = '';
     }
 });
 
-socket.on('log', data => {
-    let logs = '';
+socket.on("log", data => {
+    let logs = " ";
     data.logs.forEach(log => {
         logs += `<li> ${log.socketid} dice: ${log.message}</li>`;
     });

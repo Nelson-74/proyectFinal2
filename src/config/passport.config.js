@@ -1,9 +1,10 @@
 import passport from "passport";
 import { userModel } from "../DAO/models/usersModel.js";
-//import local from "passport-local";
-//import { createHash, isValidPassword} from "../utils.js";
+import local from "passport-local";
+import { createHash, isValidPassword} from "../utils.js";
 import GitHubStrategy from "passport-github2";
-//const LocalStrategy = local.Strategy;
+import { userService } from "../services/users.service.js";
+const LocalStrategy = local.Strategy;
 
 export function iniPassport(){
   passport.use(
@@ -57,12 +58,61 @@ export function iniPassport(){
     )
   );
 
+  passport.use (
+    "login",
+    new LocalStrategy ({ usernameField :"email"}, async ( username,password,done) => {
+      try{
+        const users = await userService.getUsers();
+        let user;
+        users.map((u) => u.email == username ? user = u : "");
+        if(!user){
+          console.log("User not found (email" + username);
+          return done(null, false);
+        }
+        if(!isValidPassword(password, user.password)){
+          console.log('Invalid Password');
+          return done(null,false,{message:'Incorrect Email or Password.'});
+        }
+        return done(null, user);
+        }catch(error){
+          return done(error);
+        }
+      })
+  );
+  
+  passport.use(
+    "register",
+    new LocalStrategy({
+      passReqToCallback: true, // allows us to access the request object in the callback
+      usernameField: "email",
+      },
+    async (req, username,password, done) => {
+      try{
+        const {email, firstName, lastName, age, password} = req.body
+        let newUser = {
+          email,
+          firstName,
+          lastName,
+          age,
+          password,
+        };
+        let userCreated = await userService.addUser(newUser);
+        console.log("user registration ok");
+        return done(null, userCreated);
+        } catch(err){
+          console.log("failed to register" );
+          return done(err);
+      }
+    }
+  ) 
+);
+
   passport.serializeUser((user, done) => {
     done(null, user._id);
   });
 
   passport.deserializeUser(async (id, done) => {
-    let user = await UserModel.findById(id);
+    let user = await userModel.findById(id);
     done(null, user);
   });
 }

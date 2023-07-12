@@ -41,7 +41,7 @@ app.set("views",path.join (__dirname, "views"));
 app.set("view engine", "handlebars");
 
 app.use(express.static(path.join(__dirname, "public")));
-//app.use('/uploads', serveStatic('uploads')); // for uploading files to server and storing
+
 
 app.use(
   session({
