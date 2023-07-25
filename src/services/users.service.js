@@ -1,7 +1,7 @@
 import { userModel } from "../DAO/models/usersModel.js";
 
 export class userService {
-  async getAll() {
+  async getAllUsers() {
     const users = await userModel.find({});
     return users;
   }
@@ -11,6 +11,7 @@ export class userService {
       console.log("validation error: please complete firstName, lastName and email");
       throw new Error("validation error: please complete firstName, lastName and email");
     }
+    return ({firstName, lastName,email})
   }
 
   async createOne(firstName, lastName, email) {

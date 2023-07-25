@@ -1,5 +1,5 @@
 import { Schema, model } from "mongoose";
-import mongoosePaginate from "mongoose-paginate-v2"
+//import mongoosePaginate from "mongoose-paginate-v2"
 
 const schema = new Schema({
   firstName: {
@@ -38,5 +38,5 @@ const schema = new Schema({
         required: false,
       }
     });
-    schema.plugin(mongoosePaginate);
+    //schema.plugin(mongoosePaginate);
     export const userModel = model("users", schema);    

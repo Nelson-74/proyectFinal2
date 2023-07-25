@@ -16,7 +16,7 @@ export function iniPassport(){
         callbackURL: "http://localhost:8080/api/sessions/githubCallback",
       },
       async (_, _, profile, done) => {
-       console.log(profile);
+      console.log(profile);
         try {
           /*const res = await fetch("https://api.github.com/user/emails", {
             headers: {
@@ -70,7 +70,7 @@ export function iniPassport(){
           return done(null, false);
         }
         if(!isValidPassword(password, user.password)){
-          console.log('Invalid Password');
+          console.log("Invalid Password");
           return done(null,false,{message:'Incorrect Email or Password.'});
         }
         return done(null, user);

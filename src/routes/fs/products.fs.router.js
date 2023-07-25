@@ -1,4 +1,4 @@
-/* 
+
 import {Router} from "express";
 import {ProductManager} from "../../DAO/fsManagers/productsManager.js";
 
@@ -65,4 +65,3 @@ productsRouter.delete("/:pid",async(req,res) => {
     res.status(500).json({ message: "There eas a mistake"});
   }
 });
- */

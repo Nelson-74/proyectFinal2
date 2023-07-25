@@ -1,6 +1,8 @@
 import { productModel } from "../DAO/models/productsModel.js";
 
-class ProductService {
+
+export class ProductService {
+
   validate(title, description, price, thumbnail, code, stock, category) {
     if (!title || !description || !price || !thumbnail || !code || !stock || !category) {
       console.log("Validation error: please complete all fields.");
@@ -48,7 +50,6 @@ class ProductService {
 
   async deleteOne(_id) {
     const deleted = await productModel.deleteOne({ _id });
-
     if (deleted.deletedCount === 1) {
       return true;
     } else {
@@ -63,7 +64,7 @@ class ProductService {
   }
 }
 
-export default ProductService;
+
 
 
 
