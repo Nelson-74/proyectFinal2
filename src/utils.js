@@ -28,7 +28,7 @@ import { Server } from "socket.io";
 export async function connectMongo() {
   try {
     await connect(
-      "mongodb+srv://nelsonandrada:CedW4PNucNIwKThz@backendcodernelson.a5badyt.mongodb.net/ecommerce?retryWrites=true&w=majority"
+      `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@backendcodernelson.a5badyt.mongodb.net/ecommerce?retryWrites=true&w=majority`
     );
     console.log("Connect to MongoDB!");
   } catch (e) {

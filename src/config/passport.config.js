@@ -11,9 +11,9 @@ export function iniPassport(){
     "github",
     new GitHubStrategy(
       {
-        clientID: "....",
-        clientSecret: "....",
-        callbackURL: "http://localhost:8080/api/sessions/githubCallback",
+        clientID: config.github.clientId,
+        clientSecret: config.github.clientSecret,
+        callbackURL: config.github.callbackURL,
       },
       async (_, _, profile, done) => {
       console.log(profile);
@@ -71,7 +71,7 @@ export function iniPassport(){
         }
         if(!isValidPassword(password, user.password)){
           console.log("Invalid Password");
-          return done(null,false,{message:'Incorrect Email or Password.'});
+          return done(null,false,{message:"Incorrect Email or Password."});
         }
         return done(null, user);
         }catch(error){
