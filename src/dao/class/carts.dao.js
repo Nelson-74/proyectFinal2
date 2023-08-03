@@ -1,10 +1,10 @@
-import {cartsDAO,productsDAO,tickectsDAO,} from "../DAO/factory.js";
+import { cartModel } from "../DAO/models/carts.models.js";
+import { productModel } from "../DAO/models/products.model.js";
 
-
-class CartService {
-  async createOne() {
+class CartsDAO {
+  async create() {
     try {
-      const newCart = new cartsDAO({ products: [] });
+      const newCart = new cartModel({ products: [] });
       const createdCart = await newCart.save();
       return createdCart;
     } catch (error) {
@@ -12,9 +12,9 @@ class CartService {
     }
   }
 
-  async get(cartId) {
+  async findById(cartId) {
     try {
-      const cart = await cartsDAO.findById(cartId).populate("products.product");
+      const cart = await cartModel.findById(cartId).populate("products.product");
       if (!cart) {
         throw new Error("Cart not found");
       }
@@ -24,10 +24,10 @@ class CartService {
     }
   }
 
-  async addProductToCart(cartId, productId) {
+  async addProduct(cartId, productId) {
     try {
-      const cart = await cartsDAO.findById(cartId);
-      const product = await productsDAO.findById(productId);
+      const cart = await cartModel.findById(cartId);
+      const product = await productModel.findById(productId);
       if (!cart) {
         throw new Error("Cart does not exist");
       }
@@ -42,9 +42,9 @@ class CartService {
     }
   }
 
-  async updateProductQty(cartId, productId, qty) {
+  async updateProductQuantity(cartId, productId, qty) {
     try {
-      const cart = await cartsDAO.findById(cartId);
+      const cart = await cartModel.findById(cartId);
       const productIndex = cart.products.findIndex(
         (p) => p.product.toString() === productId
       );
@@ -61,7 +61,7 @@ class CartService {
 
   async removeProduct(cartId, productId) {
     try {
-      const cart = await cartsDAO.findById(cartId);
+      const cart = await cartModel.findById(cartId);
       const productIndex = cart.products.findIndex(
         (p) => p.product.toString() === productId
       );
@@ -76,9 +76,9 @@ class CartService {
     }
   }
 
-  async clearCart(cartId) {
+  async clear(cartId) {
     try {
-      const cart = await cartsDAO.findById(cartId);
+      const cart = await cartModel.findById(cartId);
       cart.products = [];
       await cart.save();
     } catch (error) {
@@ -87,4 +87,4 @@ class CartService {
   }
 }
 
-export default CartService;
+export default CartsDAO;

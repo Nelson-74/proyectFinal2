@@ -1,6 +1,6 @@
 import { productModel } from "../DAO/models/products.model.js";
-export class ProductService {
 
+class ProductDAO {
   validate(title, description, price, thumbnail, code, stock, category) {
     if (!title || !description || !price || !thumbnail || !code || !stock || !category) {
       console.log("Validation error: please complete all fields.");
@@ -8,7 +8,7 @@ export class ProductService {
     }
   }
 
-  async get(queryParams) {
+  async findAll(queryParams) {
     const { limit = 10, page = 1, sort, query } = queryParams;
     const filter = {};
 
@@ -40,13 +40,13 @@ export class ProductService {
     return response;
   }
 
-  async createOne(title, description, price, thumbnail, code, stock, category) {
+  async create(title, description, price, thumbnail, code, stock, category) {
     this.validate(title, description, price, thumbnail, code, stock, category);
     const productCreated = await productModel.create({ title, description, price, thumbnail, code, stock, category });
     return productCreated;
   }
 
-  async deleteOne(_id) {
+  async deleteById(_id) {
     const deleted = await productModel.deleteOne({ _id });
     if (deleted.deletedCount === 1) {
       return true;
@@ -55,16 +55,11 @@ export class ProductService {
     }
   }
 
-  async updateOne(id, title, description, price, thumbnail, code, stock, category) {
+  async updateById(id, title, description, price, thumbnail, code, stock, category) {
     this.validate(title, description, price, thumbnail, code, stock, category);
     const productUpdated = await productModel.updateOne({ _id: id }, { title, description, price, thumbnail, code, stock, category });
     return productUpdated;
   }
 }
 
-
-
-
-
-
-
+export default ProductDAO;

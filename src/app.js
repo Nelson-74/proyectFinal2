@@ -45,7 +45,7 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.use(
   session({
-  store: MongoStore.create({mongoUrl: "mongodb+srv://nelsonandrada:CedW4PNucNIwKThz@backendcodernelson.a5badyt.mongodb.net/ecommerce?retryWrites=true&w=majority", ttl:7200}),
+  store: MongoStore.create({mongoUrl: `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@backendcodernelson.a5badyt.mongodb.net/ecommerce?retryWrites=true&w=majority`, ttl:7200}),
   secret:"un-re-secreto",
   resave: true,
   saveUninitialized: true

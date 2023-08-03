@@ -1,7 +1,7 @@
 import { MessageModel } from "../DAO/models/messages.model.js";
 
-export class MessagesService {
-  async getAll() {
+class MessagesDAO {
+  async findAll() {
     try {
       const messages = await MessageModel.find();
       return messages;
@@ -11,3 +11,5 @@ export class MessagesService {
     }
   }
 }
+
+export default MessagesDAO;
