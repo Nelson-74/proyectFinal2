@@ -1,22 +1,17 @@
-import MongoStore from "connect-mongo";
-import { connectMongo } from "../utils";
-import { Store } from "express-session";
-import { Types } from "mongoose";
-import cartsDAO from "./class/carts.dao";
 
-usersDAO(){
-    return new UsersDAO(this.db);
 
+export let MessagesDAO;
+export let UsersDAO;
+export let cartsDAO;
+export let ProductsDAO;
+export let TicketsDAO;
+
+switch (process.env.PERSISTENCE) {
+  case "MONGO":   
+    
+    break;
+
+  default:
+    break;
 }
 
-productsDAO(){
-    return new ProductsDAO(this.db)
-
-}
-cartsDAO(){
-    return  new CartsDAO ( this.db ) ;
-}
-
-ticketsDAO(){
-    return   new TicketsDAO ( this.db );
-}

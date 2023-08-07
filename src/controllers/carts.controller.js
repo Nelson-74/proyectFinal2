@@ -1,8 +1,6 @@
-// controllers/cartsController.js
 import CartService from "../services/carts.service.js";
 
 const Carts = new CartService();
-
 class CartsController {
   async createOne(req, res) {
     try {

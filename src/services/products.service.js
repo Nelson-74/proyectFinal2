@@ -1,4 +1,4 @@
-import { productModel } from "../DAO/models/products.model.js";
+import {ProductDAO} from "../DAO/class/products.dao.js";
 export class ProductService {
 
   validate(title, description, price, thumbnail, code, stock, category) {
@@ -22,7 +22,7 @@ export class ProductService {
       sort: sort === "desc" ? "-price" : "price",
     };
 
-    const result = await productModel.paginate(filter, options);
+    const result = await ProductDAO.paginate(filter, options);
 
     const response = {
       status: "ok",
@@ -42,12 +42,12 @@ export class ProductService {
 
   async createOne(title, description, price, thumbnail, code, stock, category) {
     this.validate(title, description, price, thumbnail, code, stock, category);
-    const productCreated = await productModel.create({ title, description, price, thumbnail, code, stock, category });
+    const productCreated = await ProductDAO.create({ title, description, price, thumbnail, code, stock, category });
     return productCreated;
   }
 
   async deleteOne(_id) {
-    const deleted = await productModel.deleteOne({ _id });
+    const deleted = await ProductDAO.deleteOne({ _id });
     if (deleted.deletedCount === 1) {
       return true;
     } else {
@@ -57,7 +57,7 @@ export class ProductService {
 
   async updateOne(id, title, description, price, thumbnail, code, stock, category) {
     this.validate(title, description, price, thumbnail, code, stock, category);
-    const productUpdated = await productModel.updateOne({ _id: id }, { title, description, price, thumbnail, code, stock, category });
+    const productUpdated = await ProductDAO.updateOne({ _id: id }, { title, description, price, thumbnail, code, stock, category });
     return productUpdated;
   }
 }

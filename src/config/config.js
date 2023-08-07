@@ -6,7 +6,8 @@ program.option(" --mode <mode>","Modo de trabajo", "Development");
 program.parse();
 
 dotenv.config({
-    path: program.opts().mode === "DEVELOPMENT"
+    path: program.opts().mode === "DEVELOPMENT",
+    persistence: process.env.PERSISTENCE
 });
 
 export default{

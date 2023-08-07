@@ -1,6 +1,6 @@
 import express from "express";
 import {userModel} from "../DAO/models/usersModel.js";
-import {isAdmin, isUser} from "../middlewares/auth.js";
+import {isAdmin, isLoggedIn, isUser} from "../middlewares/auth.js";
 import session from "express-session";
 import AuthController from "../controllers/authController.js";
 import { userService } from "../services/users.service.js";
@@ -15,6 +15,6 @@ authRouter.get("/logout", authController.logout);
 authRouter.post("/login", authController.login);
 authRouter.get("/register", authController.registerPage);
 authRouter.post("/register", authController.register);
-
+//authRouter.get("/shop", isLoggedIn, UsersController.shop)
 
 

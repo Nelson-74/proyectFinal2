@@ -6,8 +6,8 @@ const sessionsController = new sessionsController();
 
 iniPassport();
 
-sessionsRouter.get("/github", passport.authenticate("github", { scope: ["user:email"] }));
+sessionsRouter.get("/api/sessions/github", passport.authenticate("github", { scope: ["user:email"] }));
 
-sessionsRouter.get("/githubcallback", passport.authenticate("github", { failureRedirect: "/login" }), sessionsController.registerGithub);;
+sessionsRouter.get("/api/sessions/githubcallback", passport.authenticate("github", { failureRedirect: "/login" }), sessionsController.registerGithub);;
 
-sessionsRouter.get("/show", sessionsController.showSession);
+sessionsRouter.get("/api/sessions/current", sessionsController.currentSession);

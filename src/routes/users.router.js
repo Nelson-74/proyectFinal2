@@ -6,9 +6,9 @@ export const usersRouter = express.Router();
 
 const Service = new userService();
 
-usersRouter.get("/", usersController.getAllUsers());
-usersRouter.post("/:id", isAdmin, usersController.createOne);
-usersRouter.put("/:id",usersController.updateOne );
-usersRouter.delete("/:id", usersController.deleteOne);
+usersRouter.get("/users", usersController.getAllUsers());
+usersRouter.post("/user/:id", isAdmin, usersController.createOne);
+usersRouter.put("/user/update/:id",usersController.updateOne );
+usersRouter.delete("/delete/:id", usersController.deleteOne);
 
 

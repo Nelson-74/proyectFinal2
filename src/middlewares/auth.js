@@ -1,22 +1,30 @@
-export function isUser(req,res,next){
+export function isLoggedIn(req,res,next){
   if(req.session?.user?.email){
     return next();
   }
-  return res.status(401).render("error", { error: "Authentication Error"});
+  return res.status(401).render("error", { error: "Error logging in"});
 };
 
 export function isAdmin(req,res,next){
-  if( req.session?.user?.isAdmin){
+  if( req.session?.user?.role == "admin"){
     return next();
   }
   return res.status(403).render("error", {error: "authorization error"})
 };
 
-export function auth(req, res, next){
+export function isUser(req,res,next){
+  if(req.session?.user?.role == "user"){
+    return next();
+  }
+  return res.status(401).render
+  ("error", {error: "Authentication Error"})
+};
+
+/* export function auth(req, res, next){
   if( req.session?.user === "nelson" && req.session?.isAdmin){
     return next()
   }
   return res.status(403).render("error", {error: "authorization error"})
-}; 
+};  */
 
 
