@@ -64,9 +64,11 @@ app.use("/auth", authRouter);
 
 app.use("/api/sessions", sessionsRouter);
 app.use("/", viewsRouter);
-app.use('/api/sessions/current', (req, res) => {
+app.use("/api/sessions/current", (req, res) => {
   res.json({ user: req.session });
 });
+
+app.use(errorhadler);
 
 app.get("*",(req,res) => {
   return res.status(404).json({
