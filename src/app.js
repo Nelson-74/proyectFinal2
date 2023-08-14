@@ -4,19 +4,24 @@ import handlebars from "express-handlebars";
 import { __dirname, connectMongo,connectSocket } from "./utils.js";
 import path from "path";
 import {Server as SocketServer} from "socket.io";
-//import {usersRouter} from "./routes/users.router.js";
-//import messagesRouter from "./routes/mongo/messages.router.js";
-//import productRouter from "./routes/mongo/product.mongo.router.js";
-//import cartRouter from "./routes/mongo/cart.mongo.router.js";
-//import viewsRouter from "./routes/mongo/views.mongo.router.js";
+import {usersRouter} from "./routes/users.router.js";
+import messagesRouter from "./routes/mongo/messages.router.js";
+import productRouter from "./routes/mongo/product.mongo.router.js";
+import cartRouter from "./routes/mongo/cart.mongo.router.js";
+import viewsRouter from "./routes/mongo/views.mongo.router.js";
 //import cookieParser from "cookie-parser";
 import session from "express-session";
 import FileStore  from "session-file-store";
-//import {authRouter} from "./routes/auth.router.js";
+import {authRouter} from "./routes/auth.router.js";
 //import passport from "passport";
 //import {startPassport} from "./config/passport.config.js";
+import {authRouter} from "./routes/auth.router.js";
+import {mockRouter} from "./routes/mock.router.js";
+//import {ticketRouter} from "./routes/tickets.router.js";
 import {viewsRouter} from "./routes/views.router.js";
 import{sessionsRouter} from "./routes/sessions.router.js";
+import errorHandler from "./middlewares/errors.js";
+import EErrors from "./services/errors/enums.js";
 
 
 const app = express();
@@ -54,13 +59,13 @@ app.use(
 connectMongo();
 connectSocket(httpServer);
 
-/* app.use("/api/users", usersRouter);
+app.use("/api/users", usersRouter);
 app.use("/api/products", productRouter);
 app.use("/api/carts", cartRouter);
 app.use("/",viewsRouter);
 app.use("/chat", messagesRouter);
 app.use("/auth", authRouter);
- */
+
 
 app.use("/api/sessions", sessionsRouter);
 app.use("/", viewsRouter);
@@ -68,7 +73,8 @@ app.use("/api/sessions/current", (req, res) => {
   res.json({ user: req.session });
 });
 
-app.use(errorhadler);
+app.use("/api",mockRouter);
+app.use(errorHandler);
 
 app.get("*",(req,res) => {
   return res.status(404).json({

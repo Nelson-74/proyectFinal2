@@ -1,10 +1,15 @@
 import {ProductDAO} from "../DAO/class/products.dao.js";
+import EErrors from "./errors/enums.js";
 export class ProductService {
 
   validate(title, description, price, thumbnail, code, stock, category) {
     if (!title || !description || !price || !thumbnail || !code || !stock || !category) {
-      console.log("Validation error: please complete all fields.");
-      throw new Error("Validation error: please complete all fields.");
+      return customError.createError({
+        name: "Validate error",
+        message: "Please fill all the fields",
+        code: EErrors.INVALID_TYPES_ERROR,
+        cause:customInfo.generateProductErrorInfo(),
+      })
     }
   }
 

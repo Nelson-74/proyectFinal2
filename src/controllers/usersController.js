@@ -1,8 +1,11 @@
+import customError from "../services/errors/custom.error.js";
+import EErrors from "../services/errors/enums.js";
+import { generateUserErrorInfo } from "../services/errors/info.js";
 import { userService } from "../services/users.service.js";
 
 class UsersController {
 
-  async getAllUsers(req, res){
+  async getAllUsers(req, res,next){
     try{
       const limit = parseInt(req.query.limit) || 10;
       const allUsers = await userService.getAllUsers(limit);
@@ -11,19 +14,32 @@ class UsersController {
         data: allUsers,
         })
         } catch (error) {
-          return res.status(500).json({
-            error: "Error getting users "
-          });
+          next(customError.createError({
+            name: "DatabaseError",
+            cause: error,
+            message: "Error getting users",
+            code: EErrors.DATABASE_ERROR,
+          }));
+        };
     }
-  }
+  
 
   async createOne(req,res){
     const userToSave = req.body;
-    const savedUser = userService.createOne(userToSave);
-    return res.json({
-      status: "ok",
-      payload: savedUser,
-    })
+    try {
+      const savedUser = userService.createOne(userToSave);
+      return res.json({
+        status: "ok",
+        payload: savedUser,
+      });      
+    } catch (error) {
+      next(customError.createError({
+        name:"InvalidTypeError",
+        cause:generateUserErrorInfo(userToSave),
+        message:"Invalid user data",
+        code: EErrors.INVALID_TYPES_ERROR,
+      }));
+    }
   }
 
   async updateOne(req, res){

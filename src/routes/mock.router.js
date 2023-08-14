@@ -5,7 +5,7 @@ export const mockRouter = express.Router();
 
 const mockController = new mockController();
 
-mockRouter.get("/mockProducts", mockController.getMockProducts);
+mockRouter.get("/mockingproducts", mockController.getMockProducts);
 
 
 
