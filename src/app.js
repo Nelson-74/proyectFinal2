@@ -22,9 +22,11 @@ import {viewsRouter} from "./routes/views.router.js";
 import{sessionsRouter} from "./routes/sessions.router.js";
 import errorHandler from "./middlewares/errors.js";
 import EErrors from "./services/errors/enums.js";
-
+import winston from "winston";
 
 const app = express();
+app.use(addLogger);
+
 const port = 8080;
 const fileStore = FileStore(session);
 
