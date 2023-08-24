@@ -1,5 +1,5 @@
-import ProductService from "../services/products.service.js";
-import CartService from "../services/cart.service.js";
+import {ProductService} from "../services/products.service.js";
+import CartService from "../services/carts.service.js";
 
 const productService = new ProductService();
 const cartService = new CartService();

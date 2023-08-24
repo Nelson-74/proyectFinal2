@@ -1,5 +1,5 @@
 import express from "express";
-import ViewsController from "../controllers/viewsController.js";
+import ViewsController from "../../controllers/views.controller.js";
 
 export const viewsRouter = express.Router();
 const viewsController = new ViewsController();

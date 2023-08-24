@@ -1,5 +1,6 @@
-import { cartService } from "../services/carts.service.js";
-import { ticketService } from "../services/ticketService.js";
+import  cartService  from "../services/carts.service.js";
+import { TicketService } from "../services/tickets.service.js";
+import TicketDAO  from "../DAO/class/tickets.dao.js";
 
 class TicketsController {
     async addTicket(req, res) {
@@ -7,9 +8,9 @@ class TicketsController {
           const user = req.session.user;
           const userCartId = user.idCart;
           const purchaser = user.email;
-          const { cartStock, totalPriceTicket, cartOutStock } = await ticketService.stockForTicket(userCartId);
-          await cartService.updateCart(userCartId, cartOutStock);
-          await ticketService.addTicket(purchaser, cartStock, totalPriceTicket);
+          const { cartStock, totalPriceTicket, cartOutStock } = await TicketService.stockForTicket(userCartId);
+          await cartService.updateProductQty(userCartId, cartOutStock);
+          await TicketService.addTicket(purchaser, cartStock, totalPriceTicket);
           return res.render("finaltickets", { ticket: cartStock, totalCart: totalPriceTicket, purchaser });
         } catch (err) {
           res.status(500).json({ Error: `${err}` });

@@ -1,4 +1,4 @@
-import { userModel } from "../DAO/models/usersModel.js";
+import { userModel } from "../DAO/models/users.model.js";
 import {isAdmin, isUser} from "../middlewares/auth.js";
 import session from "express-session";
 

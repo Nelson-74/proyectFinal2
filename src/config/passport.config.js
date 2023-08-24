@@ -1,7 +1,7 @@
 import passport from "passport";
-import { userModel } from "../DAO/models/usersModel.js";
+import { userModel } from "../DAO/models/users.model.js";
 import local from "passport-local";
-import { createHash, isValidPassword} from "../utils.js";
+import { createHash, isValidPassword} from "./bcrypt.js";
 import GitHubStrategy from "passport-github2";
 import { userService } from "../services/users.service.js";
 const LocalStrategy = local.Strategy;
@@ -15,24 +15,9 @@ export function iniPassport(){
         clientSecret: config.github.clientSecret,
         callbackURL: config.github.callbackURL,
       },
-      async (_, _, profile, done) => {
+      async (_, __, profile, done) => {
       console.log(profile);
         try {
-          /*const res = await fetch("https://api.github.com/user/emails", {
-            headers: {
-              Accept: "application/vnd.github+json",
-              Authorization: "Bearer" + accesToken,
-              "X-Github-Api-Version': '2022-11-28",
-            },
-          });
-        const emails = await res.json();
-        const emailDetail = emails.find((email) => email.verified == true);
-
-        if (!emailDetail) {
-          return done(new Error("cannot get a valid email for this user"));
-        }
-          profile.email = emailDetail.email; */
-
         let user = await userModel.findOne({ email: profile.email });
         if (!user) {
           const newUser = {

@@ -1,9 +1,8 @@
 import customError from "../services/errors/custom.error.js";
 import EErrors from "../services/errors/enums.js";
-import { generateUserErrorInfo } from "../services/errors/info.js";
 import { userService } from "../services/users.service.js";
 
-class UsersController {
+export default class UserController {
 
   async getAllUsers(req, res,next){
     try{
@@ -65,14 +64,18 @@ class UsersController {
   async deleteOne(req, res){
     try {
       const { id } = req.params;
-      if (!ObjectId.isValid(id)) throw new Error("Invalid ObjectId");
+      if (!ObjectId.isValid(id)) throw customError.createError({
+        name: "InvalidObjectIdError",
+        message: "Invalid ObjectId",
+        code: EErrors.INVALID_TYPES_ERROR,
+      });
       // delete the user with this ID from DB and send response back to client
       return res.status(200).json({
         status: "ok",
         msg: "user deleted",
         data: {},
       });
-    } catch (e) {
+    } catch (error) {
       console.log(e);
       return res.status(500).json({
         status: "error",
@@ -83,4 +86,5 @@ class UsersController {
   }
 
 }
-export const usersController = new UsersController();
+
+

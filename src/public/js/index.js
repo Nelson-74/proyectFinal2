@@ -56,7 +56,7 @@ if (!carritoId) {
 
 
 
-/* document.addEventListener("DOMContentLoaded", () => {
+ document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("addProductForm");
 
   form.addEventListener("submit", event => {
@@ -164,7 +164,7 @@ function deleteProduct(id) {
       alert("Cannot delete product");
     });
   }
- */
+
 
 
 

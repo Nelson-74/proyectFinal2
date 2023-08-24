@@ -1,8 +1,8 @@
 import express from "express";
-import cartsController from "../../controllers/carts.controller.js";
+import CartsController from "../../controllers/carts.controller.js";
 
 const cartRouter = express.Router();
-const cartsController = new cartsController();
+const cartsController = new CartsController();
 
 cartRouter.post("/cart", cartsController.createOne);
 cartRouter.post("/:cid/product/:pid",cartsController.addProductToCart);

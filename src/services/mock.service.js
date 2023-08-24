@@ -1,5 +1,4 @@
-import { faker } from "@faker-js/faker/locale/es";
-
+import faker from "faker";
 class MockProducts {
   constructor() {
     this.products = [];

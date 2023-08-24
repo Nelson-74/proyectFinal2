@@ -11,7 +11,7 @@ const devLogger = winston.createLogger({
     transports: [ new winston.transports.Console()]
     });
 
-    const prodLogger = winston.createLogger({
+const prodLogger = winston.createLogger({
       level: "info",
       format: winston.format.combine(
         winston.format.timestamp(),
@@ -26,13 +26,4 @@ const devLogger = winston.createLogger({
         ]
         });
       
-export default{ devLogger, prodLogger };
-/* export const addLogger = (req, res, next) => {
-  req.logger = logger;
-  next();
-}; */
-/* new winston.transports.File({
-  filename:"./errors.log",
-  level:"warning",
-  format: winston.format.simple(),
-}), */
+export { devLogger, prodLogger };

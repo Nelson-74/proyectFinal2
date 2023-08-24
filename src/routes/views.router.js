@@ -1,10 +1,10 @@
 import express from "express";
-export const viewsRouter = express.Router();
+export const viewsRouterSessions = express.Router();
 
-viewsRouter.get("/view", async (req, res) => {
+viewsRouterSessions.get("/view", async (req, res) => {
   res.render("session");
 });
 
-viewsRouter.get("/login", async (req, res) => {
+viewsRouterSessions.get("/login", async (req, res) => {
   res.render("login-github");
 });

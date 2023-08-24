@@ -57,7 +57,7 @@ class CartsController {
     }
   }
 
-  async get(req, res) {
+  async getCarts(req, res) {
     try {
       const carts = await Carts.get();
       res.status(200).json(carts);

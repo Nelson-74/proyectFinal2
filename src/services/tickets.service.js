@@ -1,5 +1,5 @@
-import {ticketsDAO} from "../DAO/class/tickets.dao.js";
-import {CartService} from "./carts.service.js";
+import TicketDAO from "../DAO/class/tickets.dao.js";
+import CartService from "./carts.service.js";
 
 export class TicketService{
 
@@ -8,15 +8,15 @@ export class TicketService{
       const dataTicket = {
         code: "",
         purchaser_datatime: new Date(),
-        price : ticket? ticket["price"] : null,
+        price : ticket? ticket[0] : null,
         amount: totalCart,
         purchaser: purchaser,
         products: ticket
       }
-    const newTicket = await ticketsDAO.addTicket(dataTicket);
+    const newTicket = await TicketDAO.addTicket(dataTicket);
     return newTicket;
     } catch (error){
-    throw("falla en el servicio")
+    throw new Error("Failed to add ticket");
   }
   }
 

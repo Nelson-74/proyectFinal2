@@ -7,25 +7,25 @@ import {Server as SocketServer} from "socket.io";
 import {usersRouter} from "./routes/users.router.js";
 import messagesRouter from "./routes/mongo/messages.router.js";
 import productRouter from "./routes/mongo/product.mongo.router.js";
-import cartRouter from "./routes/mongo/cart.mongo.router.js";
+import cartRouter from "./routes/mongo/carts.mongo.router.js";
 import viewsRouter from "./routes/mongo/views.mongo.router.js";
-//import cookieParser from "cookie-parser";
+import cookieParser from "cookie-parser";
 import session from "express-session";
 import FileStore  from "session-file-store";
-import {authRouter} from "./routes/auth.router.js";
-//import passport from "passport";
-//import {startPassport} from "./config/passport.config.js";
+import passport from "passport";
+import {iniPassport} from "./config/passport.config.js";
 import {authRouter} from "./routes/auth.router.js";
 import {mockRouter} from "./routes/mock.router.js";
-//import {ticketRouter} from "./routes/tickets.router.js";
-import {viewsRouter} from "./routes/views.router.js";
+import {ticketsRouter} from "./routes/tickets.router.js";
+import {viewsRouterSessions} from "./routes/views.router.js";
 import{sessionsRouter} from "./routes/sessions.router.js";
 import errorHandler from "./middlewares/errors.js";
 import EErrors from "./services/errors/enums.js";
 import winston from "winston";
+import startLogger from "./middlewares/logger.middleware.js";
 
 const app = express();
-app.use(addLogger);
+app.use(startLogger );
 
 const port = 8080;
 const fileStore = FileStore(session);
@@ -70,7 +70,7 @@ app.use("/auth", authRouter);
 
 
 app.use("/api/sessions", sessionsRouter);
-app.use("/", viewsRouter);
+app.use("/", viewsRouterSessions);
 app.use("/api/sessions/current", (req, res) => {
   res.json({ user: req.session });
 });
@@ -90,7 +90,7 @@ app.get("*",(req,res) => {
 
 
 
-/* app.use(cookieParser());
+app.use(cookieParser());
 
 app.use("/api/set-cookies", (req, res) =>{
   res.cookie("cookiePower", "info con power", {maxAge:1000000, signed: true, httpOnly: true});
@@ -115,8 +115,8 @@ app.get("/api/get-cookies", (req, res) => {
 app.get("/api/deleteCookie",(req, res) => {
   res.clearCookie("cookiePower").send("Cookie Removed");
   res.clearCookie("cont").send("Cookie Removed");
-}); */
-/* app.get("/session", (req,res) => {
+}); 
+ app.get("/session", (req,res) => {
   if(req.session.cont){
     console.log(req.session, req.sessionID);
     req.session.cont++;
@@ -125,16 +125,16 @@ app.get("/api/deleteCookie",(req, res) => {
     req.session.cont = 1;
     res.send("nos visitaste" + 1 );
   }
-});  */
-/* app.use(session({
+});  
+ app.use(session({
   store: new fileStore({path: "/session", ttl:7200, retires:0}),
   secret: "S3CR3T0",
   resave: false,
   saveUninitialized: true,
-})); */
+})); 
 
 
-/* app.get("/logout", (req,res) => {
+ app.get("/logout", (req,res) => {
   //console.log(req?.session?.user, req?.session?.admin);
   req.session.destroy(err => {
     if(err){
@@ -158,9 +158,9 @@ app.get("login", (req, res) =>{
   req.session.admin = true;
   res.send(" login ok");
 });
- */
-/* app.get("/privado", auth,(req,res) => {
+
+app.get("/privado", auth,(req,res) => {
   res.send("si estás viendo esto es porque ya te logeaste!!")
-});  */
+});  
 
 //app.use(cookieParser("code-secret-123456789"));

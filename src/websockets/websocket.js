@@ -1,4 +1,4 @@
-/* import { ProductManager } from "../DAO/fsManagers/productsManager.js";
+import { ProductManager } from "../DAO/fsManagers/productsManager.js";
 import { __dirname } from "../utils.js";
 import path from "path";
 
@@ -36,17 +36,17 @@ export default (io) => {
       console.log("Cliente desconectado");
     });
   });
-}; */
+}; 
 
-/* const socketServer = new Server(httpServer);
+const socketServer = new Server(httpServer);
 let msgs = [];
 socketServer.on("connection", (socket)=> {
   socket.on("ms_front_to_back", (msg)=>{
     msgs.unshift(msg);
     socketServer.emit("msg_back_to_front", msgs);
   });
-}); */
-/* socket.on("productAdded", (product) => {
+}); 
+socket.on("productAdded", (product) => {
   const container = document.getElementById("product-list");
   const productListElement = document.createElement("div");
   productListElement.innerHTML = `
@@ -84,4 +84,4 @@ socket.on("product:deleted", (id) => {
   if (div) {
     div.remove();
   }
-}); */
+}); 

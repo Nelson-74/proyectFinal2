@@ -1,4 +1,4 @@
-import { MockProducts } from "../mocks/MockProducts.js"; 
+import MockProducts  from "../services/mock.service.js"; 
 
 class MockController {
   constructor() {

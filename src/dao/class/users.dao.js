@@ -1,6 +1,6 @@
 import { userModel } from "../DAO/models/users.model.js";
 
-class UserDAO {
+class userDAO {
   async findAll() {
     const users = await userModel.find({});
     return users;

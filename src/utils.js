@@ -1,4 +1,3 @@
-
 import multer from "multer";
 
 
@@ -23,7 +22,7 @@ export const __dirname = path.dirname(__filename);
 
 import { connect,Schema,model } from "mongoose";
 import { Server } from "socket.io";
-//import { userModel } from "./DAO/models/usersModel.js";
+import { userModel } from "./DAO/models/users.model.js";
 
 export async function connectMongo() {
   try {
@@ -38,10 +37,10 @@ export async function connectMongo() {
 } 
 //-----------------Socket---------------
 
-import { Server as socketServer} from 'socket.io';
-import {MessageModel} from './DAO/models/messagesModel.js';
-import  ProductService  from "./services/products.service.js";
-import { userModel } from "./DAO/models/usersModel.js";
+import { Server as socketServer} from "socket.io";
+import {MessageModel} from "./DAO/models/messages.model.js";
+import  {ProductService}  from "./services/products.service.js";
+
 
 
 export const connectSocket = (httpServer) => {
@@ -83,12 +82,12 @@ export function isLogedIn(req, res, next) {
   return res.status(401).render(error,{error:"Error de autorización"})
 }
 
-/* export function isAdmin(req, res, next){
-  if(req.session?.admin){
+export function isUser(req, res, next){
+  if(req.session?.user){
     return next();
   }
   return res.status(401).send("error de autorización");
-} */
+} 
 
 
 
