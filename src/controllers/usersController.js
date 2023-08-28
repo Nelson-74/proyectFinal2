@@ -1,8 +1,9 @@
 import customError from "../services/errors/custom.error.js";
 import EErrors from "../services/errors/enums.js";
+import { ProductService } from "../services/products.service.js";
 import { userService } from "../services/users.service.js";
 
-export default class UserController {
+export class UserController {
 
   async getAllUsers(req, res,next){
     try{
@@ -58,8 +59,19 @@ export default class UserController {
         data: {}
       });
     }
-
   }
+
+  async shop (req,res){
+    try {
+      const products = await ProductService.getProducts();
+      res.status(200).json(products);
+    } catch (error) {
+      res.status(500).json({
+        status: "error",
+        msg: "Failed to get shop data",
+      });
+    }  
+  };
 
   async deleteOne(req, res){
     try {

@@ -1,4 +1,4 @@
-import {cartsDAO,productDAO,TicketDAO,} from "../DAO/factory.js";
+import {cartsDAO,ProductDAO,TicketDAO,} from "../DAO/factory.js";
 
 class CartService {
   async createOne() {
@@ -26,7 +26,7 @@ class CartService {
   async addProductToCart(cartId, productId) {
     try {
       const cart = await cartsDAO.findById(cartId);
-      const product = await productDAO.findById(productId);
+      const product = await ProductDAO.findById(productId);
       if (!cart) {
         throw new Error("Cart does not exist");
       }

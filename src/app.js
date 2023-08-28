@@ -4,26 +4,28 @@ import handlebars from "express-handlebars";
 import { __dirname, connectMongo,connectSocket } from "./utils.js";
 import path from "path";
 import {Server as SocketServer} from "socket.io";
+import session from "express-session";
+import FileStore  from "session-file-store";
+import passport from "passport";
 import {usersRouter} from "./routes/users.router.js";
 import messagesRouter from "./routes/mongo/messages.router.js";
 import productRouter from "./routes/mongo/product.mongo.router.js";
 import cartRouter from "./routes/mongo/carts.mongo.router.js";
 import viewsRouter from "./routes/mongo/views.mongo.router.js";
 import cookieParser from "cookie-parser";
-import session from "express-session";
-import FileStore  from "session-file-store";
-import passport from "passport";
 import {iniPassport} from "./config/passport.config.js";
 import {authRouter} from "./routes/auth.router.js";
 import {mockRouter} from "./routes/mock.router.js";
 import {ticketsRouter} from "./routes/tickets.router.js";
 import {viewsRouterSessions} from "./routes/views.router.js";
 import{sessionsRouter} from "./routes/sessions.router.js";
+import dotenv from "dotenv";
 import errorHandler from "./middlewares/errors.js";
 import EErrors from "./services/errors/enums.js";
 import winston from "winston";
 import startLogger from "./middlewares/logger.middleware.js";
 
+dotenv.config();
 const app = express();
 app.use(startLogger );
 
@@ -78,17 +80,6 @@ app.use("/api/sessions/current", (req, res) => {
 app.use("/api",mockRouter);
 app.use(errorHandler);
 
-app.get("*",(req,res) => {
-  return res.status(404).json({
-    status:"error",
-    message:"the route is not implemented!!!",
-    data:{},
-  });
-});
-
-
-
-
 
 app.use(cookieParser());
 
@@ -116,7 +107,7 @@ app.get("/api/deleteCookie",(req, res) => {
   res.clearCookie("cookiePower").send("Cookie Removed");
   res.clearCookie("cont").send("Cookie Removed");
 }); 
- app.get("/session", (req,res) => {
+app.get("/session", (req,res) => {
   if(req.session.cont){
     console.log(req.session, req.sessionID);
     req.session.cont++;
@@ -126,15 +117,18 @@ app.get("/api/deleteCookie",(req, res) => {
     res.send("nos visitaste" + 1 );
   }
 });  
- app.use(session({
+app.use(session({
   store: new fileStore({path: "/session", ttl:7200, retires:0}),
   secret: "S3CR3T0",
   resave: false,
   saveUninitialized: true,
 })); 
 
+iniPassport();
+app.use(passport.initialize());
+app.use(passport.session());
 
- app.get("/logout", (req,res) => {
+app.get("/logout", (req,res) => {
   //console.log(req?.session?.user, req?.session?.admin);
   req.session.destroy(err => {
     if(err){
@@ -164,3 +158,10 @@ app.get("/privado", auth,(req,res) => {
 });  
 
 //app.use(cookieParser("code-secret-123456789"));
+app.get("*",(req,res) => {
+  return res.status(404).json({
+    status:"error",
+    message:"the route is not implemented!!!",
+    data:{},
+  });
+});

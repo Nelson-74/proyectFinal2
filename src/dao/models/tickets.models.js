@@ -14,4 +14,4 @@ const schema = new Schema({
 },{versionKey: false} 
 );
 
-export const TicketModel = model("tickets", Schema);
+export const TicketModel = model("tickets", schema);

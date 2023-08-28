@@ -9,6 +9,7 @@ import {UserController} from "../controllers/usersController.js";
 
 export const authRouter = express.Router();
 const authController = new AuthController();
+const userController = new UserController();
 
 authRouter.get("/login", authController.loginPage);
 authRouter.get("/profile", authController.profile);
@@ -17,6 +18,6 @@ authRouter.get("/logout", authController.logout);
 authRouter.post("/login", authController.login);
 authRouter.get("/register", authController.registerPage);
 authRouter.post("/register", authController.register);
-authRouter.get("/shop", isLoggedIn, UserController.shop)
+authRouter.get("/shop", isLoggedIn, userController.shop)
 
 

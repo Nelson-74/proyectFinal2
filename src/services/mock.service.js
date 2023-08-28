@@ -1,4 +1,5 @@
 import faker from "faker";
+
 class MockProducts {
   constructor() {
     this.products = [];
@@ -9,11 +10,11 @@ class MockProducts {
 
   generatingProduct() {
     const product = {
-      _id: faker.database.mongodbObjectId(),
+      _id: faker.datatype.uuid(),
       title: faker.commerce.productName(),
       description: faker.commerce.productDescription(),
       price: faker.commerce.price({ min: 100, max: 60000, dec: 0, symbol: "$" }),
-      thumbnails: [faker.image.sportswear()],
+      thumbnails: [faker.image.imageUrl()],
       code: faker.finance.bic({ includeBranchCode: true }),
       stock: faker.datatype.number({ max: 100 }),
       category: faker.commerce.department(),

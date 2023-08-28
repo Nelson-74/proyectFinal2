@@ -1,4 +1,4 @@
-import productDAO from "../DAO/class/products.dao.js";
+import ProductDAO from "../DAO/class/products.dao.js";
 import EErrors from "./errors/enums.js";
 export class ProductService {
 
@@ -27,7 +27,7 @@ export class ProductService {
       sort: sort === "desc" ? "-price" : "price",
     };
 
-    const result = await productDAO.paginate(filter, options);
+    const result = await ProductDAO.paginate(filter, options);
 
     const response = {
       status: "ok",

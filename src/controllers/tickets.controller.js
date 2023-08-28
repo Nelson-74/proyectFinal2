@@ -22,8 +22,8 @@ class TicketsController {
           const user = req.session.user;
           const userCartId = user.idCart;
           const cartProducts = await cartService.getProductsByCartId(userCartId);
-          const { cartStock, totalPriceTicket } = await ticketService.stockCartProductsForTicket(userCartId);
-          return res.render('ticket', { user, cartProducts, cartStock, totalPriceTicket });
+          const { cartStock, totalPriceTicket } = await TicketService.stockCartProductsForTicket(userCartId);
+          return res.render("ticket", { user, cartProducts, cartStock, totalPriceTicket });
         } catch (err) {
           res.status(500).json({ Error: `${err}` });
         }

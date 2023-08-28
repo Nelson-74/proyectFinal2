@@ -1,6 +1,6 @@
 import { productModel } from "../models/products.model.js";
 
-class productDAO {
+class ProductDAO {
   validate(title, description, price, thumbnail, code, stock, category) {
     if (!title || !description || !price || !thumbnail || !code || !stock || !category) {
       console.log("Validation error: please complete all fields.");
@@ -62,4 +62,4 @@ class productDAO {
   }
 }
 
-export default productDAO;
+export default ProductDAO;

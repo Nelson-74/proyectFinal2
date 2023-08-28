@@ -1,8 +1,10 @@
 import passport from "passport";
 import express from "express";
 import {iniPassport} from "../config/passport.config.js";
+import SessionsController from "../controllers/sessions.controller.js";
+
 export const sessionsRouter = express.Router();
-const sessionsController = new sessionsController();
+const sessionsController = new SessionsController();
 
 iniPassport();
 
