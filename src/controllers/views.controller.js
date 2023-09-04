@@ -9,7 +9,7 @@ class ViewsController {
     try {
       const { limit = 10, page = 1, sort, query } = req.query;
       const queryParams = { limit, page, sort, query };
-      const products = await productService.get(queryParams);
+      const products = await productService.getAll(queryParams);
       return res.status(200).render("home", { products });
     } catch (err) {
       console.error(err);
@@ -21,7 +21,7 @@ class ViewsController {
 
   async realtimeProducts(req, res) {
     try {
-      const products = await productService.get();
+      const products = await productService.getAll();
       return res.status(200).render("realTimeProducts", { products });
     } catch (err) {
       return res
@@ -46,7 +46,7 @@ class ViewsController {
         hasNextPage,
         prevLink,
         nextLink,
-      } = await productService.get(queryParams);
+      } = await productService.getAll(queryParams);
 
       let productsSimplified = products.map((item) => {
         return {

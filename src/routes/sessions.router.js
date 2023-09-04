@@ -6,7 +6,7 @@ import SessionsController from "../controllers/sessions.controller.js";
 export const sessionsRouter = express.Router();
 const sessionsController = new SessionsController();
 
-iniPassport();
+
 
 sessionsRouter.get("/api/sessions/github", passport.authenticate("github", { scope: ["user:email"] }));
 

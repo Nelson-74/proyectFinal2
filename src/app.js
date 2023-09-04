@@ -81,13 +81,14 @@ app.use("/api",mockRouter);
 app.use(errorHandler);
 
 
-app.use(cookieParser());
+//app.use(cookieParser());
+app.use(cookieParser("code-secret-123456789"));
 
 app.use("/api/set-cookies", (req, res) =>{
   res.cookie("cookiePower", "info con power", {maxAge:1000000, signed: true, httpOnly: true});
   res.cookie("cont", 0, {maxAge: 10000000});
   return res.status(200).json({
-    status: "error",
+    status: "ok",
     msg:"Cookies setted successfully!",
     data: {},
   })
@@ -105,7 +106,7 @@ app.get("/api/get-cookies", (req, res) => {
 
 app.get("/api/deleteCookie",(req, res) => {
   res.clearCookie("cookiePower").send("Cookie Removed");
-  res.clearCookie("cont").send("Cookie Removed");
+  
 }); 
 app.get("/session", (req,res) => {
   if(req.session.cont){
@@ -129,7 +130,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.get("/logout", (req,res) => {
-  //console.log(req?.session?.user, req?.session?.admin);
+  console.log(req?.session?.user, req?.session?.admin);
   req.session.destroy(err => {
     if(err){
       return res.json({
@@ -139,10 +140,10 @@ app.get("/logout", (req,res) => {
     }
     res.send(("Logout ok !!"))
   });
-  //console.log(req?.session?.user, req?.session?.admin);
+  console.log(req?.session?.user, req?.session?.admin);
 }); 
 
-app.get("login", (req, res) =>{
+app.get("/login", (req, res) =>{
   console.log(req.session.user,req.session.admin);
   const {userName, password} = req.query;
   if(userName !== "pepe" || password !== "pepepass"){
@@ -153,11 +154,11 @@ app.get("login", (req, res) =>{
   res.send(" login ok");
 });
 
-app.get("/privado", auth,(req,res) => {
+/* app.get("/privado", auth,(req,res) => {
   res.send("si estás viendo esto es porque ya te logeaste!!")
-});  
+});   */
 
-//app.use(cookieParser("code-secret-123456789"));
+
 app.get("*",(req,res) => {
   return res.status(404).json({
     status:"error",

@@ -14,7 +14,7 @@ class ProductsController {
         sort: req.query.sort,
         query: req.query.query,
       };
-      const response = await Products.get(queryParams);
+      const response = await Products.getAll(queryParams);
       return res.status(200).json(response);
     } catch (error) {
       console.error(error);
