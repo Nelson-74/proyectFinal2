@@ -1,0 +1,77 @@
+paths:
+  /api/products:
+  get:
+    summary: Obtiene la lista de todos los productos.
+    tags: [Products]
+    responses:
+      200:
+        description: Lista de productos obtenida con éxito.
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: "#/components/schemas/Products"
+
+@swagger
+  tags:
+  name: Products
+  description: Endpoints relacionados con productos
+
+
+@swagger
+components:
+  schemas:
+    Product:
+      type: object
+      properties:
+      title:
+          type: string
+          description:
+          type: string
+          price:
+          type: number
+          stock:
+          type: number
+          category:
+          type: string
+          code:
+          type: string
+        thumbnail:
+          type: string
+
+swagger: "2.0"
+info:
+  title: Documentación de Ropa Deportiva
+  description: Documentación de las rutas de productos
+  version: 1.0.0
+paths:
+  /api/products:
+    get:
+      summary: Obtiene la lista de todos los productos.
+      responses:
+        200:
+          description: Lista de productos obtenida con éxito.
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/Product"
+definitions:
+  Product:
+    type: object
+    properties:
+      title:
+        type: string
+      description:
+        type: string
+      price:
+        type: number
+      stock:
+        type: number
+      category:
+        type: string
+      code:
+        type: string
+      thumbnail:
+        type: string
+

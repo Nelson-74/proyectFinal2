@@ -9,9 +9,7 @@ productRouter.get("/products/:pid", productsController.getById);
 productRouter.post("/products/novel", productsController.createOne);
 productRouter.put("/products/update/:id", productsController.updateOne);
 productRouter.delete("/products/delete/:id", productsController.deleteOne);
-
 //HANDLEBARS - WEBSOCKETS
-
 productRouter.get("realTimesProducts",isUser, isAdmin, async(req, res) => {
 try {
     const products = await productService.get();
@@ -35,7 +33,5 @@ productRouter.get("products", async (req, res)=>{
           res.status(500).json({Error :"No products"})
         }
 });
-
-
 
 export default productRouter;

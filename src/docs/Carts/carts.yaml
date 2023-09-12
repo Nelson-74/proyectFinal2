@@ -1,0 +1,11 @@
+paths:
+    /api/carts:
+    get:
+        summary: Obtine la lista de todos los carros
+        tags:
+            Carts
+        response:
+            "200":
+        description: Carritos Obtenidos satisfactoriamente
+        
+

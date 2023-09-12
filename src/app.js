@@ -21,20 +21,24 @@ import {viewsRouterSessions} from "./routes/views.router.js";
 import{sessionsRouter} from "./routes/sessions.router.js";
 import dotenv from "dotenv";
 import errorHandler from "./middlewares/errors.js";
-import EErrors from "./services/errors/enums.js";
-import winston from "winston";
 import startLogger from "./middlewares/logger.middleware.js";
+import mongoose from "mongoose";
+import swaggerJsdoc from "swagger-jsdoc";
+import swaggerUiExpress from "swagger-ui-express";
 
 dotenv.config();
 const app = express();
 app.use(startLogger );
 
-const port = 8080;
+const PORT = process.env.PORT|| 8080;
+const connection = mongoose.connect("mongodb+srv://nelsonandrada:CedW4PNucNIwKThz@backendcodernelson.a5badyt.mongodb.net/ecommerce?retryWrites=true&w=majority");
+
+
 const fileStore = FileStore(session);
 
-const httpServer = app.listen(port, () => {
+const httpServer = app.listen(PORT, () => {
   console.log(__dirname);
-  console.log(`Example app listening on http://localhost:${port}`);
+  console.log(`Example app listening on http://localhost:${PORT}`);
 });
 
 app.use(express.urlencoded({ extended: false }));
@@ -51,6 +55,22 @@ app.set("view engine", "handlebars");
 
 app.use(express.static(path.join(__dirname, "public")));
 
+// Configuración de Swagger
+
+const swaggerOptions = {
+  definition: {
+    openapi: "3.0.1",
+    info: {
+      title: "Documentación Ropa deportiva",
+      version: "1.0.0",
+      description: "Este proyecto es de ropa deportiva",
+    },
+  },
+  apis: [`${__dirname}/docs/**/*,yaml`], // Especifica la ubicación de tus archivos de definición de rutas
+};
+
+const specs = swaggerJsdoc(swaggerOptions);
+app.use("/apidocs", swaggerUiExpress.serve, swaggerUiExpress.setup(specs));
 
 app.use(
   session({
@@ -153,11 +173,6 @@ app.get("/login", (req, res) =>{
   req.session.admin = true;
   res.send(" login ok");
 });
-
-/* app.get("/privado", auth,(req,res) => {
-  res.send("si estás viendo esto es porque ya te logeaste!!")
-});   */
-
 
 app.get("*",(req,res) => {
   return res.status(404).json({
