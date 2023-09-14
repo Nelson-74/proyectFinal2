@@ -66,7 +66,7 @@ const swaggerOptions = {
       description: "Este proyecto es de ropa deportiva",
     },
   },
-  apis: [`${__dirname}/docs/**/*,yaml`], // Especifica la ubicación de tus archivos de definición de rutas
+  apis: [`${__dirname}/docs/**/*.yaml`], // Especifica la ubicación de tus archivos de definición de rutas
 };
 
 const specs = swaggerJsdoc(swaggerOptions);

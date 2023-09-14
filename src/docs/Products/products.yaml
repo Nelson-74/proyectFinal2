@@ -1,77 +1,109 @@
 paths:
   /api/products:
-  get:
-    summary: Obtiene la lista de todos los productos.
-    tags: [Products]
-    responses:
-      200:
-        description: Lista de productos obtenida con éxito.
+    get:
+      summary: Obtener lista de productos
+      tags:
+      -Products
+      description: Retorna una lista de todos los productos disponibles.
+      responses:
+        200:
+          description: Lista de productos obtenida con éxito.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Products"
+    post:
+      summary: Crear un nuevo producto
+      description: Crea un nuevo producto con los datos proporcionados.
+      requestBody:
+        required: true
         content:
           application/json:
             schema:
-              type: array
-              items:
-                $ref: "#/components/schemas/Products"
-
-@swagger
-  tags:
-  name: Products
-  description: Endpoints relacionados con productos
-
-
-@swagger
+              $ref: "#/components/schemas/Product"
+      responses:
+        201:
+          description: Producto creado con éxito.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Product"
+  /api/products/{id}:
+    parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        description: ID del producto a actualizar o eliminar.
+    put:
+      summary: Actualizar un producto existente
+      description: Actualiza los datos de un producto existente.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Product"
+      responses:
+        200:
+          description: Producto actualizado con éxito.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Product"
+    delete:
+      summary: Eliminar un producto existente
+      description: Elimina un producto existente según su ID.
+      responses:
+        204:
+          description: Producto eliminado con éxito.
 components:
   schemas:
     Product:
       type: object
       properties:
-      title:
+        _id:
+          type: objectId
+          description: id agregado de mongo
+        title:
           type: string
-          description:
+          description: Nombre del producto.
+        product_description:
           type: string
-          price:
+          description: Descripción del producto.
+        price:
           type: number
-          stock:
-          type: number
-          category:
+          description: Precio del producto.
+        stock:
+          type: integer
+          description: Cantidad en stock.
+        category:
           type: string
-          code:
+          description: Categoría del producto.
+        code:
           type: string
+          description: Código único del producto.
         thumbnail:
           type: string
+          description: URL de la imagen del producto.
+      example:
+        _id: ObjectId("649a07c547a706f437ee3fe0")
+        title: Chomba de entrenamiento Boca
+        product_description: Chomba de entrenamiento para hombres
+        code: "1974"
+        price: 22000
+        stock: 10
+        category: Remera de hombre
+        thumbnail: https://i.ibb.co/LzTSr0G/chomba-Boca.jpg
 
-swagger: "2.0"
-info:
-  title: Documentación de Ropa Deportiva
-  description: Documentación de las rutas de productos
-  version: 1.0.0
-paths:
-  /api/products:
-    get:
-      summary: Obtiene la lista de todos los productos.
-      responses:
-        200:
-          description: Lista de productos obtenida con éxito.
-          schema:
-            type: array
-            items:
-              $ref: "#/definitions/Product"
-definitions:
-  Product:
-    type: object
-    properties:
-      title:
-        type: string
-      description:
-        type: string
-      price:
-        type: number
-      stock:
-        type: number
-      category:
-        type: string
-      code:
-        type: string
-      thumbnail:
-        type: string
+
+
+
+
+
+
+
 

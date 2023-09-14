@@ -1,11 +1,79 @@
 paths:
-    /api/carts:
+  /api/cart:
+    post:
+      summary: Crear un nuevo carrito
+      description: Crea un nuevo carrito.
+      responses:
+        "200":
+          description: Carrito creado con éxito.
+          content:
+            application/json:
+              schema:
+                type: object
+  /api/{cid}/product/{pid}:
+    parameters:
+      - in: path
+        name: cid
+        required: true
+        schema:
+          type: string
+        description: ID del carrito.
+      - in: path
+        name: pid
+        required: true
+        schema:
+          type: string
+        description: ID del producto a agregar al carrito.
+    post:
+      summary: Agregar producto al carrito
+      description: Agrega un producto al carrito especificado.
+      responses:
+        "200":
+          description: Producto agregado al carrito con éxito.
+          content:
+            application/json:
+              schema:
+                type: object
+    delete:
+      summary: Eliminar producto del carrito
+      description: Elimina un producto del carrito especificado.
+      responses:
+        "200":
+          description: Producto eliminado del carrito con éxito.
+          content:
+            application/json:
+              schema:
+                type: object
+  /api/carts/{cid}:
+    parameters:
+      - in: path
+        name: cid
+        required: true
+        schema:
+          type: string
+        description: ID del carrito.
     get:
-        summary: Obtine la lista de todos los carros
-        tags:
-            Carts
-        response:
-            "200":
-        description: Carritos Obtenidos satisfactoriamente
+      summary: Obtener productos en el carrito
+      description: Obtiene los productos en el carrito especificado.
+      responses:
+        "200":
+          description: Productos en el carrito obtenidos con éxito.
+          content:
+            application/json:
+              schema:
+                type: array
+  /api/carts:
+    get:
+      summary: Obtener todos los carritos
+      description: Obtiene una lista de todos los carritos disponibles.
+      responses:
+        "200":
+          description: Lista de carritos obtenida con éxito.
+          content:
+            application/json:
+              schema:
+                type: array
+
+
         
 
