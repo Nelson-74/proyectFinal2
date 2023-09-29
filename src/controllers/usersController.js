@@ -12,6 +12,7 @@ export class UserController {
       return res.status(200).json({
         success: true,
         data: allUsers,
+        payload: users,
         })
         } catch (error) {
           next(customError.createError({

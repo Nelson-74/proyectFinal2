@@ -21,14 +21,15 @@ import {viewsRouterSessions} from "./routes/views.router.js";
 import{sessionsRouter} from "./routes/sessions.router.js";
 import dotenv from "dotenv";
 import errorHandler from "./middlewares/errors.js";
-import startLogger from "./middlewares/logger.middleware.js";
+import {startLogger, devLogger, prodLogger} from "./utils/logger.js";
+import loggersTestRouter from "./routes/test.router.logger.js";
 import mongoose from "mongoose";
 import swaggerJsdoc from "swagger-jsdoc";
 import swaggerUiExpress from "swagger-ui-express";
 
-dotenv.config();
 const app = express();
 app.use(startLogger );
+dotenv.config();
 
 const PORT = process.env.PORT|| 8080;
 const connection = mongoose.connect("mongodb+srv://nelsonandrada:CedW4PNucNIwKThz@backendcodernelson.a5badyt.mongodb.net/ecommerce?retryWrites=true&w=majority");
@@ -99,7 +100,7 @@ app.use("/api/sessions/current", (req, res) => {
 
 app.use("/api",mockRouter);
 app.use(errorHandler);
-
+app.use("/testingLogger",loggersTestRouter);
 
 //app.use(cookieParser());
 app.use(cookieParser("code-secret-123456789"));
