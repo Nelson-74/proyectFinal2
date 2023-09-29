@@ -1,5 +1,5 @@
 import { userModel } from "../DAO/models/users.model.js";
-
+import {startLogger, devLogger, prodLogger} from "../utils/logger.js";
 export class userService {
   async getAllUsers() {
     const users = await userModel.find({});
@@ -59,7 +59,7 @@ export class userService {
     let createdUser = await userModel.create(userCreated);
     return createdUser;
   } catch (error) {
-    console.log(`Error creating User ${ error}`);
+    startLogger.error(e.message);
   }
 }
 };

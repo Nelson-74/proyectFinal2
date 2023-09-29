@@ -1,4 +1,5 @@
 import CartService from "../services/carts.service.js";
+import {startLogger} from '../utils/logger.js';
 
 const Carts = new CartService();
 class CartsController {
@@ -7,7 +8,7 @@ class CartsController {
       const newCart = await Carts.createOne();
       res.status(200).json(newCart);
     } catch (error) {
-      console.error(error);
+      startLogger.error(e.message);
       res.status(500).json({ 
         status: "error",
         msg: "Failed to create cart" });
@@ -36,7 +37,7 @@ class CartsController {
         msg: "Product removed from cart",
       });
     } catch (error) {
-      console.log(error);
+      startLogger.error(e.message);
       res.status(500).json({
         status: "error",
         msg: "Failed to remove product from cart",
@@ -62,7 +63,7 @@ class CartsController {
       const carts = await Carts.get();
       res.status(200).json(carts);
     } catch (error) {
-      console.error(error);
+      startLogger.error(e.message);
       res.status(500).json({ 
         status: "error",
         msg: "Failed to get carts" });

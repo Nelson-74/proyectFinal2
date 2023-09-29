@@ -1,7 +1,7 @@
 import { ProductService } from "../services/products.service.js";
 import customError from "../services/errors/custom.error.js";
 import EErrors from "../services/errors/enums.js";
-
+import {startLogger, devLogger, prodLogger} from "../utils/logger.js";
 const Products = new ProductService();
 
 class ProductsController {
@@ -17,7 +17,7 @@ class ProductsController {
       const response = await Products.getAll(queryParams);
       return res.status(200).json(response);
     } catch (error) {
-      console.error(error);
+      startLogger.error(e.message);
       next(
         customError.createError({
           name: "DatabaseError",
@@ -35,7 +35,7 @@ class ProductsController {
       const product = await Products.getById(productId);
       res.status(200).render("viewProduct", product);
     } catch (error) {
-      console.error(error);
+      startLogger.error(e.message);
       next(
         customError.createError({
           name: "DatabaseError",
@@ -57,7 +57,7 @@ class ProductsController {
         data: productCreated,
       });
     } catch (error) {
-      console.error(error);
+      startLogger.error(e.message);
       next(
         customError.createError({
           name: "DatabaseError",
@@ -80,7 +80,7 @@ class ProductsController {
         data: productUpdated,
       });
     } catch (error) {
-      console.error(error);
+      startLogger.error(e.message);
       next(
         customError.createError({
           name: "DatabaseError",
@@ -102,7 +102,7 @@ class ProductsController {
         data: { productDeleted },
       });
     } catch (error) {
-      console.error(error);
+      startLogger.error(e.message);
       next(
         customError.createError({
           name: "DatabaseError",

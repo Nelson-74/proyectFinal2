@@ -1,5 +1,5 @@
 import {cartsDAO,ProductDAO,TicketDAO,} from "../DAO/factory.js";
-
+import {startLogger, devLogger, prodLogger} from "../utils/logger.js";
 class CartService {
   async createOne() {
     try {
@@ -7,7 +7,7 @@ class CartService {
       const createdCart = await newCart.save();
       return createdCart;
     } catch (error) {
-      throw new Error("Failed to create cart");
+      startLogger.error("Failed to create cart");
     }
   }
 
@@ -15,11 +15,11 @@ class CartService {
     try {
       const cart = await cartsDAO.findById(cartId).populate("products.product");
       if (!cart) {
-        throw new Error("Cart not found");
+        startLogger.error("Cart not found");
       }
       return cart;
     } catch (error) {
-      throw new Error("Failed to get cart");
+      startLogger.error("Failed to get cart");
     }
   }
 
@@ -28,16 +28,16 @@ class CartService {
       const cart = await cartsDAO.findById(cartId);
       const product = await ProductDAO.findById(productId);
       if (!cart) {
-        throw new Error("Cart does not exist");
+        startLogger.error("Cart does not exist");
       }
       if (!product) {
-        throw new Error("Product does not exist");
+        startLogger.error("Product does not exist");
       }
       cart.products.push({ product: product._id, qty: 1 });
       await cart.save();
       return cart;
     } catch (error) {
-      throw new Error("Failed to add product to cart");
+      startLogger.error("Failed to add product to cart");
     }
   }
 
@@ -48,13 +48,13 @@ class CartService {
         (p) => p.product.toString() === productId
       );
       if (productIndex === -1) {
-        throw new Error("Product not found");
+        startLogger.error("Product not found");
       }
       cart.products[productIndex].qty = qty;
       await cart.save();
       return cart;
     } catch (error) {
-      throw new Error("Failed to update product quantity");
+      startLogger.error("Failed to update product quantity");
     }
   }
 
@@ -71,7 +71,7 @@ class CartService {
       await cart.save();
       return cart;
     } catch (error) {
-      throw new Error("Failed to remove product from cart");
+      startLogger.error("Failed to remove product from cart");
     }
   }
 
@@ -81,7 +81,7 @@ class CartService {
       cart.products = [];
       await cart.save();
     } catch (error) {
-      console.error("Failed to clear cart");
+      startLogger.error("Failed to clear cart");
     }
   }
 }

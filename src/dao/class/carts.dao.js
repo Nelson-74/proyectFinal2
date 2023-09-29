@@ -1,5 +1,6 @@
 import { cartModel } from "../DAO/models/carts.models.js";
 import { productModel } from "../DAO/models/products.model.js";
+import {startLogger, devLogger, prodLogger} from "../../utils/logger.js";
 
 class CartsDAO {
   async create() {
@@ -8,7 +9,7 @@ class CartsDAO {
       const createdCart = await newCart.save();
       return createdCart;
     } catch (error) {
-      throw new Error("Failed to create cart");
+      startLogger.error("Failed to create cart");
     }
   }
 
@@ -16,11 +17,11 @@ class CartsDAO {
     try {
       const cart = await cartModel.findById(cartId).populate("products.product");
       if (!cart) {
-        throw new Error("Cart not found");
+        startLogger.error("Cart not found");
       }
       return cart;
     } catch (error) {
-      throw new Error("Failed to get cart");
+      startLogger.error("Failed to get cart");
     }
   }
 
@@ -29,16 +30,16 @@ class CartsDAO {
       const cart = await cartModel.findById(cartId);
       const product = await productModel.findById(productId);
       if (!cart) {
-        throw new Error("Cart does not exist");
+        startLogger.error("Cart does not exist");
       }
       if (!product) {
-        throw new Error("Product does not exist");
+        startLogger.error("Product does not exist");
       }
       cart.products.push({ product: product._id, qty: 1 });
       await cart.save();
       return cart;
     } catch (error) {
-      throw new Error("Failed to add product to cart");
+      startLogger.error("Failed to add product to cart");
     }
   }
 
@@ -55,7 +56,7 @@ class CartsDAO {
       await cart.save();
       return cart;
     } catch (error) {
-      throw new Error("Failed to update product quantity");
+      startLogger.error("Failed to update product quantity");
     }
   }
 
@@ -72,7 +73,7 @@ class CartsDAO {
       await cart.save();
       return cart;
     } catch (error) {
-      throw new Error("Failed to remove product from cart");
+      startLogger.error("Failed to remove product from cart");
     }
   }
 
@@ -82,7 +83,7 @@ class CartsDAO {
       cart.products = [];
       await cart.save();
     } catch (error) {
-      console.error("Failed to clear cart");
+      startLogger.error(e.message);
     }
   }
 }

@@ -1,12 +1,12 @@
 import { MessageModel } from "../DAO/models/messages.model.js";
-
+import {startLogger, devLogger, prodLogger} from "../utils/logger.js";
 export class MessagesService {
   async getAll() {
     try {
       const messages = await MessageModel.find();
       return messages;
     } catch (error) {
-      console.error(error);
+      startLogger.error(e.message);
       throw new Error("Error al obtener los mensajes");
     }
   }

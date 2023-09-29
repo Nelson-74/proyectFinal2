@@ -1,10 +1,10 @@
 import { productModel } from "../models/products.model.js";
 import mongoosePaginate from "mongoose-paginate-v2"; 
-
+import {startLogger, devLogger, prodLogger} from "../../utils/logger.js";
 class ProductDAO {
   validate(title, description, price, thumbnail, code, stock, category) {
     if (!title || !description || !price || !thumbnail || !code || !stock || !category) {
-      console.log("Validation error: please complete all fields.");
+      startLogger.error("Validation error: please complete all fields.");
       throw new Error("Validation error: please complete all fields.");
     }
   }
@@ -44,7 +44,7 @@ class ProductDAO {
     if (deleted.deletedCount === 1) {
       return true;
     } else {
-      throw new Error("Product not found");
+      startLogger.error("Product not found");
     }
   }
 

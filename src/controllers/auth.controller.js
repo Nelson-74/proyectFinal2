@@ -1,6 +1,7 @@
 import { userModel } from "../DAO/models/users.model.js";
 import {isAdmin, isUser} from "../middlewares/auth.js";
 import session from "express-session";
+import {startLogger} from '../utils/logger.js';
 
 class AuthController {
 
@@ -19,7 +20,7 @@ class AuthController {
       return res.status(401).render("error", { error: "email or password are wrong"})
     }
   }catch(error){
-    console.log(`Error ${error}`);
+    startLogger.error(e.message);
     return res.status(500).render("error", {error:"Internal server Error"});
   }
   }

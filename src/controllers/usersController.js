@@ -2,7 +2,7 @@ import customError from "../services/errors/custom.error.js";
 import EErrors from "../services/errors/enums.js";
 import { ProductService } from "../services/products.service.js";
 import { userService } from "../services/users.service.js";
-
+import {startLogger, devLogger, prodLogger} from "../utils/logger.js";
 export class UserController {
 
   async getAllUsers(req, res,next){
@@ -89,7 +89,7 @@ export class UserController {
         data: {},
       });
     } catch (error) {
-      console.log(e);
+      startLogger.error(e.message);
       return res.status(500).json({
         status: "error",
         msg: "something went wrong ",

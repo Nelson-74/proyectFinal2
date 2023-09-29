@@ -1,5 +1,5 @@
 import { userModel } from "../DAO/models/users.model.js";
-
+import {startLogger, devLogger, prodLogger} from "../../utils/logger.js";
 class userDAO {
   async findAll() {
     const users = await userModel.find({});
@@ -8,7 +8,7 @@ class userDAO {
 
   validateUser(firstName, lastName, email) {
     if (!firstName || !lastName || !email) {
-      console.log("validation error: please complete firstName, lastName and email");
+      startLogger.error("validation error: please complete firstName, lastName and email");
       throw new Error("validation error: please complete firstName, lastName and email");
     }
     return { firstName, lastName, email };
