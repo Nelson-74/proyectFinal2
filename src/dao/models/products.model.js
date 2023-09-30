@@ -9,6 +9,7 @@ const productSchema = new Schema({
   category: { type: String, required: true, max: 100 },
   code: { type: String, required: true, max: 100 },
   thumbnail: { type: String, required: true, max: 100 },
+  owner: { type: Schema.Types.ObjectId, ref: "User", default: "admin" }
 });
 
 productSchema.plugin(mongoosePaginate);

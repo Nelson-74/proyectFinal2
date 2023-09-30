@@ -1,7 +1,7 @@
 import { ProductManager } from "../DAO/fsManagers/productsManager.js";
 import { __dirname } from "../utils.js";
 import path from "path";
-
+import { startLogger } from "../utils/logger.js";
 
 const productsFilePath = path.join(__dirname, "products.json");
 const productsManager = new ProductManager(productsFilePath);
@@ -9,7 +9,7 @@ const productsManager = new ProductManager(productsFilePath);
 
 export default (io) => {
   io.on("connection", (socket) => {
-    console.log("Nuevo cliente conectado", socket.id);
+    startLogger.info("Nuevo cliente conectado", socket.id);
 
     socket.on("addProduct", async (data) => {
       try {
@@ -17,7 +17,7 @@ export default (io) => {
         const updatedProducts = await productsManager.getProducts();
         io.emit("productAdded", updatedProducts);
       } catch (error) {
-        console.log(error);
+        startLogger.error(e.message);
       }
     });
 
@@ -28,12 +28,12 @@ export default (io) => {
         io.emit("productDeleted",updatedProducts, id);
 
       } catch (error) {
-        console.log(error);
+        startLogger.error(e.message);
       }
     });
 
     socket.on("disconnect", () => {
-      console.log("Cliente desconectado");
+      startLogger.error("Cliente desconectado");
     });
   });
 }; 

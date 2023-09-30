@@ -1,5 +1,5 @@
 import {TicketModel} from "../models/tickets.models.js";
-import {startLogger, devLogger, prodLogger} from "../../utils/logger.js";
+import {startLogger} from "../../utils/logger.js";
 class TicketDAO {
   async addTicket( dataTicket){
     try{

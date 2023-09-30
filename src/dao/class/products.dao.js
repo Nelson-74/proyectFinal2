@@ -1,6 +1,6 @@
 import { productModel } from "../models/products.model.js";
 import mongoosePaginate from "mongoose-paginate-v2"; 
-import {startLogger, devLogger, prodLogger} from "../../utils/logger.js";
+import {startLogger} from "../../utils/logger.js";
 class ProductDAO {
   validate(title, description, price, thumbnail, code, stock, category) {
     if (!title || !description || !price || !thumbnail || !code || !stock || !category) {

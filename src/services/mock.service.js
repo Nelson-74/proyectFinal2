@@ -1,5 +1,5 @@
 import faker from "faker";
-import {startLogger, devLogger, prodLogger} from "../utils/logger.js";
+import {startLogger} from "../utils/logger.js";
 class MockProducts {
   constructor() {
     this.products = [];

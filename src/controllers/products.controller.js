@@ -1,7 +1,7 @@
 import { ProductService } from "../services/products.service.js";
 import customError from "../services/errors/custom.error.js";
 import EErrors from "../services/errors/enums.js";
-import {startLogger, devLogger, prodLogger} from "../utils/logger.js";
+import {startLogger} from "../utils/logger.js";
 const Products = new ProductService();
 
 class ProductsController {
@@ -47,13 +47,30 @@ class ProductsController {
     }
   }
 
-  async createOne(req, res,next) {
+  async createOne(req, res, next) {
     try {
       const { title, description, price, thumbnail, code, stock, category } = req.body;
-      const productCreated = await Products.createOne(title, description, price, thumbnail, code, stock, category);
+      const user = req.user; // Obtener el usuario que realiza la solicitud
+  
+      if (!user.canCreateProducts) {
+        return res.status(403).json({ message: "No tienes permiso para crear productos" });
+      }
+  
+      // Crear el producto y establecer el owner
+      const productCreated = await Products.createOne({
+        title,
+        description,
+        price,
+        thumbnail,
+        code,
+        stock,
+        category,
+        owner: user.email, // O puedes usar user._id, dependiendo de tus preferencias
+      });
+  
       res.status(200).json({
         status: "ok",
-        msg: "Product created",
+        msg: "Producto creado",
         data: productCreated,
       });
     } catch (error) {
@@ -68,7 +85,7 @@ class ProductsController {
       );
     }
   }
-
+  
   async updateOne(req, res,next) {
     try {
       const { id } = req.params;
@@ -92,22 +109,32 @@ class ProductsController {
     }
   }
 
-  async deleteOne(req, res,next) {
+  async deleteOne(req, res, next) {
     try {
-      const { id } = req.params;
-      const productDeleted = await Products.deleteOne(id);
-      res.status(200).json({
-        status: "ok",
-        msg: "Product deleted",
-        data: { productDeleted },
-      });
+      const productId = req.params.id;
+      const user = req.user; // Obtener el usuario que realiza la solicitud
+      const product = await Products.getById(productId);
+      if (!product) {
+        return res.status(404).json({ message: "Producto no encontrado" });
+      }
+      // Verificar los permisos de eliminación
+      if (user.rol === "admin" || (user.rol === "premium" && product.owner === user.email)) {
+        const productDeleted = await Products.deleteOne(productId);
+        res.status(200).json({
+          status: "ok",
+          msg: "Producto eliminado",
+          data: { productDeleted },
+        });
+      } else {
+        return res.status(403).json({ message: "No tienes permiso para eliminar este producto" });
+      }
     } catch (error) {
       startLogger.error(e.message);
       next(
         customError.createError({
           name: "DatabaseError",
           cause: error,
-          message: "Something went wrong",
+          message: "Algo salió mal",
           code: EErrors.DATABASE_ERROR,
         })
       );

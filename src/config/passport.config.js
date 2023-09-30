@@ -5,6 +5,7 @@ import { createHash, isValidPassword} from "./bcrypt.js";
 import GitHubStrategy from "passport-github2";
 import { config } from "./config.js";
 import { userService } from "../services/users.service.js";
+import { startLogger } from "../utils/logger.js";
 
 const LocalStrategy = local.Strategy;
 
@@ -38,7 +39,7 @@ export function iniPassport(){
           }
         } catch (e) {
           console.log("Error en auth github");
-          console.log(e);
+          startLogger.error(e.message);
           return done(e);
         }
       }
@@ -87,7 +88,7 @@ export function iniPassport(){
         console.log("user registration ok");
         return done(null, userCreated);
         } catch(err){
-          console.log("failed to register" );
+          startLogger.error("failed to register" );
           return done(err);
       }
     }

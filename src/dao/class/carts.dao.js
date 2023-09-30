@@ -1,6 +1,6 @@
 import { cartModel } from "../DAO/models/carts.models.js";
 import { productModel } from "../DAO/models/products.model.js";
-import {startLogger, devLogger, prodLogger} from "../../utils/logger.js";
+import {startLogger} from "../../utils/logger.js";
 
 class CartsDAO {
   async create() {
@@ -17,7 +17,7 @@ class CartsDAO {
     try {
       const cart = await cartModel.findById(cartId).populate("products.product");
       if (!cart) {
-        startLogger.error("Cart not found");
+        startLogger.info("Cart not found");
       }
       return cart;
     } catch (error) {

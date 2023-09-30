@@ -1,5 +1,5 @@
 import multer from "multer";
-
+import { startLogger } from "./utils/logger.js";
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -24,14 +24,16 @@ import { connect,Schema,model } from "mongoose";
 import { Server } from "socket.io";
 import { userModel } from "./DAO/models/users.model.js";
 
+
+
 export async function connectMongo() {
   try {
     await connect(
       `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@backendcodernelson.a5badyt.mongodb.net/ecommerce?retryWrites=true&w=majority`
     );
-    console.log("Connect to MongoDB!");
+    startLogger.info("Connect to MongoDB!");
   } catch (e) {
-    console.log(e);
+    startLogger.error(e.message);
     throw "can not connect to the db";
   }
 } 
@@ -43,11 +45,12 @@ import  {ProductService}  from "./services/products.service.js";
 
 
 
+
 export const connectSocket = (httpServer) => {
   const socketServer = new Server(httpServer);
   
   socketServer.on("connection", (socket) => { 
-    console.log("new user connected");
+    startLogger.info("new user connected");
   
     socket.on("msg_front_to_back", async (message) => {
       const msgCreated = await MessageModel.create(message);
@@ -56,13 +59,13 @@ export const connectSocket = (httpServer) => {
     });
   
     socket.on("product:create", async (newProduct) => {
-      console.log("yaya");
+      startLogger.info("yaya");
       const product = await ProductService.saveProduct(newProduct);
       socketServer.emit("product:created", product);
     });
   
     socket.on("product:delete", async (id) => {
-      console.log(await ProductService.getProductById(parseInt(id)));
+      startLogger.info(await ProductService.getProductById(parseInt(id)));
       socketServer.emit("product:deleted", id);
     });
   });

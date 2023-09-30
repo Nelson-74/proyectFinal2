@@ -1,7 +1,7 @@
 import ProductDAO from "../DAO/class/products.dao.js";
 import EErrors from "./errors/enums.js";
 import mongoosePaginate from "mongoose-paginate-v2"; 
-import {startLogger, devLogger, prodLogger} from "../utils/logger.js";
+import {startLogger} from "../utils/logger.js";
 const productDAO = new ProductDAO();
 export class ProductService {
   
@@ -55,7 +55,7 @@ export class ProductService {
     if (deleted.deletedCount === 1) {
       return true;
     } else {
-      startLogger.error("Product not found");
+      startLogger.info("Product not found");
     }
   }
 

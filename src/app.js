@@ -21,14 +21,15 @@ import {viewsRouterSessions} from "./routes/views.router.js";
 import{sessionsRouter} from "./routes/sessions.router.js";
 import dotenv from "dotenv";
 import errorHandler from "./middlewares/errors.js";
-import {startLogger, devLogger, prodLogger} from "./utils/logger.js";
-import loggersTestRouter from "./routes/test.router.logger.js";
+import {startLogger} from "./utils/logger.js";
+import loggersTestRouter  from "./routes/test.router.logger.js";
 import mongoose from "mongoose";
 import swaggerJsdoc from "swagger-jsdoc";
 import swaggerUiExpress from "swagger-ui-express";
+import {retrievalRouter} from "./routes/retrieval.router.js";
 
 const app = express();
-app.use(startLogger );
+app.use(startLogger);
 dotenv.config();
 
 const PORT = process.env.PORT|| 8080;
@@ -100,8 +101,8 @@ app.use("/api/sessions/current", (req, res) => {
 
 app.use("/api",mockRouter);
 app.use(errorHandler);
-app.use("/testingLogger",loggersTestRouter);
-
+app.use("/testingLogger",loggersTestRouter );
+app.use("/retrieval-email", retrievalRouter);
 //app.use(cookieParser());
 app.use(cookieParser("code-secret-123456789"));
 
@@ -116,8 +117,8 @@ app.use("/api/set-cookies", (req, res) =>{
 });
 
 app.get("/api/get-cookies", (req, res) => {
-  console.log("normal", req.cookies);
-  console.log("firmadas" ,req.signedCookies);
+  startLogger.info("normal", req.cookies);
+  startLogger.info("firmadas" ,req.signedCookies);
   return res.status(200).json({
     status: "ok",
     msg:"look at your console and you will see your cookies!",
@@ -131,7 +132,7 @@ app.get("/api/deleteCookie",(req, res) => {
 }); 
 app.get("/session", (req,res) => {
   if(req.session.cont){
-    console.log(req.session, req.sessionID);
+    startLogger.info(req.session, req.sessionID);
     req.session.cont++;
     res.send("nos visitaste" + req.session.cont);
   }else{
@@ -151,7 +152,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.get("/logout", (req,res) => {
-  console.log(req?.session?.user, req?.session?.admin);
+  startLogger.info(req?.session?.user, req?.session?.admin);
   req.session.destroy(err => {
     if(err){
       return res.json({
@@ -161,11 +162,11 @@ app.get("/logout", (req,res) => {
     }
     res.send(("Logout ok !!"))
   });
-  console.log(req?.session?.user, req?.session?.admin);
+  logger.error(req?.session?.user, req?.session?.admin);
 }); 
 
 app.get("/login", (req, res) =>{
-  console.log(req.session.user,req.session.admin);
+  startLogger.info(req.session.user,req.session.admin);
   const {userName, password} = req.query;
   if(userName !== "pepe" || password !== "pepepass"){
     return res.send("login failed");

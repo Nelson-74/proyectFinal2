@@ -1,6 +1,6 @@
 import {ProductService} from "../services/products.service.js";
 import CartService from "../services/carts.service.js";
-import {startLogger, devLogger, prodLogger} from "../utils/logger.js";
+import {startLogger} from "../utils/logger.js";
 const productService = new ProductService();
 const cartService = new CartService();
 
@@ -94,7 +94,7 @@ class ViewsController {
         stock: product.stock,
         category: product.category,
       };
-      console.log(productSimplified);
+      startLogger.info(productSimplified);
       res.render("productDetails", { product: productSimplified });
     } catch (error) {
       next(error);

@@ -1,5 +1,5 @@
 import {cartsDAO,ProductDAO,TicketDAO,} from "../DAO/factory.js";
-import {startLogger, devLogger, prodLogger} from "../utils/logger.js";
+import {startLogger} from "../utils/logger.js";
 class CartService {
   async createOne() {
     try {
@@ -48,7 +48,7 @@ class CartService {
         (p) => p.product.toString() === productId
       );
       if (productIndex === -1) {
-        startLogger.error("Product not found");
+        startLogger.info("Product not found");
       }
       cart.products[productIndex].qty = qty;
       await cart.save();
@@ -71,7 +71,7 @@ class CartService {
       await cart.save();
       return cart;
     } catch (error) {
-      startLogger.error("Failed to remove product from cart");
+      startLogger.info("Failed to remove product from cart");
     }
   }
 

@@ -26,9 +26,13 @@ const schema = new Schema({
       rol: {
         type: String,
         default: "user",
+        enum: ["user", "premium", "admin"],
         required: true,
         max: 100,
       },
+      canCreateProducts: { 
+        type: Boolean,
+        default: false },
       age: {
         type: Number,
         required: false,

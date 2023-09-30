@@ -1,5 +1,5 @@
 import { MessageModel } from "../DAO/models/messages.model.js";
-import {startLogger, devLogger, prodLogger} from "../../utils/logger.js";
+import {startLogger} from "../../utils/logger.js";
 
 class messageDAO {
   async findAll() {

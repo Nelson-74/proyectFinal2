@@ -18,13 +18,14 @@ export const prodLogger = () => {
   return winston.createLogger({
     level: "info",
     format: winston.format.combine(
+      winston.format.colorize(),
       winston.format.timestamp(),
       winston.format.printf(({ timestamp, level, message }) => {
         return `${timestamp} [${level}]: ${message}`;
       })
     ),
     transports: [
-      new winston.transports.Console({ level: "http" }),
+      new winston.transports.Console({ level: "info" }), 
       new winston.transports.File({ filename: "./errors.log", level: "error" }),
       new winston.transports.File({ filename: "./fatal-errors.log", level: "fatal" }),
     ],

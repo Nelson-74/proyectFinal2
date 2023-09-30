@@ -1,5 +1,5 @@
 import { userModel } from "../DAO/models/users.model.js";
-import {startLogger, devLogger, prodLogger} from "../../utils/logger.js";
+import {startLogger} from "../../utils/logger.js";
 class userDAO {
   async findAll() {
     const users = await userModel.find({});
