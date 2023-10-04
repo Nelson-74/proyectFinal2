@@ -1,6 +1,6 @@
 import {ProductService} from "../services/products.service.js";
 import CartService from "../services/carts.service.js";
-import {startLogger} from "../utils/logger.js";
+import {devLogger, prodLogger} from "../utils/logger.js";
 const productService = new ProductService();
 const cartService = new CartService();
 
@@ -12,7 +12,7 @@ class ViewsController {
       const products = await productService.getAll(queryParams);
       return res.status(200).render("home", { products });
     } catch (err) {
-      startLogger.error(e.message);
+      logger.error(e.message);
       return res
         .status(500)
         .json({ status: "error", msg: "Error in server", products: {} });
@@ -73,7 +73,7 @@ class ViewsController {
         nextLink: nextLink?.substring(4) || "",
       });
     } catch (error) {
-      startLogger.error(e.message);
+      logger.error(e.message);
       return res
         .status(500)
         .json({ status: "error", message: "Error in server" });
@@ -94,7 +94,7 @@ class ViewsController {
         stock: product.stock,
         category: product.category,
       };
-      startLogger.info(productSimplified);
+      logger.info(productSimplified);
       res.render("productDetails", { product: productSimplified });
     } catch (error) {
       next(error);
@@ -116,7 +116,7 @@ class ViewsController {
       console.log(simplifiedCart);
       res.render("cartDetails", { cart: simplifiedCart });
     } catch (error) {
-      startLogger.error(e.message);;
+      logger.error(e.message);;
     }
   }
 }

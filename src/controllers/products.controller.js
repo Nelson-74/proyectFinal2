@@ -1,7 +1,7 @@
 import { ProductService } from "../services/products.service.js";
 import customError from "../services/errors/custom.error.js";
 import EErrors from "../services/errors/enums.js";
-import {startLogger} from "../utils/logger.js";
+import {devLogger, prodLogger} from "../utils/logger.js";
 const Products = new ProductService();
 
 class ProductsController {
@@ -17,7 +17,7 @@ class ProductsController {
       const response = await Products.getAll(queryParams);
       return res.status(200).json(response);
     } catch (error) {
-      startLogger.error(e.message);
+      logger.error(error.message);
       next(
         customError.createError({
           name: "DatabaseError",
@@ -35,7 +35,7 @@ class ProductsController {
       const product = await Products.getById(productId);
       res.status(200).render("viewProduct", product);
     } catch (error) {
-      startLogger.error(e.message);
+      startLogger.error(error.message);
       next(
         customError.createError({
           name: "DatabaseError",
@@ -74,7 +74,7 @@ class ProductsController {
         data: productCreated,
       });
     } catch (error) {
-      startLogger.error(e.message);
+      logger.error(error.message);
       next(
         customError.createError({
           name: "DatabaseError",
@@ -97,7 +97,7 @@ class ProductsController {
         data: productUpdated,
       });
     } catch (error) {
-      startLogger.error(e.message);
+      logger.error(error.message);
       next(
         customError.createError({
           name: "DatabaseError",
@@ -129,12 +129,12 @@ class ProductsController {
         return res.status(403).json({ message: "No tienes permiso para eliminar este producto" });
       }
     } catch (error) {
-      startLogger.error(e.message);
+      logger.error(error.message);
       next(
         customError.createError({
           name: "DatabaseError",
           cause: error,
-          message: "Algo salió mal",
+          message: "Something went wrong",
           code: EErrors.DATABASE_ERROR,
         })
       );

@@ -40,7 +40,14 @@ const schema = new Schema({
       cart: {
         type: String,
         required: false,
+      },
+      document : [
+        {
+        name: String,
+        reference: String
       }
+    ],
+      last_connection: Date,
     });
     //schema.plugin(mongoosePaginate);
     export const userModel = model("users", schema);    

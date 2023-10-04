@@ -1,5 +1,5 @@
 import faker from "faker";
-import {startLogger} from "../utils/logger.js";
+import {logger} from "../utils/logger.js";
 class MockProducts {
   constructor() {
     this.products = [];
@@ -36,7 +36,7 @@ class MockProducts {
         result: { status: "ok", payload: this.products },
       };
     } catch (error) {
-      startLogger.error(e.message);
+      logger.error(e.message);
       return {
         status: 500,
         result: { 

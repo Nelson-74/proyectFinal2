@@ -2,7 +2,7 @@ import customError from "../services/errors/custom.error.js";
 import EErrors from "../services/errors/enums.js";
 import { ProductService } from "../services/products.service.js";
 import { userService } from "../services/users.service.js";
-import {startLogger} from "../utils/logger.js";
+import {logger} from "../utils/logger.js";
 export class UserController {
 
   async getAllUsers(req, res,next){
@@ -89,7 +89,7 @@ export class UserController {
         data: {},
       });
     } catch (error) {
-      startLogger.error(e.message);
+      logger.error(e.message);
       return res.status(500).json({
         status: "error",
         msg: "something went wrong ",
@@ -102,28 +102,91 @@ export class UserController {
     try {
       const userId = req.params.uid;
       const user = await Users.findById(userId);
-
       if (!user) {
         return res.status(404).json({ message: "Usuario no encontrado" });
       }
-
       // Cambiar el rol de "user" a "premium" o viceversa
       user.rol = user.rol === "user" ? "premium" : "user";
       await user.save();
-
       res.status(200).json({
         status: "ok",
         msg: `Rol de usuario actualizado a ${user.rol}`,
         data: user,
       });
     } catch (error) {
-      startLogger.error(error.message);
+      logger.error(error.message);
       res.status(500).json({
         status: "error",
         msg: "Error al cambiar el rol del usuario",
       });
     }
   }
+  async updateToPremium(req, res) {
+  try {
+    const uid = req.params.uid;
+    const user = await Users.findById(uid);
+    if (!user) {
+      return res.status(404).json({ message: "Usuario no encontrado" });
+    }
+    // Verificar si el usuario ha cargado los documentos requeridos
+    const requiredDocuments = ["Identificación", "Comprobante de domicilio", "Comprobante de estado de cuenta"];
+    const hasRequiredDocuments = requiredDocuments.every((docName) =>
+      user.documents.some((doc) => doc.name === docName)
+    );
+    if (!hasRequiredDocuments) {
+      return res.status(400).json({ message: "El usuario no ha cargado todos los documentos requeridos" });
+    }
+    // Cambiar el rol de "user" a "premium"
+    user.rol = "premium";
+    await user.save();
+    res.status(200).json({
+      status: "ok",
+      msg: `Rol de usuario se ha actualizado a ${user.rol}`,
+      data: user,
+    });
+  } catch (error) {
+    logger.error(error.message);
+    res.status(500).json({
+      status: "error",
+      msg: "Error al cambiar el rol del usuario",
+    });
+  }
 }
+  async uploadDocuments(req, res) {
+    try {
+      const uid = req.params.uid;
+      const user = await Users.findById(uid);
+      if (!user) {
+        return res.status(404).json({ message: "Usuario no encontrado" });
+      }
+      const uploadedDocuments = req.files; // Archivos cargados por Multer
+
+      // Aquí puedes procesar los archivos y actualizar la propiedad "documents" del usuario
+      // Puedes usar user.documents para agregar los documentos cargados al usuario
+
+      // Actualiza la propiedad "documents" del usuario
+      user.documents = uploadedDocuments.map((file) => ({
+        name: file.originalname,
+        reference: file.filename, // Aquí puedes guardar el nombre del archivo o su ruta en tu servidor
+      }));
+
+      await user.save();
+
+      res.status(200).json({
+        status: "ok",
+        msg: "Documentos cargados exitosamente",
+        data: user,
+      });
+    } catch (error) {
+      startLogger.error(error.message);
+      res.status(500).json({
+        status: "error",
+        msg: "Error al cargar documentos",
+      });
+    }
+  }
+}
+
+
 
 

@@ -1,5 +1,5 @@
 import {TicketModel} from "../models/tickets.models.js";
-import {startLogger} from "../../utils/logger.js";
+import {logger} from "../../utils/logger.js";
 class TicketDAO {
   async addTicket( dataTicket){
     try{
@@ -7,7 +7,7 @@ class TicketDAO {
       const createdTicket = await newTicket.save();
       return createdTicket;  
         }catch (error) {
-          startLogger.error("failed to add ticket");
+          logger.error("failed to add ticket");
         }
   }
 }

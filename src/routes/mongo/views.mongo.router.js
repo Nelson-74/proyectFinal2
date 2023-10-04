@@ -7,8 +7,8 @@ const viewsController = new ViewsController();
 viewsRouter.get("/", viewsController.home);
 viewsRouter.get("/realtimeproducts", viewsController.realtimeProducts);
 viewsRouter.get("/products", viewsController.products);
-viewsRouter.get("/products/:pid", viewsController.productDetails);
-viewsRouter.get("/carts/:cid", viewsController.cartDetails);
+viewsRouter.get("/:pid", viewsController.productDetails);
+viewsRouter.get("/:cid", viewsController.cartDetails);
 
 export default viewsRouter;
 

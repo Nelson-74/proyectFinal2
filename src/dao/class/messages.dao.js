@@ -1,5 +1,5 @@
 import { MessageModel } from "../DAO/models/messages.model.js";
-import {startLogger} from "../../utils/logger.js";
+import {logger} from "../../utils/logger.js";
 
 class messageDAO {
   async findAll() {
@@ -7,7 +7,7 @@ class messageDAO {
       const messages = await MessageModel.find();
       return messages;
     } catch (error) {
-      startLogger.error(e.message);
+      logger.error(e.message);
       throw new Error("Error al obtener los mensajes");
     }
   }

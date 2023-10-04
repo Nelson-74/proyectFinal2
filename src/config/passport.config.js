@@ -5,7 +5,7 @@ import { createHash, isValidPassword} from "./bcrypt.js";
 import GitHubStrategy from "passport-github2";
 import { config } from "./config.js";
 import { userService } from "../services/users.service.js";
-import { startLogger } from "../utils/logger.js";
+import { devLogger, prodLogger } from "../utils/logger.js";
 
 const LocalStrategy = local.Strategy;
 
@@ -19,7 +19,7 @@ export function iniPassport(){
         callbackURL: config.github.callbackURL,
       },
       async (_, __, profile, done) => {
-      console.log(profile);
+        logger.info(profile);
         try {
         let user = await userModel.findOne({ email: profile.email });
         if (!user) {
@@ -31,15 +31,15 @@ export function iniPassport(){
           password: "nopass",
         };
           let userCreated = await userModel.create(newUser);
-          console.log("User Registration succesful");
+          logger.info("User Registration succesful");
           return done(null, userCreated);
           } else {
-          console.log("User already exists");
+          logger.info("User already exists");
           return done(null, user);
           }
         } catch (e) {
-          console.log("Error en auth github");
-          startLogger.error(e.message);
+          logger.info("Error en auth github");
+          logger.error(e.message);
           return done(e);
         }
       }
@@ -54,11 +54,11 @@ export function iniPassport(){
         let user;
         users.map((u) => u.email == username ? user = u : "");
         if(!user){
-          console.log("User not found (email" + username);
+          logger.info("User not found (email" + username);
           return done(null, false);
         }
         if(!isValidPassword(password, user.password)){
-          console.log("Invalid Password");
+          logger.info("Invalid Password");
           return done(null,false,{message:"Incorrect Email or Password."});
         }
         return done(null, user);
@@ -85,10 +85,10 @@ export function iniPassport(){
           password,
         };
         let userCreated = await userService.addUser(newUser);
-        console.log("user registration ok");
+        logger.info("user registration ok");
         return done(null, userCreated);
         } catch(err){
-          startLogger.error("failed to register" );
+          logger.error("failed to register" );
           return done(err);
       }
     }

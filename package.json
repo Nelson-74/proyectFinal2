@@ -5,9 +5,9 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "dev": "nodemon -e yaml,js ./src/app.js",
-    "start": "node ./src/app.js",
-    "test": "mocha --timeout 1000 test/supertest.test.js"
+    "dev": "nodemon -e yaml,js ./src/app.js NODE_ENV=development",
+    "start": "node ./src/app.js NODE_ENV=production",
+    "test": "mocha --timeout 1000 test/supertest.test.js NODE_ENV=development"
   },
   "keywords": [],
   "author": "",

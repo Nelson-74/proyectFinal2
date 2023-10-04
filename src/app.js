@@ -21,16 +21,18 @@ import {viewsRouterSessions} from "./routes/views.router.js";
 import{sessionsRouter} from "./routes/sessions.router.js";
 import dotenv from "dotenv";
 import errorHandler from "./middlewares/errors.js";
-import {startLogger} from "./utils/logger.js";
-import loggersTestRouter  from "./routes/test.router.logger.js";
+import {logger} from "./utils/logger.js";
+import loggersTestRouter  from "./routes/test.logger.router.js";
 import mongoose from "mongoose";
 import swaggerJsdoc from "swagger-jsdoc";
 import swaggerUiExpress from "swagger-ui-express";
 import {retrievalRouter} from "./routes/retrieval.router.js";
 
 const app = express();
-app.use(startLogger);
-dotenv.config();
+
+dotenv.config({
+  path: `.env.${process.env.NODE_ENV}`
+});
 
 const PORT = process.env.PORT|| 8080;
 const connection = mongoose.connect("mongodb+srv://nelsonandrada:CedW4PNucNIwKThz@backendcodernelson.a5badyt.mongodb.net/ecommerce?retryWrites=true&w=majority");
@@ -39,8 +41,8 @@ const connection = mongoose.connect("mongodb+srv://nelsonandrada:CedW4PNucNIwKTh
 const fileStore = FileStore(session);
 
 const httpServer = app.listen(PORT, () => {
-  console.log(__dirname);
-  console.log(`Example app listening on http://localhost:${PORT}`);
+  logger.info(__dirname);
+  logger.info(`Example app listening on http://localhost:${PORT}`);
 });
 
 app.use(express.urlencoded({ extended: false }));
@@ -72,7 +74,7 @@ const swaggerOptions = {
 };
 
 const specs = swaggerJsdoc(swaggerOptions);
-app.use("/apidocs", swaggerUiExpress.serve, swaggerUiExpress.setup(specs));
+app.use("/api/docs", swaggerUiExpress.serve, swaggerUiExpress.setup(specs));
 
 app.use(
   session({
@@ -91,14 +93,11 @@ app.use("/api/carts", cartRouter);
 app.use("/",viewsRouter);
 app.use("/chat", messagesRouter);
 app.use("/auth", authRouter);
-
-
 app.use("/api/sessions", sessionsRouter);
 app.use("/", viewsRouterSessions);
 app.use("/api/sessions/current", (req, res) => {
   res.json({ user: req.session });
 });
-
 app.use("/api",mockRouter);
 app.use(errorHandler);
 app.use("/testingLogger",loggersTestRouter );
@@ -115,7 +114,6 @@ app.use("/api/set-cookies", (req, res) =>{
     data: {},
   })
 });
-
 app.get("/api/get-cookies", (req, res) => {
   startLogger.info("normal", req.cookies);
   startLogger.info("firmadas" ,req.signedCookies);
@@ -125,14 +123,13 @@ app.get("/api/get-cookies", (req, res) => {
     data: {},
 });
 });
-
 app.get("/api/deleteCookie",(req, res) => {
   res.clearCookie("cookiePower").send("Cookie Removed");
   
 }); 
 app.get("/session", (req,res) => {
   if(req.session.cont){
-    startLogger.info(req.session, req.sessionID);
+    logger.info(req.session, req.sessionID);
     req.session.cont++;
     res.send("nos visitaste" + req.session.cont);
   }else{
@@ -152,7 +149,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.get("/logout", (req,res) => {
-  startLogger.info(req?.session?.user, req?.session?.admin);
+  logger.info(req?.session?.user, req?.session?.admin);
   req.session.destroy(err => {
     if(err){
       return res.json({
@@ -166,7 +163,7 @@ app.get("/logout", (req,res) => {
 }); 
 
 app.get("/login", (req, res) =>{
-  startLogger.info(req.session.user,req.session.admin);
+  prodLogger.info(req.session.user,req.session.admin);
   const {userName, password} = req.query;
   if(userName !== "pepe" || password !== "pepepass"){
     return res.send("login failed");

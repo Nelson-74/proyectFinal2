@@ -1,14 +1,15 @@
 <div>
   <h2>Socket.io</h2>
+  <ul id="messageList"></ul>
   <hr>
   <div>
-    <input type="text" name="chatbox" id="chatbox">    
+    <input type="text" name="chatbox" id="chatbox"placeholder="Escribe un mensaje">
+    <button id="sendMessageBtn">Enviar</button>
   </div>
   <div>
   <ul id="messages"></ul>
   </div>
 </div>
-
 <script src="/socket.io/socket.io.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="../public/js/message.js"></script>

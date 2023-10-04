@@ -1,5 +1,5 @@
 import TicketDAO from "../DAO/class/tickets.dao.js";
-import { startLogger } from "../utils/logger.js";
+import { logger} from "../utils/logger.js";
 import CartService from "./carts.service.js";
 
 export class TicketService{
@@ -17,7 +17,7 @@ export class TicketService{
     const newTicket = await TicketDAO.addTicket(dataTicket);
     return newTicket;
     } catch (error){
-    startLogger.error("Failed to add ticket");
+    logger.error("Failed to add ticket");
   }
   }
 
@@ -42,7 +42,7 @@ export class TicketService{
         }
         return { cartStock, cartOutStock, totalPriceTicket };
     } catch (error) {
-        startLogger.error(e.message);
+        logger.error(e.message);
     }
 }
 }

@@ -1,13 +1,14 @@
 import ProductDAO from "../DAO/class/products.dao.js";
 import EErrors from "./errors/enums.js";
 import mongoosePaginate from "mongoose-paginate-v2"; 
-import {startLogger} from "../utils/logger.js";
+import {logger} from '../utils/logger.js';
 const productDAO = new ProductDAO();
 export class ProductService {
   
 
   validate(title, description, price, thumbnail, code, stock, category) {
-    if (!title || !description || !price || !thumbnail || !code || !stock || !category) {
+    if (!title || !description || !price || !thumbnail || !code || stock === undefined || !category) { 
+      logger.error("Product validation failed");
       return customError.createError({
         name: "Validate error",
         message: "Please fill all the fields",
@@ -55,7 +56,7 @@ export class ProductService {
     if (deleted.deletedCount === 1) {
       return true;
     } else {
-      startLogger.info("Product not found");
+      logger.info("Product not found");
     }
   }
 

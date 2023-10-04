@@ -1,10 +1,10 @@
 import { productModel } from "../models/products.model.js";
 import mongoosePaginate from "mongoose-paginate-v2"; 
-import {startLogger} from "../../utils/logger.js";
+import {logger} from "../../utils/logger.js";
 class ProductDAO {
   validate(title, description, price, thumbnail, code, stock, category) {
     if (!title || !description || !price || !thumbnail || !code || !stock || !category) {
-      startLogger.error("Validation error: please complete all fields.");
+      prodLogger.error("Validation error: please complete all fields.");
       throw new Error("Validation error: please complete all fields.");
     }
   }
@@ -24,15 +24,12 @@ class ProductDAO {
 
   async findAllWithPagination(filter, options) {
     const { page, limit, sort } = options;
-
     const skip = (page - 1) * limit;
-
     const query = productModel.find(filter).skip(skip).limit(limit).sort(sort);
     const result = await query.exec();
-
     return result;
   }
-
+  
   async createOne(title, description, price, thumbnail, code, stock, category) {
     this.validate(title, description, price, thumbnail, code, stock, category);
     const productCreated = await productModel.create({ title, description, price, thumbnail, code, stock, category });
@@ -44,7 +41,7 @@ class ProductDAO {
     if (deleted.deletedCount === 1) {
       return true;
     } else {
-      startLogger.error("Product not found");
+      logger.error("Product not found");
     }
   }
 
