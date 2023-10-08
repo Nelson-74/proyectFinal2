@@ -8,6 +8,7 @@ class CartService {
       return createdCart;
     } catch (error) {
       logger.error("Failed to create cart");
+      throw new Error("Failed to create cart");
     }
   }
 
@@ -16,10 +17,12 @@ class CartService {
       const cart = await cartsDAO.findById(cartId).populate("products.product");
       if (!cart) {
         logger.error("Cart not found");
+        throw new Error("Cart not found");
       }
       return cart;
     } catch (error) {
       logger.error("Failed to get cart");
+      throw new Error("Failed to get cart");
     }
   }
 
@@ -28,16 +31,19 @@ class CartService {
       const cart = await cartsDAO.findById(cartId);
       const product = await ProductDAO.findById(productId);
       if (!cart) {
-        logger.error("Cart does not exist");
+        logger.error("Cart does not exist",error);
+        throw new Error("Cart does not exist");
       }
       if (!product) {
         logger.error("Product does not exist");
+        throw new Error("Product does not exist");
       }
       cart.products.push({ product: product._id, qty: 1 });
       await cart.save();
       return cart;
     } catch (error) {
       logger.error("Failed to add product to cart");
+      throw new Error("Failed to add product to cart");
     }
   }
 
@@ -49,12 +55,15 @@ class CartService {
       );
       if (productIndex === -1) {
         logger.info("Product not found");
+        // Lanza un error para indicar que el producto no se encontró en el carrito
+      throw new Error("Product not found");
       }
       cart.products[productIndex].qty = qty;
       await cart.save();
       return cart;
     } catch (error) {
       logger.error("Failed to update product quantity");
+    throw new Error("Failed to update product quantity");
     }
   }
 
@@ -65,13 +74,16 @@ class CartService {
         (p) => p.product.toString() === productId
       );
       if (productIndex === -1) {
-        throw new Error("Product not found in cart");
+        logger.error("Product not found in cart");
+        // Lanza un error para indicar que el producto no se encontró en el carrito
+      throw new Error("Product not found in cart");
       }
       cart.products.splice(productIndex, 1);
       await cart.save();
       return cart;
     } catch (error) {
-      logger.info("Failed to remove product from cart");
+      logger.error("Failed to remove product from cart");
+    throw new Error("Failed to remove product from cart");
     }
   }
 
@@ -82,6 +94,7 @@ class CartService {
       await cart.save();
     } catch (error) {
       logger.error("Failed to clear cart");
+      throw new Error("Failed to clear cart");
     }
   }
 }

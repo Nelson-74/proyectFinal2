@@ -5,7 +5,8 @@ import { createHash, isValidPassword} from "./bcrypt.js";
 import GitHubStrategy from "passport-github2";
 import { config } from "./config.js";
 import { userService } from "../services/users.service.js";
-import { devLogger, prodLogger } from "../utils/logger.js";
+import { logger } from "../utils/logger.js";
+import winston from "winston";
 
 const LocalStrategy = local.Strategy;
 
@@ -39,7 +40,7 @@ export function iniPassport(){
           }
         } catch (e) {
           logger.info("Error en auth github");
-          logger.error(e.message);
+          logger.error(error.message);
           return done(e);
         }
       }

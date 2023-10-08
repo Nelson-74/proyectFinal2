@@ -32,8 +32,6 @@ import { connect,Schema,model } from "mongoose";
 import { Server } from "socket.io";
 import { userModel } from "./DAO/models/users.model.js";
 
-
-
 export async function connectMongo() {
   try {
     await connect(
@@ -47,12 +45,12 @@ export async function connectMongo() {
 } 
 //-----------------Socket---------------
 
-import { Server as socketServer} from "socket.io";
+import { Server as SocketServer} from "socket.io";
 import {MessageModel} from "./DAO/models/messages.model.js";
 import  {ProductService}  from "./services/products.service.js";
 
 export const connectSocket = (httpServer) => {
-  const socketServer = new Server(httpServer);
+  const socketServer = new SocketServer(httpServer);
   
   socketServer.on("connection", (socket) => { 
     logger.info("new user connected");
@@ -64,7 +62,7 @@ export const connectSocket = (httpServer) => {
     });
   
     socket.on("product:create", async (newProduct) => {
-      logger.info("yaya");
+      logger.info("product created");
       const product = await ProductService.saveProduct(newProduct);
       socketServer.emit("product:created", product);
     });

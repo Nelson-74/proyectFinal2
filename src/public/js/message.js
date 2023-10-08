@@ -11,7 +11,6 @@ input.addEventListener("keyup", event => {
         input.value = '';
     }
 });
-
 socket.on("log", data => {
     let logs = " ";
     data.logs.forEach(log => {

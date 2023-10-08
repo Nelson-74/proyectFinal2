@@ -29,14 +29,11 @@ import swaggerUiExpress from "swagger-ui-express";
 import {retrievalRouter} from "./routes/retrieval.router.js";
 
 const app = express();
-
 dotenv.config({
   path: `.env.${process.env.NODE_ENV}`
 });
-
-const PORT = process.env.PORT|| 8080;
+const PORT = process.env.PORT|| 3000;
 const connection = mongoose.connect("mongodb+srv://nelsonandrada:CedW4PNucNIwKThz@backendcodernelson.a5badyt.mongodb.net/ecommerce?retryWrites=true&w=majority");
-
 
 const fileStore = FileStore(session);
 
@@ -48,7 +45,6 @@ const httpServer = app.listen(PORT, () => {
 app.use(express.urlencoded({ extended: false }));
 
 const io = new SocketServer(httpServer);
-
 
 app.use(express.json());
 app.use(express.urlencoded({extended: true})); 
@@ -115,8 +111,8 @@ app.use("/api/set-cookies", (req, res) =>{
   })
 });
 app.get("/api/get-cookies", (req, res) => {
-  startLogger.info("normal", req.cookies);
-  startLogger.info("firmadas" ,req.signedCookies);
+  logger.info("normal", req.cookies);
+  logger.info("firmadas" ,req.signedCookies);
   return res.status(200).json({
     status: "ok",
     msg:"look at your console and you will see your cookies!",
@@ -163,7 +159,7 @@ app.get("/logout", (req,res) => {
 }); 
 
 app.get("/login", (req, res) =>{
-  prodLogger.info(req.session.user,req.session.admin);
+  logger.info(req.session.user,req.session.admin);
   const {userName, password} = req.query;
   if(userName !== "pepe" || password !== "pepepass"){
     return res.send("login failed");

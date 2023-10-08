@@ -9,7 +9,8 @@ class CartsDAO {
       const createdCart = await newCart.save();
       return createdCart;
     } catch (error) {
-      logger.error("Failed to create cart");
+      logger.error(error.message,error);
+      throw new Error("Failed to create cart");
     }
   }
 
@@ -17,11 +18,13 @@ class CartsDAO {
     try {
       const cart = await cartModel.findById(cartId).populate("products.product");
       if (!cart) {
-        logger.info("Cart not found");
+        logger.error("Cart not found");
+        throw new Error("Cart not found");
       }
       return cart;
     } catch (error) {
-      logger.error("Failed to get cart");
+      logger.error(error.message.error, error);
+      throw new Error("Failed to get cart");
     }
   }
 
@@ -30,16 +33,19 @@ class CartsDAO {
       const cart = await cartModel.findById(cartId);
       const product = await productModel.findById(productId);
       if (!cart) {
-        logger.error("Cart does not exist");
+        logger.error(error.message.error, error);
+        throw new Error("Cart does not exist");
       }
       if (!product) {
-        logger.error("Product does not exist");
+        logger.error(error.message, error);
+        throw new Error("Product does not exist");
       }
       cart.products.push({ product: product._id, qty: 1 });
       await cart.save();
       return cart;
     } catch (error) {
-      logger.error("Failed to add product to cart");
+      logger.error(error.message, error);
+      throw new Error("Failed to add product to cart");
     }
   }
 
@@ -50,6 +56,7 @@ class CartsDAO {
         (p) => p.product.toString() === productId
       );
       if (productIndex === -1) {
+        logger.error(error.message, error);
         throw new Error("Product not found");
       }
       cart.products[productIndex].qty = qty;
@@ -57,6 +64,7 @@ class CartsDAO {
       return cart;
     } catch (error) {
       logger.error("Failed to update product quantity");
+      throw new Error("Failed to update product quantity");
     }
   }
 
@@ -67,13 +75,15 @@ class CartsDAO {
         (p) => p.product.toString() === productId
       );
       if (productIndex === -1) {
+        logger.error(error.message, error);
         throw new Error("Product not found in cart");
       }
       cart.products.splice(productIndex, 1);
       await cart.save();
       return cart;
     } catch (error) {
-      logger.error("Failed to remove product from cart");
+      logger.error(error.message, error);
+      throw new Error("Failed to remove product from cart");
     }
   }
 
@@ -83,7 +93,8 @@ class CartsDAO {
       cart.products = [];
       await cart.save();
     } catch (error) {
-      logger.error(e.message);
+      logger.error(error.message, error);
+      throw new Error("Failed to clear cart");
     }
   }
 }

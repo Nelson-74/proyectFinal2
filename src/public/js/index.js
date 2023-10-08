@@ -1,5 +1,5 @@
 
-const API_URL = "http://localhost:8080/api";
+const API_URL = "http://localhost:3000/api";
 
 // Función para agregar un producto al carrito
 async function putIntoCart(_id) {

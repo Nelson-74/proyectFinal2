@@ -7,7 +7,7 @@ class messageDAO {
       const messages = await MessageModel.find();
       return messages;
     } catch (error) {
-      logger.error(e.message);
+      logger.error("Error al obtener los mensajes");
       throw new Error("Error al obtener los mensajes");
     }
   }

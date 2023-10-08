@@ -1,6 +1,9 @@
-import {ProductService} from "../services/products.service.js";
+import {ProductService}from "../services/products.service.js";
 import CartService from "../services/carts.service.js";
-import {devLogger, prodLogger} from "../utils/logger.js";
+import {logger} from "../utils/logger.js";
+import { productModel } from "../DAO/models/products.model.js";
+import mongoose from 'mongoose';
+
 const productService = new ProductService();
 const cartService = new CartService();
 
@@ -12,7 +15,7 @@ class ViewsController {
       const products = await productService.getAll(queryParams);
       return res.status(200).render("home", { products });
     } catch (err) {
-      logger.error(e.message);
+      logger.error(error.message,error);
       return res
         .status(500)
         .json({ status: "error", msg: "Error in server", products: {} });
@@ -73,7 +76,7 @@ class ViewsController {
         nextLink: nextLink?.substring(4) || "",
       });
     } catch (error) {
-      logger.error(e.message);
+      logger.error(error.message,error);
       return res
         .status(500)
         .json({ status: "error", message: "Error in server" });
@@ -83,7 +86,13 @@ class ViewsController {
   async productDetails(req, res, next) {
     try {
       const { pid } = req.params;
+      if (!mongoose.Types.ObjectId.isValid(pid)) {
+        return res.status(400).json({ status: "error", message: "Invalid product ID" });
+      };
       const product = await productModel.findById(pid);
+      if (!product) {
+        return res.status(404).json({ status: "error", message: "Product not found" });
+      };
       const productSimplified = {
         _id: product._id.toString(),
         title: product.title,
@@ -116,7 +125,7 @@ class ViewsController {
       console.log(simplifiedCart);
       res.render("cartDetails", { cart: simplifiedCart });
     } catch (error) {
-      logger.error(e.message);;
+      logger.error(error.message,error);
     }
   }
 }

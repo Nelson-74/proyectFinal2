@@ -1,7 +1,7 @@
 import { userModel } from "../DAO/models/users.model.js";
 import {isAdmin, isUser} from "../middlewares/auth.js";
 import session from "express-session";
-import {devLogger,prodLogger} from '../utils/logger.js';
+import {logger} from '../utils/logger.js';
 
 class AuthController {
 
@@ -63,8 +63,7 @@ class AuthController {
   administration(req, res) {
     return res.send("Top secret data!!");
   }
-
-
+  
   registerPage(req, res) {
     return res.render("register");
   }

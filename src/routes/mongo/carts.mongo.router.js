@@ -12,5 +12,4 @@ cartRouter.get("/", cartsController.getCarts);
 cartRouter.put("/:cid", cartsController.updateCart);
 cartRouter.put("/:cid/products/:pid", cartsController.updateProductQuantity);
 
-
 export default cartRouter;

@@ -1,6 +1,7 @@
 import { userModel } from "../DAO/models/users.model.js";
 import {logger} from "../utils/logger.js";
 export class userService {
+  
   async getAllUsers(limit) {
     const users = await userModel.find({}).limit(limit); 
     return users;
@@ -8,7 +9,7 @@ export class userService {
   
   validateUser(firstName, lastName, email) {
     if (!firstName || !lastName || !email) {
-      logger.info("validation error: please complete firstName, lastName and email");
+      logger.info("validation error: please complete firstName, lastName and email",error);
       throw new Error("validation error: please complete firstName, lastName and email");
     }
     return ({firstName, lastName,email})
@@ -59,7 +60,7 @@ export class userService {
     let createdUser = await userModel.create(userCreated);
     return createdUser;
   } catch (error) {
-    logger.error(e.message);
+    logger.error(error.message);
   }
 }
 };

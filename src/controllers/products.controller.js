@@ -1,7 +1,8 @@
 import { ProductService } from "../services/products.service.js";
 import customError from "../services/errors/custom.error.js";
 import EErrors from "../services/errors/enums.js";
-import {devLogger, prodLogger} from "../utils/logger.js";
+import {logger} from "../utils/logger.js";
+
 const Products = new ProductService();
 
 class ProductsController {
@@ -17,7 +18,7 @@ class ProductsController {
       const response = await Products.getAll(queryParams);
       return res.status(200).json(response);
     } catch (error) {
-      logger.error(error.message);
+      logger.error(error.message,error);
       next(
         customError.createError({
           name: "DatabaseError",
@@ -35,7 +36,7 @@ class ProductsController {
       const product = await Products.getById(productId);
       res.status(200).render("viewProduct", product);
     } catch (error) {
-      startLogger.error(error.message);
+      logger.error(error.message,error);
       next(
         customError.createError({
           name: "DatabaseError",
@@ -50,13 +51,10 @@ class ProductsController {
   async createOne(req, res, next) {
     try {
       const { title, description, price, thumbnail, code, stock, category } = req.body;
-      const user = req.user; // Obtener el usuario que realiza la solicitud
-  
+      const user = req.user; 
       if (!user.canCreateProducts) {
         return res.status(403).json({ message: "No tienes permiso para crear productos" });
-      }
-  
-      // Crear el producto y establecer el owner
+      }  
       const productCreated = await Products.createOne({
         title,
         description,
@@ -65,16 +63,19 @@ class ProductsController {
         code,
         stock,
         category,
-        owner: user.email, // O puedes usar user._id, dependiendo de tus preferencias
-      });
-  
-      res.status(200).json({
-        status: "ok",
-        msg: "Producto creado",
-        data: productCreated,
-      });
+        owner: user.email,
+      }); 
+      if (productCreated) {
+        res.status(200).json({
+          status: "ok",
+          msg: "Producto creado",
+          data: productCreated,
+        });
+      } else {
+        res.status(500).json({ message: "Error al crear el producto" });
+      }
     } catch (error) {
-      logger.error(error.message);
+      logger.error(error.message,error);
       next(
         customError.createError({
           name: "DatabaseError",
@@ -97,7 +98,7 @@ class ProductsController {
         data: productUpdated,
       });
     } catch (error) {
-      logger.error(error.message);
+      logger.error(error.message,error);
       next(
         customError.createError({
           name: "DatabaseError",
@@ -129,7 +130,7 @@ class ProductsController {
         return res.status(403).json({ message: "No tienes permiso para eliminar este producto" });
       }
     } catch (error) {
-      logger.error(error.message);
+      logger.error(error.message,error);
       next(
         customError.createError({
           name: "DatabaseError",

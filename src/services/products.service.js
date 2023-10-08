@@ -1,23 +1,32 @@
 import ProductDAO from "../DAO/class/products.dao.js";
 import EErrors from "./errors/enums.js";
-import mongoosePaginate from "mongoose-paginate-v2"; 
+import createError from "./errors/custom.error.js";
 import {logger} from '../utils/logger.js';
+
 const productDAO = new ProductDAO();
 export class ProductService {
   
-
   validate(title, description, price, thumbnail, code, stock, category) {
-    if (!title || !description || !price || !thumbnail || !code || stock === undefined || !category) { 
-      logger.error("Product validation failed");
-      return customError.createError({
+    const isFieldMissing = (field) => !field || !field.trim(); 
+    if (isFieldMissing(title) || isFieldMissing(description) || isFieldMissing(price) || isFieldMissing(thumbnail) || isFieldMissing(code) || stock === undefined || isFieldMissing(category)) {
+      const errorMessage = "Please fill in all the required fields.";
+      logger.error(error.message);
+      return createError({
         name: "Validate error",
-        message: "Please fill all the fields",
+        message: errorMessage,
         code: EErrors.INVALID_TYPES_ERROR,
-        cause:customInfo.generateProductErrorInfo(),
-      })
+        cause: customInfo.generateProductErrorInfo(),
+      });
     }
   }
-
+  
+  async getById(productId){
+      const product = await productDAO.findOneById(productId);
+      if(!product){
+        throw new Error(" Product no found");
+      }
+      return product; 
+}
   async getAll(queryParams) {
     const { limit = 10, page = 1, sort, query } = queryParams;
     const filter = {};

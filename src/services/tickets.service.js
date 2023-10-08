@@ -42,7 +42,7 @@ export class TicketService{
         }
         return { cartStock, cartOutStock, totalPriceTicket };
     } catch (error) {
-        logger.error(e.message);
+        logger.error(error.message);
     }
 }
 }

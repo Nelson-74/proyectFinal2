@@ -2,17 +2,20 @@ import customError from "../services/errors/custom.error.js";
 import EErrors from "../services/errors/enums.js";
 import { ProductService } from "../services/products.service.js";
 import { userService } from "../services/users.service.js";
+import { userModel } from "../DAO/models/users.model.js";
 import {logger} from "../utils/logger.js";
+import { ObjectId } from "mongoose";
 export class UserController {
 
   async getAllUsers(req, res,next){
     try{
       const limit = parseInt(req.query.limit) || 10;
-      const allUsers = await userService.getAllUsers(limit);
+      const userServiceInstance = new userService(); 
+      const allUsers = await userServiceInstance.getAllUsers(limit);
       return res.status(200).json({
         success: true,
         data: allUsers,
-        payload: users,
+        //payload: users,
         })
         } catch (error) {
           next(customError.createError({
@@ -25,10 +28,10 @@ export class UserController {
     }
   
 
-  async createOne(req,res){
+  async createOne(req,res,next){
     const userToSave = req.body;
     try {
-      const savedUser = userService.createOne(userToSave);
+      const savedUser = await userService.createOne(userToSave);
       return res.json({
         status: "ok",
         payload: savedUser,
@@ -47,11 +50,11 @@ export class UserController {
     const _id = req.params.id;
     const {firstName, lastName, email} = req.body;
     try {
-      let userUptaded = await Service.updateOne(_id,firstName,lastName, email);
+      let userUpdated = await userService.updateOne(_id,firstName,lastName, email);
       return res.status(200).json({
         status: " ok",
         message:"Successfully updated User!",
-        data : userUptaded,
+        data : userUpdated,
       })
     } catch (error) {
       return res.status(500).json({
@@ -89,7 +92,7 @@ export class UserController {
         data: {},
       });
     } catch (error) {
-      logger.error(e.message);
+      logger.error(error.message,error);
       return res.status(500).json({
         status: "error",
         msg: "something went wrong ",
@@ -101,7 +104,7 @@ export class UserController {
   async togglePremiumRol(req, res) {
     try {
       const userId = req.params.uid;
-      const user = await Users.findById(userId);
+      const user = await userModel.findById(userId);
       if (!user) {
         return res.status(404).json({ message: "Usuario no encontrado" });
       }
@@ -114,7 +117,7 @@ export class UserController {
         data: user,
       });
     } catch (error) {
-      logger.error(error.message);
+      logger.error(error.message,error);
       res.status(500).json({
         status: "error",
         msg: "Error al cambiar el rol del usuario",
@@ -124,7 +127,7 @@ export class UserController {
   async updateToPremium(req, res) {
   try {
     const uid = req.params.uid;
-    const user = await Users.findById(uid);
+    const user = await userModel.findById(uid);
     if (!user) {
       return res.status(404).json({ message: "Usuario no encontrado" });
     }
@@ -145,7 +148,7 @@ export class UserController {
       data: user,
     });
   } catch (error) {
-    logger.error(error.message);
+    logger.error(error.message,error);
     res.status(500).json({
       status: "error",
       msg: "Error al cambiar el rol del usuario",
@@ -155,30 +158,26 @@ export class UserController {
   async uploadDocuments(req, res) {
     try {
       const uid = req.params.uid;
-      const user = await Users.findById(uid);
+      const user = await userModel.findById(uid);
       if (!user) {
         return res.status(404).json({ message: "Usuario no encontrado" });
       }
       const uploadedDocuments = req.files; // Archivos cargados por Multer
-
       // Aquí puedes procesar los archivos y actualizar la propiedad "documents" del usuario
       // Puedes usar user.documents para agregar los documentos cargados al usuario
-
       // Actualiza la propiedad "documents" del usuario
       user.documents = uploadedDocuments.map((file) => ({
         name: file.originalname,
         reference: file.filename, // Aquí puedes guardar el nombre del archivo o su ruta en tu servidor
       }));
-
       await user.save();
-
       res.status(200).json({
         status: "ok",
         msg: "Documentos cargados exitosamente",
         data: user,
       });
     } catch (error) {
-      startLogger.error(error.message);
+      logger.error(error.message,error);
       res.status(500).json({
         status: "error",
         msg: "Error al cargar documentos",

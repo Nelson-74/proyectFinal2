@@ -7,7 +7,8 @@ class TicketDAO {
       const createdTicket = await newTicket.save();
       return createdTicket;  
         }catch (error) {
-          logger.error("failed to add ticket");
+          logger.error(error.message, error);
+          throw new Error("failed to add ticket");
         }
   }
 }

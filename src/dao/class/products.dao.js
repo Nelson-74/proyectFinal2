@@ -1,13 +1,18 @@
 import { productModel } from "../models/products.model.js";
-import mongoosePaginate from "mongoose-paginate-v2"; 
 import {logger} from "../../utils/logger.js";
+
 class ProductDAO {
   validate(title, description, price, thumbnail, code, stock, category) {
     if (!title || !description || !price || !thumbnail || !code || !stock || !category) {
-      prodLogger.error("Validation error: please complete all fields.");
+      logger.error("Validation error: please complete all fields.");
       throw new Error("Validation error: please complete all fields.");
     }
-  }
+  };
+
+  async findOneById(productId){
+    const product = await productModel.findById(productId);
+    return product;
+  };
 
   async getAll(queryParams) {
     const { limit = 10, page = 1, sort, query } = queryParams;
@@ -19,8 +24,9 @@ class ProductDAO {
       page: parseInt(page),
       limit: parseInt(limit),
       sort: sort === "desc" ? "-price" : "price",
-    };
-  }
+    };    
+    return await productModel.paginate(filter, options);
+  }  
 
   async findAllWithPagination(filter, options) {
     const { page, limit, sort } = options;

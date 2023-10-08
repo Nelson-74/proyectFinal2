@@ -1,5 +1,5 @@
 import MockProducts  from "../services/mock.service.js"; 
-import {devLogger,prodLogger} from '../utils/logger.js';
+import {logger} from '../utils/logger.js';
 
 class MockController {
   constructor() {
@@ -12,7 +12,7 @@ class MockController {
       const response = this.mockProducts.getAllProducts(); // Llama al método getAllProducts del módulo MockProducts
       res.status(response.status).json(response.result);
     } catch (error) {
-      logger.error(e.message);
+      logger.error(error.message,error);
       res.status(500).json({
         status: "error",
         msg: "Internal Server Error",
