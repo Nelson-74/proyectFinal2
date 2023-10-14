@@ -1,5 +1,4 @@
 import express from "express";
-import { userService } from "../services/users.service.js";
 import  {UserController}  from "../controllers/usersController.js";
 import { isAdmin } from "../utils.js";
 import documentsRouter from "./document.router.js";
@@ -12,37 +11,49 @@ usersRouter.get("/", userController.getAllUsers);
 usersRouter.post("/:id", isAdmin, userController.createOne);
 usersRouter.put("/update/:id",userController.updateOne );
 usersRouter.delete("/delete/:id", userController.deleteOne);
-usersRouter.put("/premium/:uid", userController.togglePremiumRol);
+usersRouter.put("/premium/:uid", userController.togglePremiumRole);
 usersRouter.put("/premium/:uid/upgrade", userController.updateToPremium);
 usersRouter.use("/:uid/documents", documentsRouter); 
 
 usersRouter.post("/", async (req, res) => {
-    const { firstName, lastName, email, password } = req.body;
-    try {
-      if (!firstName || !lastName || !email || !password) {
-        console.log(
-          "validation error: please complete firstName, lastName and email."
-        );
-        return res.status(400).json({
-          status: "error",
-          msg: "please complete firstName, lastName and email.",
-          data: {},
-        });
-      }
-      const userCreated = await userModel.create({ firstName, lastName, email, password });
-      return res.status(201).json({
-        status: "success",
-        msg: "user created",
-        data: userCreated,
-      });
-    } catch (e) {
-      console.log(e);
-      return res.status(500).json({
+  const { firstName, lastName, email, password } = req.body;
+  try {
+    if (!firstName || !lastName || !email || !password) {
+      console.log("Validation error: Please complete firstName, lastName, email, and password.");
+      return res.status(400).json({
         status: "error",
-        msg: "something went wrong :(",
+        msg: "Validation error: Please complete firstName, lastName, email, and password.",
         data: {},
       });
     }
-  });
-  
+    const userCreated = await userModel.create({ firstName, lastName, email, password });
+    if (!userCreated) {
+      return res.status(500).json({
+        status: "error",
+        msg: "Failed to create user.",
+        data: {},
+      });
+    }
+    return res.status(201).json({
+      status: "success",
+      msg: "User created successfully.",
+      data: userCreated,
+    });
+  } catch (error) {
+    console.error("Error in user creation:", error);
+    if (error.code === 11000) {
+      return res.status(400).json({
+        status: "error",
+        msg: "User with this email already exists.",
+        data: {},
+      });
+    }
+    return res.status(500).json({
+      status: "error",
+      msg: "Something went wrong while creating the user.",
+      data: {},
+    });
+  }
+});
+
 

@@ -50,36 +50,22 @@ if (!carritoId) {
       alert(JSON.stringify(error));
     });
 }
-
-
-
-
-
-
- document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("addProductForm");
-
   form.addEventListener("submit", event => {
     event.preventDefault();
-
     const titleInput = document.getElementById("title");
     const title = titleInput.value;
-
     const thumbnailInput = document.getElementById("thumbnail");
     const thumbnails = thumbnailInput.value;
-
     const descriptionInput = document.getElementById("description");
     const description = descriptionInput.value;
-
     const priceInput = document.getElementById("price");
     const price = parseFloat(priceInput.value);
-
     const codeInput = document.getElementById("code");
     const code = codeInput.value;
-
     const stockInput = document.getElementById("stock");
     const stock = parseInt(stockInput.value);
-
     const product = {
       title,
       thumbnails,
@@ -90,7 +76,6 @@ if (!carritoId) {
     };
 
     socket.emit("addProduct", product);
-
     fetch("/api/products", {
       method: "POST",
       headers: {
@@ -136,7 +121,6 @@ if (!carritoId) {
             </div>
           </div>
         `;
-
         container.appendChild(productListElement);
       })
       .catch(error => {

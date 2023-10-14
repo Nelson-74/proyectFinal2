@@ -21,7 +21,11 @@ class RetrievalService {
       // Envía el correo electrónico con el enlace de recuperación
       const recoveryLink = `${env.API_URL}/reset-password?token=${token}`;
       const transporter = nodemailer.createTransport({
-        // Configura tu servicio de correo electrónico aquí
+      service:"Gmail",
+      auth:{
+        user: env.GOOGLE_EMAIL,
+        pass: env.GOOGLE_PASS,
+      },
       });
 
       await transporter.sendMail({

@@ -6,7 +6,6 @@ import GitHubStrategy from "passport-github2";
 import { config } from "./config.js";
 import { userService } from "../services/users.service.js";
 import { logger } from "../utils/logger.js";
-import winston from "winston";
 
 const LocalStrategy = local.Strategy;
 
@@ -24,12 +23,14 @@ export function iniPassport(){
         try {
         let user = await userModel.findOne({ email: profile.email });
         if (!user) {
+          const randomPassword = generateRandomPassword();
+          const hashedPassword = createHash(randomPassword);
           const newUser = {
           email: profile.email,
           firstName: profile._json.name || profile._json.login || "noname",
           lastName: "nolast",
           isAdmin: false,
-          password: "nopass",
+          password: hashedPassword,
         };
           let userCreated = await userModel.create(newUser);
           logger.info("User Registration succesful");
@@ -40,7 +41,7 @@ export function iniPassport(){
           }
         } catch (e) {
           logger.info("Error en auth github");
-          logger.error(error.message);
+          logger.error(e.message);
           return done(e);
         }
       }

@@ -128,7 +128,6 @@ class CartsController {
   async clearCart(req, res) {
     try {
       const { cid } = req.params;
-
       await Carts.clearCart(cid);
       res.status(200).json({
         status: "success",

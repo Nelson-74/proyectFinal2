@@ -9,8 +9,9 @@ export class userService {
   
   validateUser(firstName, lastName, email) {
     if (!firstName || !lastName || !email) {
-      logger.info("validation error: please complete firstName, lastName and email",error);
-      throw new Error("validation error: please complete firstName, lastName and email");
+      const error = new Error("Validation error: please complete firstName, lastName, and email");
+      logger.error(error.message);
+      throw error;
     }
     return ({firstName, lastName,email})
   }
@@ -40,6 +41,7 @@ export class userService {
     if (userExisting){
       throw ("This user already exists")
     };
+    const hashedPassword = await bcrypt.hash(newUser.password, 10);
     const cartId = await cartService.addCart()
     const userCreated = {
       email: newUser.email && /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/i.test(newUser.email) ?
@@ -54,13 +56,14 @@ export class userService {
       age: newUser.age ? newUser.age : "100",
       isAdmin: false,
       role: "user",
-      password : createHash( newUser, password),
+      password : hashedPassword,
       idCart: cartId._id
     };
     let createdUser = await userModel.create(userCreated);
     return createdUser;
   } catch (error) {
     logger.error(error.message);
+    return {error: "Error al crear el usuario"};
   }
 }
 };

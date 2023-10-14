@@ -2,7 +2,7 @@ import {ProductService}from "../services/products.service.js";
 import CartService from "../services/carts.service.js";
 import {logger} from "../utils/logger.js";
 import { productModel } from "../DAO/models/products.model.js";
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
 const productService = new ProductService();
 const cartService = new CartService();
@@ -15,7 +15,6 @@ class ViewsController {
       const products = await productService.getAll(queryParams);
       return res.status(200).render("home", { products });
     } catch (err) {
-      logger.error(error.message,error);
       return res
         .status(500)
         .json({ status: "error", msg: "Error in server", products: {} });
@@ -87,12 +86,12 @@ class ViewsController {
     try {
       const { pid } = req.params;
       if (!mongoose.Types.ObjectId.isValid(pid)) {
-        return res.status(400).json({ status: "error", message: "Invalid product ID" });
-      };
+        throw new Error("Invalid product ID");
+      }
       const product = await productModel.findById(pid);
       if (!product) {
-        return res.status(404).json({ status: "error", message: "Product not found" });
-      };
+        throw new Error("Product not found");
+      }
       const productSimplified = {
         _id: product._id.toString(),
         title: product.title,
@@ -109,7 +108,7 @@ class ViewsController {
       next(error);
     }
   }
-
+  
   async cartDetails(req, res, next) {
     try {
       const { cid } = req.params;

@@ -33,7 +33,7 @@ dotenv.config({
   path: `.env.${process.env.NODE_ENV}`
 });
 const PORT = process.env.PORT|| 3000;
-const connection = mongoose.connect("mongodb+srv://nelsonandrada:CedW4PNucNIwKThz@backendcodernelson.a5badyt.mongodb.net/ecommerce?retryWrites=true&w=majority");
+const connection = mongoose.connect(`mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@backendcodernelson.a5badyt.mongodb.net/ecommerce?retryWrites=true&w=majority`);
 
 const fileStore = FileStore(session);
 
@@ -96,7 +96,6 @@ app.use("/api/sessions/current", (req, res) => {
 });
 app.use("/api",mockRouter);
 app.use(errorHandler);
-app.use("/testingLogger",loggersTestRouter );
 app.use("/retrieval-email", retrievalRouter);
 //app.use(cookieParser());
 app.use(cookieParser("code-secret-123456789"));
@@ -117,7 +116,7 @@ app.get("/api/get-cookies", (req, res) => {
     status: "ok",
     msg:"look at your console and you will see your cookies!",
     data: {},
-});
+  });
 });
 app.get("/api/deleteCookie",(req, res) => {
   res.clearCookie("cookiePower").send("Cookie Removed");
@@ -168,6 +167,12 @@ app.get("/login", (req, res) =>{
   req.session.admin = true;
   res.send(" login ok");
 });
+
+app.use((req, res, next) => {
+  req.logger = logger;
+  next();
+});
+app.use("/testingLogger",loggersTestRouter );
 
 app.get("*",(req,res) => {
   return res.status(404).json({

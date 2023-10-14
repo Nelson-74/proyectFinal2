@@ -1,4 +1,5 @@
 import multer from "multer";
+
 import { logger} from "./utils/logger.js";
 
 const storage = multer.diskStorage({
@@ -37,12 +38,12 @@ export async function connectMongo() {
     await connect(
       `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@backendcodernelson.a5badyt.mongodb.net/ecommerce?retryWrites=true&w=majority`
     );
-    logger.info("Connect to MongoDB!");
-  } catch (e) {
-    logger.error(e.message);
-    throw "can not connect to the db";
+    logger.info("Connected to MongoDB!");
+  } catch (error) {
+    logger.error("MongoDB connection error:", error);
+    throw new Error("Unable to connect to the database");
   }
-} 
+}
 //-----------------Socket---------------
 
 import { Server as SocketServer} from "socket.io";
@@ -78,21 +79,21 @@ export function isAdmin(req, res, next) {
   if (req.session?.isAdmin){
     return next();
   }
-  return res.status(403).render(error,{error:"Error de autorización"})
+  return res.status(403).render(error,{error:"Error de autorización"});
 }
 
-export function isLogedIn(req, res, next) {
+export function isLoggedIn(req, res, next) {
   if (req.session?.email){
     return next();
   }
-  return res.status(401).render(error,{error:"Error de autorización"})
+  return res.status(401).render(error,{error:"Error de autenticación"});
 }
 
 export function isUser(req, res, next){
   if(req.session?.user){
     return next();
   }
-  return res.status(401).send("error de autorización");
+  return res.status(401).send("Error de autorización");
 } 
 
 

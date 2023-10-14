@@ -1,37 +1,25 @@
 import { retrievalService } from "../services/retrieval.service.js";
 
 class RetrievalController {
-  async sendRecoveryEmail(req, res) {
-    const { email } = req.body;
-
+  async handleServiceRequest(req, res, serviceMethod) {
     try {
-      const result = await retrievalService.sendRecoveryEmail(email);
+      const result = await serviceMethod(req);
       res.status(200).json({ message: result });
     } catch (error) {
       res.status(400).json({ error: error.message });
     }
+  }
+
+  async sendRecoveryEmail(req, res) {
+    return this.handleServiceRequest(req, res, retrievalService.sendRecoveryEmail);
   }
 
   async validateToken(req, res) {
-    const { token } = req.params;
-
-    try {
-      const result = await retrievalService.validateToken(token);
-      res.status(200).json({ message: result });
-    } catch (error) {
-      res.status(400).json({ error: error.message });
-    }
+    return this.handleServiceRequest(req, res, retrievalService.validateToken);
   }
 
   async resetPassword(req, res) {
-    const { token, newPassword } = req.body;
-
-    try {
-      const result = await retrievalService.resetPassword(token, newPassword);
-      res.status(200).json({ message: result });
-    } catch (error) {
-      res.status(400).json({ error: error.message });
-    }
+    return this.handleServiceRequest(req, res, retrievalService.resetPassword);
   }
 }
 

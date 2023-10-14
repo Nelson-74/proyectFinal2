@@ -9,7 +9,7 @@ class CartsDAO {
       const createdCart = await newCart.save();
       return createdCart;
     } catch (error) {
-      logger.error(error.message,error);
+      logger.error(error.message, error);
       throw new Error("Failed to create cart");
     }
   }

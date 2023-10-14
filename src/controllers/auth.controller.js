@@ -8,7 +8,15 @@ class AuthController {
   async login(req, res) {
     const {email, password} = req.body;
   if(!email || !password){
-    return res.status(400).render("error","enter your email and password");
+    try {
+      customError.createError({
+        name: "ValidationError",
+        message: "Enter your email and password",
+        code: EErrors.INVALID_TYPES_ERROR,
+      });
+    } catch (error) {
+      return next(error);
+    }
   }
   try {
     let userFound = await userModel.findOne({ email });
@@ -17,11 +25,18 @@ class AuthController {
       req.session.isAdmin = userFound.isAdmin;
       return res.redirect("/auth/perfil");
     }else{
-      return res.status(401).render("error", { error: "email or password are wrong"})
+      try {
+        customError.createError({
+          name: "AuthenticationError",
+          message: "Email or password are wrong",
+          code: EErrors.INVALID_TYPES_ERROR,
+        });
+      } catch (error) {
+        return next(error);
+      }
     }
-  }catch(error){
-    logger.error(e.message);
-    return res.status(500).render("error", {error:"Internal server Error"});
+  } catch (error) {
+    return next(error);
   }
   }
 

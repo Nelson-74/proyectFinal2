@@ -4,7 +4,7 @@ import { ProductService } from "../services/products.service.js";
 import { userService } from "../services/users.service.js";
 import { userModel } from "../DAO/models/users.model.js";
 import {logger} from "../utils/logger.js";
-import { ObjectId } from "mongoose";
+
 export class UserController {
 
   async getAllUsers(req, res,next){
@@ -15,21 +15,26 @@ export class UserController {
       return res.status(200).json({
         success: true,
         data: allUsers,
-        //payload: users,
         })
         } catch (error) {
           next(customError.createError({
             name: "DatabaseError",
             cause: error,
-            message: "Error getting users",
+            message: "Error getting users from database",
             code: EErrors.DATABASE_ERROR,
           }));
         };
     }
   
-
   async createOne(req,res,next){
     const userToSave = req.body;
+    if (!userToSave.firstName || !userToSave.lastName || !userToSave.email) {
+      return res.status(400).json({
+        status: "error",
+        message: "Campos de usuario faltantes",
+        data: {},
+      });
+    }
     try {
       const savedUser = await userService.createOne(userToSave);
       return res.json({
@@ -49,6 +54,13 @@ export class UserController {
   async updateOne(req, res){
     const _id = req.params.id;
     const {firstName, lastName, email} = req.body;
+    if (!firstName || !lastName || !email) {
+      return res.status(400).json({
+        status: "error",
+        message: "Campos de usuario faltantes",
+        data: {},
+      });
+    }
     try {
       let userUpdated = await userService.updateOne(_id,firstName,lastName, email);
       return res.status(200).json({
@@ -101,7 +113,7 @@ export class UserController {
     }
   };
 
-  async togglePremiumRol(req, res) {
+  async togglePremiumRole(req, res) {
     try {
       const userId = req.params.uid;
       const user = await userModel.findById(userId);
@@ -109,11 +121,11 @@ export class UserController {
         return res.status(404).json({ message: "Usuario no encontrado" });
       }
       // Cambiar el rol de "user" a "premium" o viceversa
-      user.rol = user.rol === "user" ? "premium" : "user";
+      user.role = user.role === "user" ? "premium" : "user";
       await user.save();
       res.status(200).json({
         status: "ok",
-        msg: `Rol de usuario actualizado a ${user.rol}`,
+        msg: `Rol de usuario actualizado a ${user.role}`,
         data: user,
       });
     } catch (error) {
@@ -134,17 +146,17 @@ export class UserController {
     // Verificar si el usuario ha cargado los documentos requeridos
     const requiredDocuments = ["Identificación", "Comprobante de domicilio", "Comprobante de estado de cuenta"];
     const hasRequiredDocuments = requiredDocuments.every((docName) =>
-      user.documents.some((doc) => doc.name === docName)
+      user.document.some((doc) => doc.name === docName)
     );
     if (!hasRequiredDocuments) {
       return res.status(400).json({ message: "El usuario no ha cargado todos los documentos requeridos" });
     }
     // Cambiar el rol de "user" a "premium"
-    user.rol = "premium";
+    user.role = "premium";
     await user.save();
     res.status(200).json({
       status: "ok",
-      msg: `Rol de usuario se ha actualizado a ${user.rol}`,
+      msg: `Rol de usuario se ha actualizado a ${user.role}`,
       data: user,
     });
   } catch (error) {
@@ -160,16 +172,29 @@ export class UserController {
       const uid = req.params.uid;
       const user = await userModel.findById(uid);
       if (!user) {
-        return res.status(404).json({ message: "Usuario no encontrado" });
+        return res.status(404).json({ message: "Usuario no encontrado" });       
       }
-      const uploadedDocuments = req.files; // Archivos cargados por Multer
-      // Aquí puedes procesar los archivos y actualizar la propiedad "documents" del usuario
-      // Puedes usar user.documents para agregar los documentos cargados al usuario
-      // Actualiza la propiedad "documents" del usuario
-      user.documents = uploadedDocuments.map((file) => ({
+      if (!isLoggedIn(req)) {
+        return res.status(401).json({ message: "Debes iniciar sesión para cargar documentos" });
+      }
+      if (!user.isAdmin) {
+      return res.status(403).json({ message: "No tienes permiso para cargar documentos" });
+      }
+      const uploadedDocuments = req.files; 
+      user.document = uploadedDocuments.map((file) => ({
         name: file.originalname,
         reference: file.filename, // Aquí puedes guardar el nombre del archivo o su ruta en tu servidor
       }));
+      for(const file of uploadedDocuments){
+        if(!isValidDocumentExtension(file.originalname)){
+          return  res.status(415).send("Solo archivos con extension .pdf y .png son permitidos");
+        }
+      }
+      // Almacena los documentos en una ubicación segura (por ejemplo, fuera del directorio público)
+      for (const file of uploadedDocuments){
+        const securePath = `/documentos/${file.filename}`;// Ruta segura para el servidor
+        user.document.push({ name: file.originalname, reference: securePath });
+      }
       await user.save();
       res.status(200).json({
         status: "ok",
@@ -184,8 +209,12 @@ export class UserController {
       });
     }
   }
+  isValidDocumentExtension(filename) {
+    const allowedExtensions = [".pdf", ".doc", ".docx"]; // Ejemplo de extensiones permitidas
+    const ext = path.extname(filename).toLowerCase();
+    return allowedExtensions.includes(ext);
+  }
 }
-
 
 
 

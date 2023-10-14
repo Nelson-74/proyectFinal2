@@ -1,3 +1,4 @@
+import express from "express";
 import faker from "faker";
 import {logger} from "../utils/logger.js";
 class MockProducts {
@@ -36,7 +37,7 @@ class MockProducts {
         result: { status: "ok", payload: this.products },
       };
     } catch (error) {
-      logger.error(e.message);
+      logger.error(error.message);
       return {
         status: 500,
         result: { 

@@ -8,7 +8,8 @@ class TicketsController {
           const user = req.session.user;
           const userCartId = user.idCart;
           const purchaser = user.email;
-          const { cartStock, totalPriceTicket, cartOutStock } = await TicketService.stockForTicket(userCartId);
+          const { cartStock, totalPriceTicket, cartOutStock } =
+          await TicketService.stockForTicket(userCartId);
           await cartService.updateProductQty(userCartId, cartOutStock);
           await TicketService.addTicket(purchaser, cartStock, totalPriceTicket);
           return res.render("finaltickets", { ticket: cartStock, totalCart: totalPriceTicket, purchaser });

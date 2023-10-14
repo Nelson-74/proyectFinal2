@@ -10,7 +10,6 @@ export class ProductService {
     const isFieldMissing = (field) => !field || !field.trim(); 
     if (isFieldMissing(title) || isFieldMissing(description) || isFieldMissing(price) || isFieldMissing(thumbnail) || isFieldMissing(code) || stock === undefined || isFieldMissing(category)) {
       const errorMessage = "Please fill in all the required fields.";
-      logger.error(error.message);
       return createError({
         name: "Validate error",
         message: errorMessage,
@@ -18,6 +17,7 @@ export class ProductService {
         cause: customInfo.generateProductErrorInfo(),
       });
     }
+    return null;
   }
   
   async getById(productId){

@@ -53,7 +53,12 @@ class ProductsController {
       const { title, description, price, thumbnail, code, stock, category } = req.body;
       const user = req.user; 
       if (!user.canCreateProducts) {
-        return res.status(403).json({ message: "No tienes permiso para crear productos" });
+        const error = customError.createError({
+          name: "PermissionError",
+          message: "No tienes permiso para crear productos",
+          code: EErrors.PERMISSION_ERROR,
+        });
+        return next(error);
       }  
       const productCreated = await Products.createOne({
         title,

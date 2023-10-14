@@ -23,7 +23,7 @@ const schema = new Schema({
         required: true,
         max: 100,
       },
-      rol: {
+      role: {
         type: String,
         default: "user",
         enum: ["user", "premium", "admin"],
@@ -40,6 +40,10 @@ const schema = new Schema({
       cart: {
         type: String,
         required: false,
+      },
+      isAdmin: {
+        type: Boolean,
+        default: false, 
       },
       document : [
         {
