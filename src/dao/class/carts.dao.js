@@ -1,5 +1,5 @@
-import { cartModel } from "../DAO/models/carts.models.js";
-import { productModel } from "../DAO/models/products.model.js";
+import { cartModel } from "../models/carts.models.js";
+import { productModel } from "../models/products.model.js";
 import {logger} from "../../utils/logger.js";
 
 class CartsDAO {
@@ -23,7 +23,7 @@ class CartsDAO {
       }
       return cart;
     } catch (error) {
-      logger.error(error.message.error, error);
+      logger.error(error.message, error);
       throw new Error("Failed to get cart");
     }
   }
@@ -37,7 +37,7 @@ class CartsDAO {
         throw new Error("Cart does not exist");
       }
       if (!product) {
-        logger.error(error.message, error);
+        logger.error("Product does not exist");
         throw new Error("Product does not exist");
       }
       cart.products.push({ product: product._id, qty: 1 });
@@ -56,14 +56,14 @@ class CartsDAO {
         (p) => p.product.toString() === productId
       );
       if (productIndex === -1) {
-        logger.error(error.message, error);
+        logger.error("Product not found");
         throw new Error("Product not found");
       }
       cart.products[productIndex].qty = qty;
       await cart.save();
       return cart;
     } catch (error) {
-      logger.error("Failed to update product quantity");
+      logger.error(error.message, error);
       throw new Error("Failed to update product quantity");
     }
   }
@@ -75,7 +75,7 @@ class CartsDAO {
         (p) => p.product.toString() === productId
       );
       if (productIndex === -1) {
-        logger.error(error.message, error);
+        logger.error("Product not found in cart");
         throw new Error("Product not found in cart");
       }
       cart.products.splice(productIndex, 1);

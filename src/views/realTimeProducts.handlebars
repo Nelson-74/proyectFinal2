@@ -10,15 +10,15 @@
             <h2>{{this.title}}</h2>
             <ul class="list-group">
               <hr>
-              <img src="{{this.thumbnail}}" alt="">
+              <img src="{{this.thumbnail}}" alt="{{this.title}}">
               <p><strong>{{this.description}}</strong></p>
               <h3>Price: ${{this.price}}</h3>
               <h3>Stock: {{this.stock}}</h3>
               <p>Category: {{this.category}}</p>
               <p>Code: {{this.code}}</p>
-              <p>Id: {{this.id}}</p>
+              <p>_id: {{this._id}}</p>
             </ul>
-            <button class="delete-btn " onclick="deleteProduct('{{this.id}}')">Delete</button>
+            <button class="btn btn-secondary" onclick="addProductToCart('{{this._id}}')">Agregar al carrito</button>
           </div>
         </aside>
       </div>
@@ -26,50 +26,44 @@
     </div>
   </div>
 </div>
-
-<div>
-  <h2 class="text-center">Add Product</h2>
-  <div class="product-container" id="product_form">
-    <div class="row">
-      <div class="col-sm-8">
-        <form id="addProductForm" method="POST" action="/api/products" class="form-group col-auto">
-          <div class="product">
-            <div class="form-group">
-              <label for="title">Title:</label>
-              <input type="text" class="form-control" placeholder="Title" id="title" name="Title">
-            </div>
-            <div class="form-group">
-              <label for="description">Description:</label>
-              <input type="text" class="description" placeholder="Description" id="description" name="Description">
-            </div>
-            <div class="form-group">
-              <label for="price">Price: $</label>
-              <input type="text" class="price" placeholder="Price" id="price" name="Price">
-            </div>
-            <div class="form-group">
-              <label for="stock">Stock:</label>
-              <input type="number" class="stock" placeholder="Stock" id="stock" name="Stock">
-            </div>
-            <div class="form-group">
-              <label for="category">Category:</label>
-              <input type="text" class="category" placeholder="Category" id="category" name="Category">
-            </div>
-            <div class="form-group">
-              <label for="code">Code:</label>
-              <input type="text" class="code" placeholder="Code" id="code" name="Code">
-            </div>
-            <div class="form-group">
-              <label for="thumbnail">Thumbnail:</label>
-              <input type="text" class="thumbnail" placeholder="Thumbnail" id="thumbnail" name="Thumbnail">
-            </div>
-            <div class="form-group">
-              <button type="submit" class="btn btn-success d-grid gap-2 col-2 mx-auto">Add Product</button>
-            </div>
-          </div>
-        </form>
-      </div>
-    </div>
+<div class="container" id="product_form">
+  <h2 class="text-center">Carrito de Compras</h2>
+  <form id="addProductForm" method="POST" action="/api/carts" class="form-group col-auto">
+  {{#if cart.length}}
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Producto</th>
+        <th>Descripción</th>
+        <th>Precio</th>
+        <th>Cantidad</th>
+        <th>Subtotal</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each cart}}
+      <tr>
+        <td>{{this.title}}</td>
+        <td>{{this.description}}</td>
+        <td>${{this.price}}</td>
+        <td>{{this.quantity}}</td>
+        <td>${this.price * this.quantity}</td>
+        <td>
+          <button class="btn btn-danger" onclick="removeFromCart(`{{this._id}}`)">Eliminar</button>
+        </td>
+      </tr>
+      {{/each}}
+    </tbody>
+  </table>
+  <div class="text-end">
+    <p>Total: ${{total}}</p>
+    <button class="btn btn-primary">Realizar Pedido</button>
   </div>
+  {{else}}
+  <p>El carrito de compras está vacío.</p>
+  {{/if}}
+  </form>
 </div>
 
 <script src="/socket.io/socket.io.js"></script>

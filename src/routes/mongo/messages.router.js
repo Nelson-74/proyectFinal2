@@ -1,17 +1,14 @@
 import express from "express";
+import { MessagesController } from "../../controllers/messages.controller.js";
 
-const messagesRouter = express.Router ();
+const messagesRouter = express.Router();
+const messagesController = new MessagesController();
 
-messagesRouter.get ("/message" , async(req, res) => {
-  try {
-        res.status(200).render ("chat");
-  } catch (error) {
-    console.error("Error en la ruta /message:");
-        res.status(500).json({
-          status : "error",
-          msg: "error",
-  })
-  }
+// Obtener todos los mensajes
+messagesRouter.get('/', async (req, res) => {
+  await messagesController.getAllMessages(req, res);
 });
+
 export default messagesRouter;
+
 

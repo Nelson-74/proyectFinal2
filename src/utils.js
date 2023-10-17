@@ -57,11 +57,12 @@ export const connectSocket = (httpServer) => {
     logger.info("new user connected");
   
     socket.on("msg_front_to_back", async (message) => {
+      // Procesa y almacena el mensaje en MongoDB
       const msgCreated = await MessageModel.create(message);
       const msgs = await MessageModel.find({});
       socketServer.emit("todos_los_msgs", msgs);
     });
-  
+    
     socket.on("product:create", async (newProduct) => {
       logger.info("product created");
       const product = await ProductService.saveProduct(newProduct);
@@ -76,10 +77,11 @@ export const connectSocket = (httpServer) => {
 }
 
 export function isAdmin(req, res, next) {
-  if (req.session?.isAdmin){
+  if (req.user && req.user.isAdmin){
     return next();
+  }else{
+  return res.status(403).render(error,{error:"Error de autorización, no tienes permisos de administrador"});
   }
-  return res.status(403).render(error,{error:"Error de autorización"});
 }
 
 export function isLoggedIn(req, res, next) {
@@ -90,11 +92,15 @@ export function isLoggedIn(req, res, next) {
 }
 
 export function isUser(req, res, next){
-  if(req.session?.user){
+  if(req.user){
     return next();
+  }else{
+  return res.status(401).send("Error de autorización, debes iniciar sesión");
   }
-  return res.status(401).send("Error de autorización");
-} 
+}
+
+
+
 
 
 

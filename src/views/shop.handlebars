@@ -1,8 +1,8 @@
 <div class="container">
     <div class="card col-md-6 mx-auto mt-4">
         <div class="card-header bg-primary text-white">
-            <h3 class="mb-0">shop-adidas</h3>
-            <div>¡¡¡Bienvenido, <strong>{{ user.firstName }}!!!</strong> <a href="/auth/logout">Salir</a></div>
+            <h3 class="mb-0">shop</h3>
+            <h2>Bienvenido, {{user.email}} (Rol: {{user.isAdmin ? "Admin" : "Usuario"}})<a href="/auth/logout">Salir</a></h2>
         </div>
         <div class="card-body">
             <h5 class="card-title">Qué hacer</h5>
@@ -38,7 +38,7 @@
             </div>
         </div>
         <div class="card-footer text-center">
-            <h4 class="mb-0">Shop Adidas</h4>
+            <h4 class="mb-0">Shop</h4>
             <a href="/addProductToCart" class="btn btn-sm btn-dark">Ir a la tienda</a>
         </div>
     </div>

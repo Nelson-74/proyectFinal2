@@ -33,14 +33,22 @@ export class ProductService {
     if (query) {
       filter.$or = [{ category: query }, { availability: query }];
     }
+    const sortOptions = {};
+    if(sort){
+      if(sort === "asc"){
+        sortOptions.price = 1;
+      }else if (sort === "desc"){
+        sortOptions.price = -1;
+      }
+    }
     const options = {
       page: parseInt(page),
       limit: parseInt(limit),
-      sort: sort === "desc" ? "-price" : "price",
+      sort: sortOptions,
     };
     const result = await productDAO.findAllWithPagination(filter, options);
     const response = {
-      status: "ok",
+      status: "success",
       payload: result.docs,
       totalPages: result.totalPages,
       prevPage: result.hasPrevPage ? result.prevPage : null,

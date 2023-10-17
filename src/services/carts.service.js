@@ -1,9 +1,10 @@
-import {cartsDAO,ProductDAO,TicketDAO,} from "../DAO/factory.js";
+import CartsDAO from "../DAO/class/carts.dao.js"
+import ProductDAO from "../DAO/class/products.dao.js";
 import {logger} from "../utils/logger.js";
 class CartService {
   async createOne() {
     try {
-      const newCart = new cartsDAO({ products: [] });
+      const newCart = new CartsDAO({ products: [] });
       const createdCart = await newCart.save();
       return createdCart;
     } catch (error) {
@@ -14,7 +15,7 @@ class CartService {
 
   async get(cartId) {
     try {
-      const cart = await cartsDAO.findById(cartId).populate("products.product");
+      const cart = await CartsDAO.findById(cartId).populate("products.product");
       if (!cart) {
         logger.error("Cart not found");
         throw new Error("Cart not found");
@@ -28,7 +29,7 @@ class CartService {
 
   async addProductToCart(cartId, productId) {
     try {
-      const cart = await cartsDAO.findById(cartId);
+      const cart = await CartsDAO.findById(cartId);
       const product = await ProductDAO.findById(productId);
       if (!cart) {
         logger.error("Cart does not exist",error);
@@ -47,9 +48,9 @@ class CartService {
     }
   }
 
-  async updateProductQty(cartId, productId, qty) {
+  async updateProductQuantity(cartId, productId, qty) {
     try {
-      const cart = await cartsDAO.findById(cartId);
+      const cart = await CartsDAO.findById(cartId);
       const productIndex = cart.products.findIndex(
         (p) => p.product.toString() === productId
       );
@@ -69,7 +70,7 @@ class CartService {
 
   async removeProduct(cartId, productId) {
     try {
-      const cart = await cartsDAO.findById(cartId);
+      const cart = await CartsDAO.findById(cartId);
       const productIndex = cart.products.findIndex(
         (p) => p.product.toString() === productId
       );
@@ -89,7 +90,7 @@ class CartService {
 
   async clearCart(cartId) {
     try {
-      const cart = await cartsDAO.findById(cartId);
+      const cart = await CartsDAO.findById(cartId);
       cart.products = [];
       await cart.save();
     } catch (error) {

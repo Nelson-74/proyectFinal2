@@ -2,7 +2,7 @@
 const API_URL = "http://localhost:3000/api";
 
 // Función para agregar un producto al carrito
-async function putIntoCart(_id) {
+async function addProductToCart(_id) {
   let carritoId = localStorage.getItem("carrito-id");
   const url = `${API_URL}/carts/${carritoId}/product/${_id}`;
   const data = {};

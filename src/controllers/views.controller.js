@@ -36,7 +36,6 @@ class ViewsController {
     try {
       const { limit = 10, page = 1, sort, query } = req.query;
       const queryParams = { limit, page, sort, query };
-
       const {
         payload: products,
         totalPages,
@@ -62,7 +61,6 @@ class ViewsController {
           category: item.category,
         };
       });
-
       return res.render("products", {
         products: productsSimplified,
         totalPages,
@@ -78,19 +76,25 @@ class ViewsController {
       logger.error(error.message,error);
       return res
         .status(500)
-        .json({ status: "error", message: "Error in server" });
+        .render("error",{error});
     }
   }
 
   async productDetails(req, res, next) {
     try {
       const { pid } = req.params;
+      if (pid === "favicon.ico") {
+        return res.status(404).render("error", { error: "Product not found" });
+      }
+      console.log("Product ID:", pid); 
       if (!mongoose.Types.ObjectId.isValid(pid)) {
-        throw new Error("Invalid product ID");
+        return res.status(400).render("error", { error: "Invalid product ID"});
+        /* throw new Error("Invalid product ID"); */
       }
       const product = await productModel.findById(pid);
       if (!product) {
-        throw new Error("Product not found");
+        return res.status(404).render("error", { error: "Product not found" });
+        /* throw new Error("Product not found"); */
       }
       const productSimplified = {
         _id: product._id.toString(),
@@ -103,7 +107,7 @@ class ViewsController {
         category: product.category,
       };
       logger.info(productSimplified);
-      res.render("productDetails", { product: productSimplified });
+      res.render("product", { product: productSimplified });
     } catch (error) {
       next(error);
     }
@@ -113,18 +117,22 @@ class ViewsController {
     try {
       const { cid } = req.params;
       const cart = await cartService.get(cid);
-
       const simplifiedCart = cart.products.map((item) => {
         return {
           title: item.product.title,
+          description: item.product.description,
           price: item.product.price,
-          qty: item.qty,
+          thumbnail: item.product.thumbnail,
+          code: item.product.code,
+          stock: item.product.stock,
+          category: item.product.category,
+          quantity: item.quantity,
         };
       });
-      console.log(simplifiedCart);
-      res.render("cartDetails", { cart: simplifiedCart });
+      res.render("cart", { cart: simplifiedCart });
     } catch (error) {
       logger.error(error.message,error);
+      next(error);
     }
   }
 }

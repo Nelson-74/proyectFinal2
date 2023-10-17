@@ -9,14 +9,28 @@ class ProductsController {
 
   async getAll(req, res,next) {
     try {
+      const{limit = 10, page = 1,sort, query} = req.query;
       const queryParams = {
-        limit: req.query.limit,
-        page: req.query.page,
-        sort: req.query.sort,
-        query: req.query.query,
+        limit: parseInt(limit),
+        page: parseInt(page),
+        query:query,
       };
+      const user = req.user;
+      const cartId = user ? user.cartId : null;
       const response = await Products.getAll(queryParams);
-      return res.status(200).json(response);
+      res.render("products", {
+        user: req.user,
+        products: response.products,
+        cartId: cartId,
+        totalPages: response.totalPages,
+        prevPage: response.prevPage,
+        nextPage: response.nextPage,
+        hasPrevPage:response.hasPrevPage,
+        hasNextPage:response.hasNextPage,
+        currentPage:response.currentPage,
+        prevLink: response.prevLink,
+        nextLink: response.nextLink,
+      })
     } catch (error) {
       logger.error(error.message,error);
       next(

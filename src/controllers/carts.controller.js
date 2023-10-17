@@ -21,6 +21,10 @@ class CartsController {
   async addProductToCart(req, res) {
     try {
       const { cid, pid } = req.params;
+      if (!cid ||!pid ) return res.sendStatus(401).json({
+        status: "error",
+          msg: "Invalid request. Both 'cid' and 'pid' must be provided.",
+      }); 
       const cart = await Carts.addProductToCart(cid, pid);
       res.status(200).json({
       status: "success",
@@ -33,11 +37,13 @@ class CartsController {
         msg: "Failed to add product to cart",
       });
     }
+    console.log('Añadir producto al carrito:', productId);
   }
 
   async removeProduct(req, res) {
     try {
       const { cid, pid } = req.params;
+      if (!cid || !pid) return res.sendStatus(401);
       await Carts.removeProduct(cid, pid);
       res.status(200).json({
         status: "success",
@@ -91,7 +97,9 @@ class CartsController {
     try {
       const { cid } = req.params;
       const newProducts = req.body.products; // proporcionar un arreglo de productos en req.body
-      const updatedCart = await Carts.updateCart(cid, newProducts);
+      const currentCart = await Carts.get(cid);
+      currentCart.products = newProducts;
+      const updatedCart = await currentCart.save();
       res.status(200).json({
         status: "success",
         message: "Cart updated successfully",

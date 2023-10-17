@@ -15,6 +15,7 @@ import viewsRouter from "./routes/mongo/views.mongo.router.js";
 import cookieParser from "cookie-parser";
 import {iniPassport} from "./config/passport.config.js";
 import {authRouter} from "./routes/auth.router.js";
+import { isAdmin, isLoggedIn, isUser } from "./utils.js";
 import {mockRouter} from "./routes/mock.router.js";
 import {ticketsRouter} from "./routes/tickets.router.js";
 import {viewsRouterSessions} from "./routes/views.router.js";
@@ -96,6 +97,16 @@ app.use("/api/sessions/current", (req, res) => {
 });
 app.use("/api",mockRouter);
 app.use(errorHandler);
+app.get("/admin", isAdmin, (req, res) => {
+  res.send('Página de administrador');// Esta ruta solo estará disponible para usuarios administradores
+});
+app.get("/user", isLoggedIn, (req, res) => {
+  res.send("Página para usuarios autenticados");// Esta ruta requiere que el usuario esté autenticado
+});
+app.get("/user-auth", isUser, (req, res) => {
+  res.send("Página para cualquier usuario autenticado");// Esta ruta requiere que el usuario esté autenticado, pero no necesariamente un administrador
+});
+
 app.use("/retrieval-email", retrievalRouter);
 //app.use(cookieParser());
 app.use(cookieParser("code-secret-123456789"));

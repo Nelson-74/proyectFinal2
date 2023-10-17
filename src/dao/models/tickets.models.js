@@ -5,9 +5,11 @@ const schema = new Schema({
   purchase_datetime:{ type: Date},
   amount:{type:Number},
   purchaser:{type:String},
+  cartId: { type: String, required: true },
+	amount: { type: Number, required: true },
   products: [{
       idProduct: {type:Object},
-      qty :{type: Number},
+      quantity :{type: Number},
       _id: false,
       total_price: {type: Number}
   }]

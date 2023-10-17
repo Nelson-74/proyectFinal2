@@ -13,11 +13,11 @@
     <p>{{this.code}}</p>
     <p>{{this.stock}}</p>
     <p>{{this.category}}</p>
-    <a href="/products/{{this._id}}"> Ver {{this._id}}</a>
-    {{!-- <button class="btn btn-primary" onclick="putIntoCart("{{this._id}}")">Add to cart {{this._id}}</button>
+    <a href="/products/{{this._sid}}"> Ver {{this._id}}</a>
+    <button class="btn btn-primary" onclick="addProductToCart('{{this._id}}')">Add to cart {{this._id}}</button>
     <br />
-    <a href="/products/{{this._id}}" class="btn btn-primary">View Details</a> --}}
-    <form action="/api/carts/{{cartId}}/products/{{this._id}}" method="PUT">
+    <a href="/products/{{this.id}}" class="btn btn-primary">View Details</a> --}}
+    <form action="/api/carts/{{cartId}}/products/{{this._id}}" method="POST">
       <input type="number" name="quantity" value="1" min="1">
       <button type="submit" class="btn btn-primary">Add to Cart</button>
     </form>
@@ -32,7 +32,7 @@ prevPage:
 nextPage:
 {{nextPage}}
 currentPage:
-{{pageNo}}
+{{currentPage}}
 hasPrevPage:
 {{hasPrevPage}}
 hasNextPage:

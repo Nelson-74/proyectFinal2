@@ -120,6 +120,9 @@ export class UserController {
       if (!user) {
         return res.status(404).json({ message: "Usuario no encontrado" });
       }
+      if(!req.sessions.isAdmin){
+        return res.status(403).send("No tienes permisos para realizar esta acción");
+      }
       // Cambiar el rol de "user" a "premium" o viceversa
       user.role = user.role === "user" ? "premium" : "user";
       await user.save();
@@ -142,6 +145,9 @@ export class UserController {
     const user = await userModel.findById(uid);
     if (!user) {
       return res.status(404).json({ message: "Usuario no encontrado" });
+    }
+    if(!req.session.isAdmin){
+      return res.status(403).json({ message: "No tienes permiso para cambiar el rol de usuario"});
     }
     // Verificar si el usuario ha cargado los documentos requeridos
     const requiredDocuments = ["Identificación", "Comprobante de domicilio", "Comprobante de estado de cuenta"];
