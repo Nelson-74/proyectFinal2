@@ -135,7 +135,7 @@ class ProductsController {
       const user = req.user; // Obtener el usuario que realiza la solicitud
       const product = await Products.getById(productId);
       if (!product) {
-        return res.status(404).json({ message: "Producto no encontrado" });
+        return res.status(404).render( "error",{ Error: "Producto no encontrado" });
       }
       // Verificar los permisos de eliminación
       if (user.rol === "admin" || (user.rol === "premium" && product.owner === user.email)) {
@@ -146,7 +146,7 @@ class ProductsController {
           data: { productDeleted },
         });
       } else {
-        return res.status(403).json({ message: "No tienes permiso para eliminar este producto" });
+        return res.status(401).render("error",{ Error: "No tienes permiso para eliminar este producto" });
       }
     } catch (error) {
       logger.error(error.message,error);

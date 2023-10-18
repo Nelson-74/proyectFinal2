@@ -14,7 +14,7 @@ class TicketsController {
           await TicketService.addTicket(purchaser, cartStock, totalPriceTicket);
           return res.render("finaltickets", { ticket: cartStock, totalCart: totalPriceTicket, purchaser });
         } catch (err) {
-          res.status(500).json({ Error: `${err}` });
+          res.status(500).render("error",{ Error: `${err}` });
         }
     }
 
@@ -26,7 +26,7 @@ class TicketsController {
           const { cartStock, totalPriceTicket } = await TicketService.stockCartProductsForTicket(userCartId);
           return res.render("ticket", { user, cartProducts, cartStock, totalPriceTicket });
         } catch (err) {
-          res.status(500).json({ Error: `${err}` });
+          res.status(500).render("error",{ Error: `${err}` });
         }
     }
 }

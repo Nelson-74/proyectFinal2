@@ -29,11 +29,7 @@ export class UserController {
   async createOne(req,res,next){
     const userToSave = req.body;
     if (!userToSave.firstName || !userToSave.lastName || !userToSave.email) {
-      return res.status(400).json({
-        status: "error",
-        message: "Campos de usuario faltantes",
-        data: {},
-      });
+      return res.status(400).render("error",{Error: "Campos de usuario faltantes"});
     }
     try {
       const savedUser = await userService.createOne(userToSave);
@@ -55,11 +51,7 @@ export class UserController {
     const _id = req.params.id;
     const {firstName, lastName, email} = req.body;
     if (!firstName || !lastName || !email) {
-      return res.status(400).json({
-        status: "error",
-        message: "Campos de usuario faltantes",
-        data: {},
-      });
+      return res.status(400).render("error",{Error: "Campos de usuario faltantes"});
     }
     try {
       let userUpdated = await userService.updateOne(_id,firstName,lastName, email);
@@ -69,11 +61,7 @@ export class UserController {
         data : userUpdated,
       })
     } catch (error) {
-      return res.status(500).json({
-        status: "error",
-        message :"Internal Server Error",
-        data: {}
-      });
+      return res.status(500).render("error",{Error :"Internal Server Error"});
     }
   }
 
@@ -82,10 +70,7 @@ export class UserController {
       const products = await ProductService.getProducts();
       res.status(200).json(products);
     } catch (error) {
-      res.status(500).json({
-        status: "error",
-        msg: "Failed to get shop data",
-      });
+      res.status(500).render("error",{Error: "Failed to get shop data"});
     }  
   };
 
@@ -105,11 +90,7 @@ export class UserController {
       });
     } catch (error) {
       logger.error(error.message,error);
-      return res.status(500).json({
-        status: "error",
-        msg: "something went wrong ",
-        data: {},
-      });
+      return res.status(500).render("error",{Error: "something went wrong ",});
     }
   };
 
@@ -118,7 +99,7 @@ export class UserController {
       const userId = req.params.uid;
       const user = await userModel.findById(userId);
       if (!user) {
-        return res.status(404).json({ message: "Usuario no encontrado" });
+        return res.status(404).render("error",{ Error: "Usuario no encontrado" });
       }
       if(!req.sessions.isAdmin){
         return res.status(403).send("No tienes permisos para realizar esta acción");
@@ -133,10 +114,7 @@ export class UserController {
       });
     } catch (error) {
       logger.error(error.message,error);
-      res.status(500).json({
-        status: "error",
-        msg: "Error al cambiar el rol del usuario",
-      });
+      res.status(500).render( "error",{ Error: "Error al cambiar el rol del usuario",});
     }
   }
   async updateToPremium(req, res) {
@@ -144,10 +122,10 @@ export class UserController {
     const uid = req.params.uid;
     const user = await userModel.findById(uid);
     if (!user) {
-      return res.status(404).json({ message: "Usuario no encontrado" });
+      return res.status(404).render("error",{ Error: "Usuario no encontrado" });
     }
     if(!req.session.isAdmin){
-      return res.status(403).json({ message: "No tienes permiso para cambiar el rol de usuario"});
+      return res.status(403).render("error",{ Error: "No tienes permiso para cambiar el rol de usuario"});
     }
     // Verificar si el usuario ha cargado los documentos requeridos
     const requiredDocuments = ["Identificación", "Comprobante de domicilio", "Comprobante de estado de cuenta"];
@@ -155,7 +133,7 @@ export class UserController {
       user.document.some((doc) => doc.name === docName)
     );
     if (!hasRequiredDocuments) {
-      return res.status(400).json({ message: "El usuario no ha cargado todos los documentos requeridos" });
+      return res.status(400).render("error",{ Error: "El usuario no ha cargado todos los documentos requeridos" });
     }
     // Cambiar el rol de "user" a "premium"
     user.role = "premium";
@@ -167,10 +145,7 @@ export class UserController {
     });
   } catch (error) {
     logger.error(error.message,error);
-    res.status(500).json({
-      status: "error",
-      msg: "Error al cambiar el rol del usuario",
-    });
+    res.status(500).render("error",{Error: "Error al cambiar el rol del usuario"});
   }
 }
   async uploadDocuments(req, res) {
@@ -178,13 +153,13 @@ export class UserController {
       const uid = req.params.uid;
       const user = await userModel.findById(uid);
       if (!user) {
-        return res.status(404).json({ message: "Usuario no encontrado" });       
+        return res.status(404).render("error",{ Error: "Usuario no encontrado" });       
       }
       if (!isLoggedIn(req)) {
-        return res.status(401).json({ message: "Debes iniciar sesión para cargar documentos" });
+        return res.status(401).render("error",{ Error: "Debes iniciar sesión para cargar documentos" });
       }
       if (!user.isAdmin) {
-      return res.status(403).json({ message: "No tienes permiso para cargar documentos" });
+      return res.status(403).render("error",{ Error: "No tienes permiso para cargar documentos" });
       }
       const uploadedDocuments = req.files; 
       user.document = uploadedDocuments.map((file) => ({
@@ -209,10 +184,7 @@ export class UserController {
       });
     } catch (error) {
       logger.error(error.message,error);
-      res.status(500).json({
-        status: "error",
-        msg: "Error al cargar documentos",
-      });
+      res.status(500).render("error",{Error: "Error al cargar documentos"});
     }
   }
   isValidDocumentExtension(filename) {

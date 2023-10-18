@@ -8,14 +8,14 @@ class SessionsController {
 
   shop(req,res){
     if(req.session ||req.session.user ){
-      return res.redirect("/shop");
+      return res.render("/shop");
   }
 };
 
   async registerGithub(req, res) {
     req.session.user = req.user;
     /* res.status(200).json({ status: "ok", msg: "User authenticated via GitHub" }); */
-    res.redirect("/products");
+    res.render("/products");
   }
 
   showSession(req, res) {

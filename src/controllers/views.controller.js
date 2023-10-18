@@ -15,9 +15,7 @@ class ViewsController {
       const products = await productService.getAll(queryParams);
       return res.status(200).render("home", { products });
     } catch (err) {
-      return res
-        .status(500)
-        .json({ status: "error", msg: "Error in server", products: {} });
+      return res.status(500).render("error",{ Error: "Error in server", products: {} });
     }
   }
 
@@ -26,9 +24,7 @@ class ViewsController {
       const products = await productService.getAll();
       return res.status(200).render("realTimeProducts", { products });
     } catch (err) {
-      return res
-        .status(500)
-        .json({ status: "error", msg: "Error in server", products: {} });
+      return res.status(500).render("error",{ Error: "Error in server", products: {} });
     }
   }
 

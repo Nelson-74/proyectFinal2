@@ -4,6 +4,7 @@ import { isAdmin , isUser} from "../utils.js";
 import documentsRouter from "./document.router.js";
 import { userModel } from "../DAO/models/users.model.js";
 
+
 export const usersRouter = express.Router();
 const userController = new UserController();
 
@@ -20,19 +21,11 @@ usersRouter.post("/", async (req, res) => {
   try {
     if (!firstName || !lastName || !email || !password) {
       console.log("Validation error: Please complete firstName, lastName, email, and password.");
-      return res.status(400).json({
-        status: "error",
-        msg: "Validation error: Please complete firstName, lastName, email, and password.",
-        data: {},
-      });
+      return res.status(400).render("error",{ Error : "Validation error: Please complete firstName, lastName, email, and password."});
     }
     const userCreated = await userModel.create({ firstName, lastName, email, password });
     if (!userCreated) {
-      return res.status(500).json({
-        status: "error",
-        msg: "Failed to create user.",
-        data: {},
-      });
+      return res.status(500).render("error",{Error : "Failed to create user."});
     }
     return res.status(201).json({
       status: "success",
@@ -48,11 +41,7 @@ usersRouter.post("/", async (req, res) => {
         data: {},
       });
     }
-    return res.status(500).json({
-      status: "error",
-      msg: "Something went wrong while creating the user.",
-      data: {},
-    });
+    return res.status(500).render("error",{ Error:"Something went wrong while creating the user."});
   }
 });
 

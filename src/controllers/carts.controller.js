@@ -12,9 +12,7 @@ class CartsController {
       data: newCart});
     } catch (error) {
       logger.error(error.message,error);
-      res.status(500).json({ 
-        status: "error",
-        msg: "Failed to create cart" });
+      res.status(500).render("error",{ Error: "Failed to create cart" });
     }
   }
 
@@ -32,10 +30,7 @@ class CartsController {
       data: cart,});
     } catch (error) {
       logger.error(error.message,error);
-      res.status(500).json({
-        status: "error",
-        msg: "Failed to add product to cart",
-      });
+      res.status(500).render("error",{Error: "Failed to add product to cart"});
     }
     console.log('Añadir producto al carrito:', productId);
   }
@@ -51,10 +46,7 @@ class CartsController {
       });
     } catch (error) {
       logger.error(error.message,error);
-      res.status(500).json({
-        status: "error",
-        msg: "Failed to remove product from cart",
-      });
+      res.status(500).render("error",{Error: "Failed to remove product from cart"});
     }
   }
 
@@ -70,10 +62,7 @@ class CartsController {
       res.render("cartView", {cartProducts});
     } catch (error) {
       logger.error(error.message,error);
-      res.status(500).json({
-        status: "error",
-        msg: "Failed to get cart products",
-      });
+      res.status(500).render("error",{Error: "Failed to get cart products"});
     }
   }
 
@@ -87,9 +76,7 @@ class CartsController {
       });
     } catch (error) {
       logger.error(error.message,error);
-      res.status(500).json({ 
-        status: "error",
-        msg: "Failed to get carts" });
+      res.status(500).render("error",{ Error: "Failed to get carts" });
     }
   }
 
@@ -107,10 +94,7 @@ class CartsController {
       });
     } catch (error) {
       logger.error(error.message,error);
-      res.status(500).json({
-        status: "error",
-        msg: "Failed to update cart",
-      });
+      res.status(500).render("error",{Error: "Failed to update cart"});
     }
   }
 
@@ -126,10 +110,7 @@ class CartsController {
       });
     } catch (error) {
       logger.error(error.message,error);
-      res.status(500).json({
-        status: "error",
-        msg: "Failed to update product quantity",
-      });
+      res.status(500).render("error",{Error: "Failed to update product quantity"});
     }
   }
 
@@ -143,10 +124,7 @@ class CartsController {
       });
     } catch (error) {
       logger.error(error.message,error);
-      res.status(500).json({
-        status: "error",
-        msg: "Failed to clear cart",
-      });
+      res.status(500).render("error",{Error: "Failed to clear cart"});
     }
   }
 }

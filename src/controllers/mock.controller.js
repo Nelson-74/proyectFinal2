@@ -13,11 +13,7 @@ class MockController {
       res.status(response.status).json(response.result);
     } catch (error) {
       logger.error(error.message,error);
-      res.status(500).json({
-        status: "error",
-        msg: "Internal Server Error",
-        payload: {},
-      });
+      res.status(500).render("error",{Error: "Internal Server Error",payload: {},});
     }
   }
 }

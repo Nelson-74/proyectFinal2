@@ -10,10 +10,7 @@ export class MessagesController {
       res.status(200).json(messages);
     } catch (error) {
       console.error("Error al obtener los mensajes:", error);
-      res.status(500).json({
-        status: "error",
-        message: "Error al obtener los mensajes",
-      });
+      res.status(500).render("error",{Error: "Error al obtener los mensajes"});
     }
   }
 }
