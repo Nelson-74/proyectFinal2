@@ -48,18 +48,18 @@ class CartService {
     }
   }
 
-  async updateProductQuantity(cartId, productId, qty) {
+  async updateProductQuantity(cartId, productId) {
     try {
       const cart = await CartsDAO.findById(cartId);
-      const productIndex = cart.products.findIndex(
-        (p) => p.product.toString() === productId
+      for(const product of cartOutStock){
+        const productId = product.idProduct;
+        const productIndex = cart.products.findIndex(
+          (p) => p.product.toString() === productId
       );
-      if (productIndex === -1) {
-        logger.info("Product not found");
-        // Lanza un error para indicar que el producto no se encontró en el carrito
-      throw new Error("Product not found");
+      if (productIndex !== -1) {
+        cart.products.splice(productIndex, 1);
       }
-      cart.products[productIndex].qty = qty;
+      }
       await cart.save();
       return cart;
     } catch (error) {
@@ -98,6 +98,48 @@ class CartService {
       throw new Error("Failed to clear cart");
     }
   }
-}
+
+  async purchaseCart(req, res) {
+    try {
+      const { cid } = req.params;
+      const cart = await CartsDAO.get(cid);
+      if (!cart) {
+        return res.status(404).json({
+          status: "error",
+          message: "Cart not found",
+        });
+      }
+      // Iterate through the products in the cart
+      for (const cartProduct of cart.products) {
+        const productId = cartProduct.product.toString();
+        const product = await ProductDAO.findById(productId);
+        if (!product) {
+          return res.status(404).json({
+            status: "error",
+            message: `Product with ID ${productId} not found`,
+          });
+        }
+        if (product.stock >= cartProduct.quantity) {
+          product.stock -= cartProduct.quantity;
+          await product.save();
+        } else {
+          return res.status(400).json({
+            status: "error",
+            message: `Product ${product.title} doesn't have enough stock.`,
+          });
+        }
+        }
+        // Clear the cart after purchasing all its contents
+        await this.clearCart(cart._id);
+        return res.status(201).json({
+          status: "success",
+          message: "Order placed successfully.",
+        });
+        } catch (err) {
+        console.log(err);
+        return res.status(500).send('Server error');
+      }
+    }
+  };
 
 export default CartService;

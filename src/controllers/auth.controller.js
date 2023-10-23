@@ -23,7 +23,7 @@ class AuthController {
     if (userFound && userFound.password == password){
       req.session.email = userFound.email;
       req.session.isAdmin = userFound.isAdmin;
-      return res.redirect("/auth/perfil");
+      return res.render("/auth/perfil");
     }else{
       try {
         customError.createError({
@@ -49,7 +49,7 @@ class AuthController {
     await userModel.create({ email: email, password: password, firstName: firstName, lastName : lastName, isAdmin: false });
     req.session.email = email;
     req.session.isAdmin = false;
-    return res.redirect("/auth/profile");
+    return res.render("/auth/profile");
   }catch(error){
     return res.status(400).render("error", {error: "Failed to create user, try another email"});
   }

@@ -9,10 +9,11 @@ const productSchema = new Schema({
   category: { type: String, required: true },
   code: { type: String, required: true },
   thumbnail: { type: String, required: true },
-  idProduct: { type: Schema.Types.ObjectId, ref: "product", required: true, unique: true },
-  owner: { type: Schema.Types.ObjectId, ref: "user", default: "admin" }
+  idProduct: { type: Schema.Types.ObjectId, ref: "product", required: true },
+  owner: { type: Schema.Types.ObjectId, required : true, ref: "user", default: "admin" }
 },{versionKey:false});
 
+productSchema.index({ description: "text" });
 productSchema.plugin(mongoosePaginate);
 export const productModel = model("product", productSchema);
 

@@ -1,9 +1,8 @@
 import { Schema,model } from "mongoose";
 
 const schema = new Schema({
-  code: {type: String},
-  purchase_datetime:{ type: Date},
-  amount:{type:Number},
+  code: {type: String,required: true, unique:true},
+  purchase_datetime:{ type: Date, default: Date.now},
   purchaser:{type:String},
   cartId: { type: String, required: true },
 	amount: { type: Number, required: true },

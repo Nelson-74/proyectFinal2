@@ -5,4 +5,4 @@ import {isLoggedIn, isUser} from "../middlewares/auth.js";
 export const ticketsRouter =  Router();
 
 ticketsRouter.get ("/checkout", isLoggedIn,isUser,ticketsController.checkOut);
-ticketsRouter.get("/finaltickets", isLoggedIn, isUser, ticketsController.addTicket)
+ticketsRouter.get("/tickets", isLoggedIn, isUser, ticketsController.addTicket)

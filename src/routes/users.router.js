@@ -12,8 +12,8 @@ usersRouter.get("/", userController.getAllUsers);
 usersRouter.post("/:id", isAdmin, userController.createOne);
 usersRouter.put("/update/:id",userController.updateOne );
 usersRouter.delete("/delete/:id", userController.deleteOne);
-usersRouter.put("/premium/:uid", userController.togglePremiumRole);
-usersRouter.put("/premium/:uid/upgrade", userController.updateToPremium);
+usersRouter.put("/premium/:uid", isAdmin,userController.togglePremiumRole);
+usersRouter.put("/premium/:uid/upgrade", isAdmin, userController.updateToPremium);
 usersRouter.use("/:uid/documents", documentsRouter); 
 
 usersRouter.post("/", async (req, res) => {

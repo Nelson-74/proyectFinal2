@@ -4,9 +4,15 @@ class RetrievalController {
   async handleServiceRequest(req, res, serviceMethod) {
     try {
       const result = await serviceMethod(req);
-      res.status(200).json({ message: result });
+      // Si result es "tokenExpired," renderiza la plantilla para el token expirado
+      if (result === "tokenExpired") {
+        return res.render("retrieval.mail", { tokenExpired: true });
+      } else {
+        // Si no, renderiza la plantilla normal de recuperación
+        return res.render("retrieval.mail", { tokenExpired: false, validEmail: result });
+      }
     } catch (error) {
-      res.status(400).render("error",{ Error: error.message });
+      res.status(400).render("error", { Error: error.message });
     }
   }
 
@@ -14,7 +20,7 @@ class RetrievalController {
     return this.handleServiceRequest(req, res, retrievalService.sendRecoveryEmail);
   }
 
-  async validateToken(req, res) {
+  async validateToken(req, res){
     return this.handleServiceRequest(req, res, retrievalService.validateToken);
   }
 

@@ -10,9 +10,9 @@ class TicketsController {
           const purchaser = user.email;
           const { cartStock, totalPriceTicket, cartOutStock } =
           await TicketService.stockForTicket(userCartId);
-          await cartService.updateProductQty(userCartId, cartOutStock);
+          await cartService.updateProductQuantity(userCartId, cartOutStock);
           await TicketService.addTicket(purchaser, cartStock, totalPriceTicket);
-          return res.render("finaltickets", { ticket: cartStock, totalCart: totalPriceTicket, purchaser });
+          return res.render("tickets", { ticket: cartStock, totalCart: totalPriceTicket, purchaser });
         } catch (err) {
           res.status(500).render("error",{ Error: `${err}` });
         }
@@ -24,7 +24,7 @@ class TicketsController {
           const userCartId = user.idCart;
           const cartProducts = await cartService.getProductsByCartId(userCartId);
           const { cartStock, totalPriceTicket } = await TicketService.stockCartProductsForTicket(userCartId);
-          return res.render("ticket", { user, cartProducts, cartStock, totalPriceTicket });
+          return res.render("tickets", { user, cartProducts, cartStock, totalPriceTicket });
         } catch (err) {
           res.status(500).render("error",{ Error: `${err}` });
         }

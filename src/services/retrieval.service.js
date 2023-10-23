@@ -1,6 +1,7 @@
 import nodemailer from "nodemailer";
 import { RetrievalCodeModel } from "../DAO/models/retrieval.code.models.js";
 import { userModel } from "../DAO/models/users.model.js";
+import { logger } from "../utils/logger.js";
 
 
 class RetrievalService {
@@ -15,7 +16,6 @@ class RetrievalService {
       // Establece la fecha de expiración (1 hora a partir de ahora)
       const expire = new Date();
       expire.setHours(expire.getHours() + 1);
-
       // Guarda el token y la fecha de expiración en la base de datos
       await RetrievalCodeModel.create({ token, email, expire });
       // Envía el correo electrónico con el enlace de recuperación
@@ -23,8 +23,8 @@ class RetrievalService {
       const transporter = nodemailer.createTransport({
       service:"Gmail",
       auth:{
-        user: env.GOOGLE_EMAIL,
-        pass: env.GOOGLE_PASS,
+        user: proyecto.coder.Nelson,
+        pass: CoderPassWord2023,
       },
       });
 
@@ -33,19 +33,23 @@ class RetrievalService {
         subject: "Recuperación de Contraseña",
         html: `Haga click <a href="${env.API_URL}">aquí</a> para restablecer su contraseña.`,
       });
-      return "Correo de recuperación enviado con éxito";
+      if(info.accepted.length > 0){
+        logger.info("Correo enviado con éxito a :", info.accepted);
+      }else{
+        logger.error("Error al enviar el correo. No se entregó a ninguna dirrección");
+      }
     } catch (error) {
-      throw error;
+      logger.error("Error al enviar el email", error);
     }
   }
   async validateToken(token) {
     try {
       const retrievalCode = await RetrievalCodeModel.findOne({ token });
       if (!retrievalCode) {
-        throw new Error("Token inválido");
+        throw new Error("Token inválido o ya utilizado");
       }
       if (retrievalCode.expire < new Date()) {
-        throw new Error("El token ha expirado");
+        return "tokenExpired";
       }
       return "Token válido"; 
     } catch (error) {
@@ -56,10 +60,10 @@ class RetrievalService {
     try {
       const retrievalCode = await RetrievalCodeModel.findOne({ token });
       if (!retrievalCode) {
-        throw new Error("Token inválido");
+        throw new Error("Token inválido o ya utilizado");
       }
       if (retrievalCode.expire < new Date()) {
-        throw new Error("El token ha expirado");
+        return "tokenExpired";
       }
       const user = await userModel.findOne({ email: retrievalCode.email });
       if (!user) {

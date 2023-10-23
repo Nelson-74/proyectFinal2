@@ -1,5 +1,7 @@
 import CartService from "../services/carts.service.js";
 import {logger} from '../utils/logger.js';
+import CartsDAO from '../DAO/class/carts.dao.js';
+import ProductDAO from '../DAO/class/products.dao.js';
 
 const Carts = new CartService();
 class CartsController {
@@ -101,8 +103,8 @@ class CartsController {
   async updateProductQuantity(req, res) {
     try {
       const { cid, pid } = req.params;
-      const { qty } = req.body; // proporcionar la nueva cantidad en req.body
-      const updatedCart = await Carts.updateProductQuantity(cid, pid, qty);
+      const { quantity } = req.body; // proporcionar la nueva cantidad en req.body
+      const updatedCart = await Carts.updateProductQuantity(cid, pid, quantity);
       res.status(200).json({
         status: "success",
         message: "Product quantity updated successfully",
@@ -127,6 +129,47 @@ class CartsController {
       res.status(500).render("error",{Error: "Failed to clear cart"});
     }
   }
+  async purchaseCart(req, res) {
+    try {
+      const { cid } = req.params;
+      const cart = await CartsDAO.get(cid);
+      if (!cart) {
+        return res.status(404).json({
+          status: "error",
+          message: "Cart not found",
+        });
+      }
+      // Iterate through the products in the cart
+      for (const cartProduct of cart.products) {
+        const productId = cartProduct.product.toString();
+        const product = await ProductDAO.findById(productId);
+        if (!product) {
+          return res.status(404).json({
+            status: "error",
+            message: `Product with ID ${productId} not found`,
+          });
+        }
+        if (product.stock >= cartProduct.quantity) {
+          product.stock -= cartProduct.quantity;
+          await product.save();
+        } else {
+          return res.status(400).json({
+            status: "error",
+            message: `Product ${product.title} doesn't have enough stock.`,
+          });
+        }
+        }
+        // Clear the cart after purchasing all its contents
+        await this.clearCart(cart._id);
+        return res.status(201).json({
+          status: "success",
+          message: "Order placed successfully.",
+        });
+        } catch (err) {
+        console.log(err);
+        return res.status(500).send('Server error');
+      }
+    }
 }
 
 export default CartsController;

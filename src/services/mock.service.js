@@ -4,8 +4,6 @@ import {logger} from "../utils/logger.js";
 class MockProducts {
   constructor() {
     this.products = [];
-    this.generateProduct = this.generatingProduct.bind(this);
-    this.getAllProducts = this.getAllProducts.bind(this);
     this.init();
   }
 
@@ -26,25 +24,19 @@ class MockProducts {
 
   init() {
     while (this.products.length < 100) {
-      this.products.push(this.generateProduct());
+      this.products.push(this.generatingProduct());
     }
   }
 
-  getAllProducts() {
+  async getAllProducts() {
     try {
-      return {
-        status: 200,
-        result: { status: "ok", payload: this.products },
-      };
+      return this.products;
     } catch (error) {
       logger.error(error.message);
       return {
-        status: 500,
-        result: { 
         status: "error",
-        msg: "Internal Server Error",
-        payload: {}
-        },
+        message: "Internal Server Error",
+        payload: {},
       };
     }
   }

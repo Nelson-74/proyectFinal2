@@ -173,7 +173,7 @@ export class UserController {
       }
       // Almacena los documentos en una ubicación segura (por ejemplo, fuera del directorio público)
       for (const file of uploadedDocuments){
-        const securePath = `/documentos/${file.filename}`;// Ruta segura para el servidor
+        const securePath = `/document/${file.filename}`;// Ruta segura para el servidor
         user.document.push({ name: file.originalname, reference: securePath });
       }
       await user.save();
