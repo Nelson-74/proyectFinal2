@@ -1,7 +1,7 @@
 paths:
   /api/products:
     get:
-      summary: Obtener lista de productos
+      summary: Obtener lista de productos.
       tags:
       -Products
       description: Retorna una lista de todos los productos disponibles.

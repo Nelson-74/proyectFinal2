@@ -1,6 +1,6 @@
 import express from "express";
 import  {UserController}  from "../controllers/usersController.js";
-import { isAdmin , isUser} from "../utils.js";
+import { isAdmin } from "../utils.js";
 import documentsRouter from "./document.router.js";
 import { userModel } from "../DAO/models/users.model.js";
 

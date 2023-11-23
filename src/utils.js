@@ -80,7 +80,7 @@ export function isAdmin(req, res, next) {
   if (req.user && req.user.isAdmin){
     return next();
   }else{
-  return res.status(403).render(error,{error:"Error de autorización, no tienes permisos de administrador"});
+    return res.status(403).render("error", "Error de autorización, no tienes permisos de administrador");
   }
 }
 

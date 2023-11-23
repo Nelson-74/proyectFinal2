@@ -1,7 +1,7 @@
 import CartService from "../services/carts.service.js";
-import {logger} from '../utils/logger.js';
-import CartsDAO from '../DAO/class/carts.dao.js';
-import ProductDAO from '../DAO/class/products.dao.js';
+import {logger} from "../utils/logger.js";
+import CartsDAO from "../DAO/class/carts.dao.js";
+import ProductDAO from "../DAO/class/products.dao.js";
 
 const Carts = new CartService();
 class CartsController {

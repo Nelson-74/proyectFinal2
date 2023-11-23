@@ -34,30 +34,21 @@ dotenv.config({
   path: `.env.${process.env.NODE_ENV}`
 });
 const PORT = process.env.PORT|| 3000;
-const connection = mongoose.connect(`mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@backendcodernelson.a5badyt.mongodb.net/ecommerce?retryWrites=true&w=majority`);
-
+const connection = mongoose.connect(`mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@backendcodernelson.a5badyt.mongodb.net/ecommerce?retryWrites=true&w=majority`); 
 const fileStore = FileStore(session);
-
 const httpServer = app.listen(PORT, () => {
   logger.info(__dirname);
   logger.info(`Example app listening on http://localhost:${PORT}`);
 });
-
 app.use(express.urlencoded({ extended: false }));
-
 const io = new SocketServer(httpServer);
-
 app.use(express.json());
 app.use(express.urlencoded({extended: true})); 
-
 app.engine("handlebars", handlebars.engine());
 app.set("views",path.join (__dirname, "views"));
 app.set("view engine", "handlebars");
-
 app.use(express.static(path.join(__dirname, "public")));
-
 // Configuración de Swagger
-
 const swaggerOptions = {
   definition: {
     openapi: "3.0.1",
@@ -69,10 +60,8 @@ const swaggerOptions = {
   },
   apis: [`${__dirname}/docs/**/*.yaml`], // Especifica la ubicación de tus archivos de definición de rutas
 };
-
 const specs = swaggerJsdoc(swaggerOptions);
 app.use("/api/docs", swaggerUiExpress.serve, swaggerUiExpress.setup(specs));
-
 app.use(
   session({
   store: MongoStore.create({mongoUrl: `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@backendcodernelson.a5badyt.mongodb.net/ecommerce?retryWrites=true&w=majority`, ttl:7200}),
@@ -80,16 +69,15 @@ app.use(
   resave: true,
   saveUninitialized: true
 }));
-
 connectMongo();
 connectSocket(httpServer);
-
 app.use("/api/users", usersRouter);
 app.use("/api/products", productRouter);
 app.use("/api/carts", cartRouter);
 app.use("/",viewsRouter);
 app.use("/chat", messagesRouter);
 app.use("/auth", authRouter);
+app.use("/api/tickets", ticketsRouter); 
 app.use("/api/sessions", sessionsRouter);
 app.use("/", viewsRouterSessions);
 app.use("/api/sessions/current", (req, res) => {
@@ -98,7 +86,7 @@ app.use("/api/sessions/current", (req, res) => {
 app.use("/api",mockRouter);
 app.use(errorHandler);
 app.get("/admin", isAdmin, (req, res) => {
-  res.send('Página de administrador');// Esta ruta solo estará disponible para usuarios administradores
+  res.send("Página de administrador");// Esta ruta solo estará disponible para usuarios administradores
 });
 app.get("/user", isLoggedIn, (req, res) => {
   res.send("Página para usuarios autenticados");// Esta ruta requiere que el usuario esté autenticado
@@ -106,11 +94,9 @@ app.get("/user", isLoggedIn, (req, res) => {
 app.get("/user-auth", isUser, (req, res) => {
   res.send("Página para cualquier usuario autenticado");// Esta ruta requiere que el usuario esté autenticado, pero no necesariamente un administrador
 });
-
 app.use("/retrieval-email", retrievalRouter);
 //app.use(cookieParser());
 app.use(cookieParser("code-secret-123456789"));
-
 app.use("/api/set-cookies", (req, res) =>{
   res.cookie("cookiePower", "info con power", {maxAge:1000000, signed: true, httpOnly: true});
   res.cookie("cont", 0, {maxAge: 10000000});
@@ -149,11 +135,9 @@ app.use(session({
   resave: false,
   saveUninitialized: true,
 })); 
-
 iniPassport();
 app.use(passport.initialize());
 app.use(passport.session());
-
 app.get("/logout", (req,res) => {
   logger.info(req?.session?.user, req?.session?.admin);
   req.session.destroy(err => {
@@ -167,7 +151,6 @@ app.get("/logout", (req,res) => {
   });
   logger.error(req?.session?.user, req?.session?.admin);
 }); 
-
 app.get("/login", (req, res) =>{
   logger.info(req.session.user,req.session.admin);
   const {userName, password} = req.query;
@@ -178,13 +161,11 @@ app.get("/login", (req, res) =>{
   req.session.admin = true;
   res.send(" login ok");
 });
-
 app.use((req, res, next) => {
   req.logger = logger;
   next();
 });
 app.use("/testingLogger",loggersTestRouter );
-
 app.get("*",(req,res) => {
   return res.status(404).json({
     status:"error",

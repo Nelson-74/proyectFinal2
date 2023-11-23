@@ -7,7 +7,9 @@
   "scripts": {
     "dev": "nodemon -e yaml,js ./src/app.js NODE_ENV=development",
     "start": "node ./src/app.js NODE_ENV=production",
-    "test": "mocha --timeout 1000 test/supertest.test.js NODE_ENV=development"
+    "test": "set NODE_ENV=development&& mocha --timeout 1000 test/supertest.test.js"
+
+
   },
   "keywords": [],
   "author": "",

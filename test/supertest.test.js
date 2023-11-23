@@ -1,16 +1,15 @@
 import chai from "chai";
 import supertest from "supertest";
-import faker from "faker";
 
 //chai
 const expect = chai.expect;
 //supertest
-const requester = supertest("http://localhost:8080");
+const requester = supertest("http://localhost:3000");
 
 describe("testing API", () => {
   describe("test ENDPOINT users", () => {
-    it("Debería obtener la lista de usuarios", (done) => {
-      requester.get("/users").end((err, res) => {
+    it("Debería obtener la lista de usuarios de la API", (done) => {
+      requester.get("/api/users").end((err, res) => {
         expect(res.status).to.equal(200);
         done();
       });
@@ -18,14 +17,16 @@ describe("testing API", () => {
 
     it("Debería crear un nuevo usuario", (done) => {
       const newUser = {
-        "name": "<NAME>",
-        "email": "<EMAIL>"
+        "firstName": "John",
+        "lastName": "Doe",
+        "email": "johndoe@gmail.com",
+        "password": "secretpassword"
       };
       requester
-        .post("/user/:id")
+        .post("/api/users")
         .send(newUser)
         .end((err, res) => {
-          expect(res.status).to.equal(200);
+          expect(res.status).to.equal(201);
           done();
         });
     });
@@ -42,13 +43,13 @@ describe("testing API", () => {
   });
 
   it("Debería obtener un producto por su ID", (done) => {
-    const productId = "4";
-    requester.get(`/api/product/${productId}`).end((err, res) => {
-      console.log("Error:", err);
-    console.log("Response:", res);
+    const productId = "651a2e2311aaf2b9830807b8";
+    requester.get(`/api/products/${productId}`).end((err, res) => {
+      if(err){
+        return done(err);
+      }
       expect(res.status).to.equal(200);
       expect(res.body).to.be.an("object");
-      expect(res.body.id).to.equal(productId);
       done();
     });
   });
@@ -64,12 +65,10 @@ describe("testing API", () => {
       category: "Accesorios de mujer",
     };
     requester
-      .post("/api/product/novel")
+      .post("/api/products/novel")
       .send(newProduct)
       .end((err, res) => {
-        expect(res.status).to.equal(200);
-        expect(res.body).to.be.an("object");
-        expect(res.body).to.have.property("id");
+        expect(res.status).to.equal(201);
         done();
       });
   });

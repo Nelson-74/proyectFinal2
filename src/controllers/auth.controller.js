@@ -1,5 +1,5 @@
 import { userModel } from "../DAO/models/users.model.js";
-import {isAdmin, isUser} from "../middlewares/auth.js";
+import {isAdmin, isUser} from "../utils.js";
 import session from "express-session";
 import {logger} from '../utils/logger.js';
 
@@ -67,7 +67,7 @@ class AuthController {
     })
   }
   loginPage(req, res) {
-    return res.render("login", {});
+    return res.render("login.github", {});
   }
 
   profile(req, res) {

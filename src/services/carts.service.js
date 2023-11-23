@@ -29,15 +29,25 @@ class CartService {
 
   async addProductToCart(cartId, productId) {
     try {
+      const{cid, pid} = req.params;
+      if(!cid || !pid) return res.sendStatus(401);
       const cart = await CartsDAO.findById(cartId);
       const product = await ProductDAO.findById(productId);
       if (!cart) {
         logger.error("Cart does not exist",error);
         throw new Error("Cart does not exist");
       }
+      const userId = req.user._id;
+      const user = await userModel.findById(userId);
+      if(user.role === "premium"){
+        const product = await ProductDAO.findById(pid);
+      }
       if (!product) {
         logger.error("Product does not exist");
-        throw new Error("Product does not exist");
+        return res.status(404).render(error,{Error: "product witch Id : ${pid} not found"});
+      }
+      if(product.owner.toString() === userId){
+        return res.status(403).json({message:"You cannot add your own product to the cart as a premium user"});
       }
       cart.products.push({ product: product._id, qty: 1 });
       await cart.save();
